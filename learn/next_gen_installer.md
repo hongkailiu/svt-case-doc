@@ -51,7 +51,7 @@ $ cd go/src/github.com/openshift/installer/
 ### download terraform into bin folder
 $ ./hack/get-terraform.sh
 ### build openshift-install binary in bin folder
-./hack/build.sh
+$ ./hack/build.sh
 ### launch a cluster:
 ### the kerberos_id in the openshift_env.sh file
 ### will be used in the name of the created instances

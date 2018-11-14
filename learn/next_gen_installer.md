@@ -47,7 +47,7 @@ $ ansible-playbook -i "<jump_node_public_dns>," playbooks/install_fedora_ocp4.ya
 Launch a cluster:
 
 ```bash
-$ cd go/src/github.com/openshift/
+$ cd go/src/github.com/openshift/installer/
 ### download terraform into bin folder
 $ ./hack/get-terraform.sh
 ### build openshift-install binary in bin folder

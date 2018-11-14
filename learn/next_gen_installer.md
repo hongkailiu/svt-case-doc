@@ -52,7 +52,7 @@ $ cd go/src/github.com/openshift/
 $ ./hack/get-terraform.sh
 ### build openshift-install binary in bin folder
 ./hack/build.sh
-### launch
+### launch a cluster:
 ### the kerberos_id in the openshift_env.sh file
 ### will be used in the name of the created instances
 ### change it to your own id before launching a cluster

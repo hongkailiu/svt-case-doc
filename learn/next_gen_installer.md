@@ -99,9 +99,34 @@ $ bin/openshift-install destroy cluster --log-level=debug
 
 ```
 
+Number of instance in a role:
+
+```bash
+$ ./bin/openshift-install create install-config
+$ vi install-config.yml
+
+```
+
+Instance type: Not working yet. Track with [installer/671](https://github.com/openshift/installer/issues/671).
+
+```bash
+$ bin/openshift-install create manifests
+$ vi tectonic/99_openshift-cluster-api_master-machines.yaml
+$ vi tectonic/99_openshift-cluster-api_worker-machineset.yaml 
+
+
+```
+
+See the used AMI:
+
+```bash
+$ aws ec2 describe-images --owner 531415883065 --output text
+
+```
+
 TODO:
 
-* controll the cluster: instanceType, number of instances for roles.
+* device mapping of the instances
 * what to do when create/destroy does not work.
 
 ### libvert

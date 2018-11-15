@@ -77,6 +77,13 @@ https://flaviocopes.com/golang-sql-database/
 https://github.com/golang-migrate/migrate
 https://github.com/pressly/goose
 
+## godoc
+
+[godoc.org](https://godoc.org/) generates and hosts api docs for
+ go project hosted eg, at github.com.
+See [how to write doc for golang](https://blog.golang.org/godoc-documenting-go-code).
+[Here](https://godoc.org/github.com/hongkailiu/test-go) is the doc for svt-go.
+
 ## CICD
 
 ## Good practice

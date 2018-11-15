@@ -84,6 +84,9 @@ https://github.com/pressly/goose
 See [how to write doc for golang](https://blog.golang.org/godoc-documenting-go-code).
 [Here](https://godoc.org/github.com/hongkailiu/test-go) is the doc for svt-go.
 
+[Generate and view goDoc locally](https://godoc.org/golang.org/x/tools/cmd/godoc).
+
+
 ## CICD
 
 ## Good practice

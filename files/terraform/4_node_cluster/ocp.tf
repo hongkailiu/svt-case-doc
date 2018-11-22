@@ -100,7 +100,7 @@ resource "aws_instance" "gluster" {
   }
 
   ebs_block_device = {
-    device_name = /dev/sdf
+    device_name = "/dev/sdf"
     volume_size = "${var.gluster_volume_size}"
     volume_type = "gp2"
     delete_on_termination =  true

@@ -1,5 +1,11 @@
 # Ansible
 
+## cli
+
+```
+$ ansible-inventory
+```
+
 ## intro_dynamic_inventory
 
 * [inventory-script-example-aws-ec2](https://docs.ansible.com/ansible/2.7/user_guide/intro_dynamic_inventory.html#inventory-script-example-aws-ec2), [inventory-plugins](https://docs.ansible.com/ansible/2.7/plugins/inventory.html#inventory-plugins)

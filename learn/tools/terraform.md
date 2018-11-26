@@ -34,9 +34,31 @@ Qs:
 
 * How does OCP installer use terraform?
 
+## tf file format
+
+* [configuration syntax](https://www.terraform.io/docs/configuration/syntax.html) and [interpolation syntax](https://www.terraform.io/docs/configuration/interpolation.html)
+
+* involve history: [nginx configuration file format](https://nginx.org/en/docs/beginners_guide.html#conf_structure)
+    &#10168;
+  [libucl](https://github.com/vstakhov/libucl)
+    &#10168;
+  [hil](https://github.com/hashicorp/hil)/[hcl](https://github.com/hashicorp/hcl)
+
+* [syntax of hcl](https://github.com/hashicorp/hcl#syntax): see list and multi-line string
+
+## modules
+
+* [intro](https://www.terraform.io/intro/getting-started/modules.html) and [doc](https://www.terraform.io/docs/modules/index.html) 
+
+TODO
+
+## [best practice](https://www.terraform.io/docs/enterprise/guides/recommended-practices/index.html)
+TODO
+
+Understand tf plan. Count 1 to 2: why destroy 1 and create 2?
 
 ## more reading
 
-https://medium.com/@fabiojose/platform-as-code-with-openshift-terraform-1da6af7348ce
+* [k8s as terraform provider](https://medium.com/@fabiojose/platform-as-code-with-openshift-terraform-1da6af7348ce): Use terraform to provision k8s resources
 
-https://github.com/dwmkerr/terraform-aws-openshift
+* [terraform-aws-openshift](https://github.com/dwmkerr/terraform-aws-openshift): Use terraform to create OCP cluster

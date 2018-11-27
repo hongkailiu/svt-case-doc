@@ -14,6 +14,6 @@
 
 * [istio](https://istio.io/docs/concepts/what-is-istio/)
 * [linkerd](https://linkerd.io/) and [conduit.io](https://conduit.io/)
-* [servicemesh@oc](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html)
+* [service-mesh@oc](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html)
 
 

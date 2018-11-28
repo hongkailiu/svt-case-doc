@@ -271,7 +271,7 @@ https://kiali-istio-system.apps.52.32.1.134.xip.io
 
 Observation:
 
-* in `istio-ingress` is missing.
+* route `istio-ingress` is missing.
 * graph for `myproject` has no `istio-system` node or `mongodb` node
 
 ## grafana

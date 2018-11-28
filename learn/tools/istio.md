@@ -10,6 +10,8 @@
 ```bash
 # on master
 # cd /etc/origin/master/
+###content of master-config.patch:
+###check the above steps or https://github.com/Maistra/openshift-ansible/blob/maistra-0.4/istio/master-config.patch
 # vi master-config.patch
 # cp -p master-config.yaml master-config.yaml.prepatch
 # oc ex config patch master-config.yaml.prepatch -p "$(cat master-config.patch)" > master-config.yaml

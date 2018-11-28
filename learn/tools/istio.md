@@ -25,6 +25,7 @@
 
 ```bash
 ### no need to create file `istio-installation.yaml`. will use `cr-full.yaml` in the repo
+# cd /tmp/
 # git clone https://github.com/Maistra/openshift-ansible.git
 # cd openshift-ansible/istio
 ### branch maistra-0.4 has the version matching in the doc

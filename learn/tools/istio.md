@@ -156,4 +156,10 @@ In the command `oc create -f cr-full.yaml -n istio-operator` above:
 
 `authentication` indicates "Whether to enable mutual authentication". It *seems* that `mutual authentication` is `mutual TLS`.
 
+```
+# curl -o destination-rule-all-mtls.yaml https://raw.githubusercontent.com/istio/istio/release-1.0/samples/bookinfo/networking/destination-rule-all-mtls.yaml
+# oc apply -f destination-rule-all-mtls.yaml
+
+
+```
 

@@ -49,3 +49,7 @@ TODO
     * debugging/troubleshooting steps, and
     * automation.
 
+## puddle
+A puddle means a build in Red Hat.
+
+TODO: how to link a puddle or puddles to a advisory?

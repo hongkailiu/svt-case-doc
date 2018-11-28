@@ -167,11 +167,131 @@ In the command `oc create -f cr-full.yaml -n istio-operator` above:
 [Install](https://istio.io/docs/setup/kubernetes/download-release/) `istioctl`
 
 ```bash
+# curl -LO https://github.com/istio/istio/releases/download/1.0.4/istio-1.0.4-linux.tar.gz
+
+# cd ~/bin/
+# ln -s ../istio-1.0.4/bin/istioctl istioctl
+
+# istioctl version
+Version: 1.0.4
+GitRevision: d5cb99f479ad9da88eebb8bb3637b17c323bc50b
+User: root@8c2feba0b568
+Hub: docker.io/istio
+GolangVersion: go1.10.4
+BuildStatus: Clean
+
+# istioctl get all
+NAME      KIND                                          NAMESPACE   AGE
+default   MeshPolicy.authentication.istio.io.v1alpha1               2h
+
+DESTINATION-RULE NAME   HOST          SUBSETS                      NAMESPACE   AGE
+details                 details       v1,v2                        myproject   2h
+productpage             productpage   v1                           myproject   2h
+ratings                 ratings       v1,v2,v2-mysql,v2-mysql-vm   myproject   2h
+reviews                 reviews       v1,v2,v3                     myproject   2h
+
+VIRTUAL-SERVICE NAME   GATEWAYS           HOSTS     #HTTP     #TCP      NAMESPACE   AGE
+bookinfo               bookinfo-gateway   *             1        0      myproject   2h
+
+GATEWAY NAME       HOSTS     NAMESPACE   AGE
+bookinfo-gateway   *         myproject   2h
+
+###the above can be listed by oc command
+# oc get crd | grep istio
+# oc get virtualservices
+# oc get meshpolicies
+# oc get gateway
+# oc get destinationrule
+
+
+### HOW CAN I CHECK WHETHER MUTUAL TLS IS ENABLED FOR A SERVICE?
+### https://istio.io/help/faq/security/#check-policy
+# oc get svc -n devex 
+NAME                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+launcher-backend    ClusterIP   172.26.217.161   <none>        8080/TCP   3h
+launcher-frontend   ClusterIP   172.25.154.132   <none>        8080/TCP   3h
+
+# istioctl authn tls-check | grep launcher
+launcher-backend.devex.svc.cluster.local:8080                               OK           mTLS       mTLS       default/                                       default/istio-system
+launcher-frontend.devex.svc.cluster.local:8080                              OK           mTLS       mTLS       default/                                       default/istio-system
 
 
 ```
 
+## [jaeger](https://www.jaegertracing.io/)
 
-## [envoy](https://www.envoyproxy.io/)
+```bash
+# 
+# export JAEGER_URL=$(oc get route -n istio-system jaeger-query -o jsonpath='{.spec.host}')
+# echo "https://${JAEGER_URL}"
+https://jaeger-query-istio-system.apps.52.32.1.134.xip.io
+
+```
+
+Observation: 
+
+* no service called `productpage` in the list on the UI.
+
+## prometheus
+
+```bash
+# export PROMETHEUS_URL=$(oc get route -n istio-system prometheus -o jsonpath='{.spec.host}')
+# echo http://${PROMETHEUS_URL}
+http://prometheus-istio-system.apps.52.32.1.134.xip.io
+
+```
+
+Observation:
+
+* in [querying-metrics](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html#querying-metrics) session: 
+    Step 7 does not work: nothing returned.
+    ```bash
+    $ oc get prometheus -n istio-system -o jsonpath='{.items[*].spec.metrics[*].name}'
+  
+    ```
+
+## [kiali](https://www.kiali.io/)
+
+```bash
+# oc get route -n istio-system
+NAME                   HOST/PORT                                                   PATH      SERVICES               PORT              TERMINATION   WILDCARD
+grafana                grafana-istio-system.apps.52.32.1.134.xip.io                          grafana                http                            None
+istio-ingressgateway   istio-ingressgateway-istio-system.apps.52.32.1.134.xip.io             istio-ingressgateway   http2                           None
+jaeger-query           jaeger-query-istio-system.apps.52.32.1.134.xip.io                     jaeger-query           jaeger-query      edge          None
+kiali                  kiali-istio-system.apps.52.32.1.134.xip.io                            kiali                  http-kiali        reencrypt     None
+prometheus             prometheus-istio-system.apps.52.32.1.134.xip.io                       prometheus             http-prometheus                 None
+tracing                tracing-istio-system.apps.52.32.1.134.xip.io                          tracing                tracing           edge          None
+
+# export KIALI_URL=$(oc get route -n istio-system kiali -o jsonpath='{.spec.host}')
+# echo https://${KIALI_URL}
+https://kiali-istio-system.apps.52.32.1.134.xip.io
+### see the username/password in cr-full.yaml
+
+```
+
+Observation:
+
+* in `istio-ingress` is missing.
+* graph for `myproject` has no `istio-system` node or `mongodb` node
+
+## grafana
+
+```bash
+# export GRAFANA_URL=$(oc get route -n istio-system grafana -o jsonpath='{.spec.host}')
+# echo  http://${GRAFANA_URL}
+http://grafana-istio-system.apps.52.32.1.134.xip.io
+
+###Istio Mesh Dashboard
+###http://grafana-istio-system.apps.52.32.1.134.xip.io/d/1/istio-mesh-dashboard?refresh=5s&orgId=1
+###Istio Workload Dashboard
+###http://grafana-istio-system.apps.52.32.1.134.xip.io/d/UbsSZTDik/istio-workload-dashboard?refresh=10s&orgId=1
+```
+
+This section works nicely.
+
+## [Red Hat OpenShift Application Runtime Missions](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html#rhoar-missions) 
+This section is not detailed enough to do test. Leave it as a TODO.
+
+
 
 

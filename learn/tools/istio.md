@@ -160,6 +160,18 @@ In the command `oc create -f cr-full.yaml -n istio-operator` above:
 # curl -o destination-rule-all-mtls.yaml https://raw.githubusercontent.com/istio/istio/release-1.0/samples/bookinfo/networking/destination-rule-all-mtls.yaml
 # oc apply -f destination-rule-all-mtls.yaml
 
+```
+
+
+
+[Install](https://istio.io/docs/setup/kubernetes/download-release/) `istioctl`
+
+```bash
+
 
 ```
+
+
+## [envoy](https://www.envoyproxy.io/)
+
 

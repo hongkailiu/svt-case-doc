@@ -31,7 +31,8 @@
 ### branch maistra-0.4 has the version matching in the doc
 # git checkout maistra-0.4
 # oc new-project istio-operator
-# oc new-app -f ./istio_product_operator_template.yaml --param=OPENSHIFT_ISTIO_MASTER_PUBLIC_URL=https://ec2-54-203-156-70.us-west-2.compute.amazonaws.com:8443
+# OPENSHIFT_ISTIO_MASTER_PUBLIC_URL=$(grep "masterPublicURL" /etc/origin/master/master-config.yaml | head -n 1 | awk '{print $2}')
+# oc new-app -f ./istio_product_operator_template.yaml --param=OPENSHIFT_ISTIO_MASTER_PUBLIC_URL=${OPENSHIFT_ISTIO_MASTER_PUBLIC_URL}
 
 # oc get pod
 NAME                              READY     STATUS    RESTARTS   AGE

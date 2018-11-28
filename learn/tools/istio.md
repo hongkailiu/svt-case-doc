@@ -293,5 +293,29 @@ This section works nicely.
 This section is not detailed enough to do test. Leave it as a TODO.
 
 
+Created [1654462](https://bugzilla.redhat.com/show_bug.cgi?id=1654462) for tracking the above issues/observations.
 
+## [REMOVING THE BOOKINFO APPLICATION](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html#removing-bookinfo-application)
+
+See [1651548](https://bugzilla.redhat.com/show_bug.cgi?id=1651548)
+
+```sh
+# curl -o cleanup.sh https://raw.githubusercontent.com/Maistra/bookinfo/master/cleanup.sh && chmod +x ./cleanup.sh
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  1596  100  1596    0     0   5858      0 --:--:-- --:--:-- --:--:--  5846
+root@ip-172-31-55-123: ~ # ./cleanup.sh
+namespace ? [default] myproject
+using NAMESPACE=myproject
+Deleted config: destinationrules details
+Deleted config: destinationrules productpage
+Deleted config: destinationrules ratings
+Deleted config: destinationrules reviews
+Deleted config: virtualservices bookinfo
+Deleted config: gateways bookinfo-gateway
+Application cleanup may take up to one minute
+error: the path "/root/bookinfo.yaml" does not exist
+root@ip-172-31-55-123: ~ # echo $?
+1
+```
 

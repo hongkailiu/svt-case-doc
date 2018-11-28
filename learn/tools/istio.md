@@ -5,9 +5,16 @@
 
 ## install on OCP
 
-[Steps](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html): The difference is shown as follows:
+[Steps](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html):
 
 ```bash
+# on master
+# cd /etc/origin/master/
+# vi master-config.patch
+# cp -p master-config.yaml master-config.yaml.prepatch
+# oc ex config patch master-config.yaml.prepatch -p "$(cat master-config.patch)" > master-config.yaml
+# /usr/local/bin/master-restart api && /usr/local/bin/master-restart controllers
+
 ### UPDATING THE NODE CONFIGURATION
 ### https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html
 # oc get nodes --no-headers | cut -f1 -d" " | while read i; do ssh -n "$i" 'echo "vm.max_map_count = 262144" > /etc/sysctl.d/99-elasticsearch.conf'; done

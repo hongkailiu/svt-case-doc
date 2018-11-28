@@ -91,9 +91,9 @@ launcher-frontend-2-lsnvd     1/1       Running   0          26m
 
 ```
 
-Observation:
+Observation: TODO: bz?
 
-* `istio-statsd-prom-bridge-7f44bb5ddb-vvtmm` is not there.
+* `istio-statsd-prom-bridge-*` is not there.
 * 2 jaeger-agent out of 4 desired
 
 ```bash
@@ -114,15 +114,46 @@ ip-172-31-58-23.us-west-2.compute.internal   Ready     master    4h        v1.11
 
 ```
 
-After installing bookinfo project,
+## bookinfo app
+[installation](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html#installing-bookinfo-application)
 
 ```bash
+# oc new-project myproject
+# oc adm policy add-scc-to-user anyuid -z default -n myproject
+# oc adm policy add-scc-to-user privileged -z default -n myproject
+# oc apply -n myproject -f https://raw.githubusercontent.com/Maistra/bookinfo/master/bookinfo.yaml
+# oc apply -n myproject -f https://raw.githubusercontent.com/Maistra/bookinfo/master/bookinfo-gateway.yaml
+### when all pods are running
+# oc get pods
+NAME                              READY     STATUS    RESTARTS   AGE
+details-v1-54b6b58d9c-l4wft       2/2       Running   0          2m
+productpage-v1-69b749ff4c-txv2l   2/2       Running   0          2m
+ratings-v1-7ffc85d9bf-tphrv       2/2       Running   0          2m
+reviews-v1-fcd7cc7b6-mhfmp        2/2       Running   0          2m
+reviews-v2-655cc678db-wdbmd       2/2       Running   0          2m
+reviews-v3-645d59bdfd-vfprk       2/2       Running   0          2m
+
+# export GATEWAY_URL=$(oc get route -n istio-system istio-ingressgateway -o jsonpath='{.spec.host}')
 # curl -o /dev/null -s -w "%{http_code}\n" http://$GATEWAY_URL/productpage
 200
 
+### use browser:
+# echo  http://$GATEWAY_URL/productpage
+http://istio-ingressgateway-istio-system.apps.52.32.1.134.xip.io/productpage
 
 ```
 
 In Step `ADD DEFAULT DESTINATION RULES`: how to tell *If you did not enable mutual TLS*?
 
-Blocked here, need more doc reading ...
+In the command `oc create -f cr-full.yaml -n istio-operator` above:
+
+```sh
+# grep authentication cr-full.yaml -B1
+  istio:
+    authentication: true
+
+```
+
+`authentication` indicates "Whether to enable mutual authentication". It *seems* that `mutual authentication` is `mutual TLS`.
+
+

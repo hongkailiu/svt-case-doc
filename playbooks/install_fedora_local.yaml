@@ -4,9 +4,9 @@
     ###https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-handle-python-not-having-a-python-interpreter-at-usr-bin-python-on-a-remote-machine
     ###
     ansible_python_interpreter: /usr/bin/python3
+    ansible_user: fedora
+    install_docker: false
     ansible_become_pass: 111
-  vars_files:
-    - external_vars.yaml
   tasks:
   - name: print hostname
     debug:
@@ -24,4 +24,28 @@
         - bash-completion
         - git
         - tmux
+    become: true
+
+
+  - name: Install Apache
+    block:
+    - name: dnf docker pkg
+      dnf:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+        - docker
+    - name: start docker
+      systemd:
+        name: docker
+        state: started
+        enabled: True
+    - name: run docker postinstall step 1
+      group:
+        name: docker
+        state: present
+    - name: run docker postinstall step 2
+      command: "usermod -aG docker {{ ansible_user }}"
+    when: install_docker
     become: true

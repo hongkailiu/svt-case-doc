@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: my-test-template
+  annotations:
+    template.openshift.io/bindable: "false"
+objects:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    name: myapp-pod-1
+    labels:
+      app: myapp
+  spec:
+    containers:
+    - name: myapp
+      image: ${IMAGE}
+      command: ["/http"]
+      args: ["start", "-v"]
+      env:
+      - name: GIN_MODE
+        value: release
+      - name: gh_client_id
+        value: ${gh_client_id}
+      - name: gh_client_secret
+        value: ${gh_client_secret}
+      - name: gg_client_id
+        value: ${gg_client_id}
+      - name: gg_client_secret
+        value: ${gg_client_secret}
+      - name: gg_redirect_url
+        value: ${gg_redirect_url}
+      - name: session_key
+        value: ${session_key}
+    - name: envoy
+      image: "docker.io/hongkailiu/test-envoy:service-001"
+      env:
+      - name: SERVICE_NAME
+        value: "service1"
+parameters:
+- description: Image
+  displayName: Image
+  name: IMAGE
+  required: false
+  value: quay.io/hongkailiu/test-go:http-0.0.10
+- description: gh_client_id
+  displayName: gh_client_id
+  name: gh_client_id
+  required: false
+  value: gh_client_id
+- description: gh_client_secret
+  displayName: gh_client_secret
+  name: gh_client_secret
+  required: false
+  value: gh_client_secret
+- description: gg_client_id
+  displayName: gg_client_id
+  name: gg_client_id
+  required: false
+  value: gg_client_id
+- description: gg_client_secret
+  displayName: gg_client_secret
+  name: gg_client_secret
+  required: false
+  value: gg_client_secret
+- description: gg_redirect_url
+  displayName: gg_redirect_url
+  name: gg_redirect_url
+  required: false
+  value: gg_redirect_url
+- description: session_key
+  displayName: session_key
+  name: session_key
+  required: false
+  value: session_key

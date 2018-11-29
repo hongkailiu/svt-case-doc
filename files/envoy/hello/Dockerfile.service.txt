@@ -1,0 +1,5 @@
+FROM envoyproxy/envoy-alpine:latest
+
+ADD ./service-envoy.yaml /service-envoy.yaml
+
+ENTRYPOINT envoy -c /service-envoy.yaml --service-cluster service${SERVICE_NAME}

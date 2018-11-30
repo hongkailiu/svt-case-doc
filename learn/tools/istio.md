@@ -175,6 +175,15 @@ http://istio-ingressgateway-istio-system.apps.52.32.1.134.xip.io/productpage
 ### it is the default behavior of k8s service
 ###https://istio.io/docs/examples/bookinfo/#confirm-the-app-is-running
 
+### the service is not accessible by curl command
+### not sure why??? Google shows some interesting discussion. ^_^
+# oc get svc  productpage
+NAME          TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+productpage   ClusterIP   172.24.242.211   <none>        9080/TCP   4h
+# curl 172.24.242.211:9080/productpage
+curl: (56) Recv failure: Connection reset by peer
+
+
 ```
 
 _Notice_ the containers for each service pod: There is an envoy container.
@@ -244,6 +253,7 @@ The above `destination-rule-all-mtls.yaml` file does not change the default rout
 traffic routing. 
 
 
+### istio-cli: istioctl
 [Install](https://istio.io/docs/setup/kubernetes/download-release/) `istioctl`
 
 ```bash
@@ -433,6 +443,8 @@ TODO: more doc reading
 
 
 ## Test with my hello-world app
-https://istio.io/docs/setup/kubernetes/platform-setup/openshift/
-https://istio.io/docs/setup/kubernetes/spec-requirements/
-https://istio.io/docs/setup/kubernetes/sidecar-injection/#policy
+TODO
+
+* https://istio.io/docs/setup/kubernetes/platform-setup/openshift/
+* https://istio.io/docs/setup/kubernetes/spec-requirements/
+* https://istio.io/docs/setup/kubernetes/sidecar-injection/#policy

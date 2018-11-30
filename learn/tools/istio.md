@@ -1,9 +1,10 @@
 # istio
 
-* [doc@istio](https://istio.io/docs/concepts/what-is-istio/)
+## Test steps
 
+Follow the steps: [doc@istio](https://istio.io/docs/concepts/what-is-istio/)
 
-## install on OCP
+### install on OCP
 
 [Steps](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html):
 
@@ -114,7 +115,7 @@ ip-172-31-58-23.us-west-2.compute.internal   Ready     master    4h        v1.11
 
 ```
 
-## bookinfo app
+### bookinfo app
 [installation](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html#installing-bookinfo-application)
 
 ```bash
@@ -218,7 +219,7 @@ launcher-frontend.devex.svc.cluster.local:8080                              OK  
 
 ```
 
-## [jaeger](https://www.jaegertracing.io/)
+### [jaeger](https://www.jaegertracing.io/)
 
 ```bash
 # 
@@ -232,7 +233,7 @@ Observation:
 
 * no service called `productpage` in the list on the UI.
 
-## prometheus
+### prometheus
 
 ```bash
 # export PROMETHEUS_URL=$(oc get route -n istio-system prometheus -o jsonpath='{.spec.host}')
@@ -250,7 +251,7 @@ Observation:
   
     ```
 
-## [kiali](https://www.kiali.io/)
+### [kiali](https://www.kiali.io/)
 
 ```bash
 # oc get route -n istio-system
@@ -274,7 +275,7 @@ Observation:
 * route `istio-ingress` is missing.
 * graph for `myproject` has no `istio-system` node or `mongodb` node
 
-## grafana
+### grafana
 
 ```bash
 # export GRAFANA_URL=$(oc get route -n istio-system grafana -o jsonpath='{.spec.host}')
@@ -289,13 +290,13 @@ http://grafana-istio-system.apps.52.32.1.134.xip.io
 
 This section works nicely.
 
-## [Red Hat OpenShift Application Runtime Missions](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html#rhoar-missions) 
+### [Red Hat OpenShift Application Runtime Missions](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html#rhoar-missions) 
 This section is not detailed enough to do test. Leave it as a TODO.
 
 
 Created [1654462](https://bugzilla.redhat.com/show_bug.cgi?id=1654462) for tracking the above issues/observations.
 
-## [REMOVING THE BOOKINFO APPLICATION](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html#removing-bookinfo-application)
+### [REMOVING THE BOOKINFO APPLICATION](https://docs.openshift.com/container-platform/3.11/servicemesh-install/servicemesh-install.html#removing-bookinfo-application)
 
 See [1651548](https://bugzilla.redhat.com/show_bug.cgi?id=1651548)
 
@@ -319,3 +320,32 @@ root@ip-172-31-55-123: ~ # echo $?
 1
 ```
 
+## istio components
+
+### Envoy
+
+* [Istio uses an extended version of the Envoy proxy. Envoy is deployed as a sidecar to the relevant service in the same Kubernetes pod.](https://istio.io/docs/concepts/what-is-istio/#envoy)
+ 
+* [The graph](https://istio.io/docs/concepts/traffic-management/#pilot-and-envoy) also shows that envoy is in the pod of the service app.
+
+### Pilot
+
+The core component used for traffic management in Istio
+
+### Mixer
+
+### citadal
+
+
+## [rule configuration](https://istio.io/docs/concepts/traffic-management/#rule-configuration)
+
+_There are four traffic management configuration resources in Istio: VirtualService, DestinationRule, ServiceEntry, and Gateway._
+
+## [security](https://istio.io/docs/concepts/security/#high-level-architecture)
+
+Security in Istio involves multiple components:
+
+* Citadel for key and certificate management
+* Sidecar and perimeter proxies to implement secure communication between clients and servers
+* Pilot to distribute authentication policies and secure naming information to the proxies
+* Mixer to manage authorization and auditing

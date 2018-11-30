@@ -73,7 +73,3 @@ myapp-pod-1   2/2       Running   0          8s        172.23.0.4   ip-172-31-53
 
 ```
 
-
-TODO:
-
-* Find out envoy proxy is on the level of pod or svc?

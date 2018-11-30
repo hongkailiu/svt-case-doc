@@ -171,6 +171,9 @@ reviews-v3-645d59bdfd-vfprk       2/2       Running   0          2m
 ### use browser:
 # echo  http://$GATEWAY_URL/productpage
 http://istio-ingressgateway-istio-system.apps.52.32.1.134.xip.io/productpage
+###refresh the page, see round-robin of versions of reviews: This has nothing to do with istio
+### it is the default behavior of k8s service
+###https://istio.io/docs/examples/bookinfo/#confirm-the-app-is-running
 
 ```
 
@@ -235,6 +238,10 @@ reviews-v2-655cc678db-7rg79       2/2       Running   0          3h        app=r
 reviews-v3-645d59bdfd-8mmt8       2/2       Running   0          3h        app=reviews,pod-template-hash=2018156898,version=v3
 
 ```
+
+The above `destination-rule-all-mtls.yaml` file does not change the default routing behavior of the app.
+[intelligent-routing](https://istio.io/docs/examples/intelligent-routing/) shows an example of controlling
+traffic routing. 
 
 
 [Install](https://istio.io/docs/setup/kubernetes/download-release/) `istioctl`

@@ -213,7 +213,7 @@ http://ae67d308ef4bc11e898f102fa9e2e24a-539964417.us-west-2.elb.amazonaws.com/pr
 ```
 * The ingress is configured by `bookinfo-gateway.yaml` above, `.spect.selector` of [gateway](https://istio.io/docs/concepts/traffic-management/#gateways).
 * The `VirtualService` defined the routing rules for the gateway which it binds to. See [VirtualService](https://istio.io/docs/concepts/traffic-management/#virtual-services).
-    * spec.http[].route[].destination is the service name in the namespace. Eg, `productpage` will be interpreted as `productpage.myproject.svc.cluster.local`.
+    * `spec.http[].route[].destination` is the service name in the namespace. Eg, `productpage` will be interpreted as `productpage.myproject.svc.cluster.local`.
 
 In Step `ADD DEFAULT DESTINATION RULES`: how to tell *If you did not enable mutual TLS*?
 

@@ -20,7 +20,6 @@ CONTAINER ID        IMAGE                     COMMAND                  CREATED  
 f4ad12fabef7        envoyproxy/envoy:latest   "/usr/bin/dumb-ini..."   10 minutes ago      Up 10 minutes       0.0.0.0:10000->10000/tcp   condescending_banach
 
 $ docker exec -it condescending_banach bash
-root@f4ad12fabef7:/# cat /tmp/admin_access.log 
 root@f4ad12fabef7:/# ps -ef | grep envoy
 root         1     0  0 17:41 ?        00:00:00 /usr/bin/dumb-init -- /bin/sh -c /usr/local/bin/envoy --v2-config-only -l $loglevel -c /etc/envoy/envoy.yaml
 root         7     1  0 17:41 ?        00:00:00 /bin/sh -c /usr/local/bin/envoy --v2-config-only -l $loglevel -c /etc/envoy/envoy.yaml

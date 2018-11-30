@@ -84,6 +84,27 @@ kiali-7795bff985-phnfr                        1/1       Running     0          2
 openshift-ansible-istio-installer-job-cjg5c   0/1       Completed   0          28m
 prometheus-76db5fddd5-lkdgx                   1/1       Running     0          27m
 
+# oc get svc -n istio-system 
+NAME                     TYPE           CLUSTER-IP       EXTERNAL-IP                                                               PORT(S)                                                                                                                   AGE
+elasticsearch            ClusterIP      172.24.175.51    <none>                                                                    9200/TCP                                                                                                                  8m
+elasticsearch-cluster    ClusterIP      172.27.235.80    <none>                                                                    9300/TCP                                                                                                                  8m
+grafana                  ClusterIP      172.25.216.3     <none>                                                                    3000/TCP                                                                                                                  8m
+istio-citadel            ClusterIP      172.27.84.154    <none>                                                                    8060/TCP,9093/TCP                                                                                                         9m
+istio-egressgateway      ClusterIP      172.25.8.77      <none>                                                                    80/TCP,443/TCP                                                                                                            9m
+istio-galley             ClusterIP      172.25.157.50    <none>                                                                    443/TCP,9093/TCP                                                                                                          9m
+istio-ingressgateway     LoadBalancer   172.25.110.62    ae67d308ef4bc11e898f102fa9e2e24a-539964417.us-west-2.elb.amazonaws.com    80:31380/TCP,443:31390/TCP,31400:31400/TCP,15011:30023/TCP,8060:30574/TCP,853:31654/TCP,15030:32671/TCP,15031:32364/TCP   9m
+istio-pilot              ClusterIP      172.27.247.117   <none>                                                                    15010/TCP,15011/TCP,8080/TCP,9093/TCP                                                                                     9m
+istio-policy             ClusterIP      172.24.208.110   <none>                                                                    9091/TCP,15004/TCP,9093/TCP                                                                                               9m
+istio-sidecar-injector   ClusterIP      172.27.0.188     <none>                                                                    443/TCP                                                                                                                   9m
+istio-telemetry          ClusterIP      172.25.23.172    <none>                                                                    9091/TCP,15004/TCP,9093/TCP,42422/TCP                                                                                     9m
+jaeger-collector         ClusterIP      172.25.17.221    <none>                                                                    14267/TCP,14268/TCP,9411/TCP                                                                                              7m
+jaeger-query             LoadBalancer   172.25.204.146   a216b4dddf4bd11e898f102fa9e2e24a-197988756.us-west-2.elb.amazonaws.com    80:30839/TCP                                                                                                              7m
+kiali                    ClusterIP      172.25.214.129   <none>                                                                    20001/TCP                                                                                                                 7m
+prometheus               ClusterIP      172.24.91.214    <none>                                                                    9090/TCP                                                                                                                  9m
+tracing                  LoadBalancer   172.26.173.190   a21ceb43df4bd11e898f102fa9e2e24a-1195692779.us-west-2.elb.amazonaws.com   80:31899/TCP                                                                                                              7m
+zipkin                   ClusterIP      172.24.169.172   <none>                                                                    9411/TCP                                                                                                                  7m
+
+
 # oc get pod -n devex
 NAME                          READY     STATUS    RESTARTS   AGE
 configmapcontroller-1-sr5nw   1/1       Running   0          27m
@@ -92,10 +113,19 @@ launcher-frontend-2-lsnvd     1/1       Running   0          26m
 
 ```
 
+_Notice_ that 
+* There are 3 services with type `LoadBalancer` (see [k8s-doc](https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer)). 
+* The `EXTERNAL-IP` is actually `svc.status.loadBalancer.ingress.hostname` on aws.
+* Those values are also [classic](https://aws.amazon.com/elasticloadbalancing/) elb(s) which can be found on ec2 console (Navigate to _Load Balancers_).
+    Remember to delete them manually after terminating the test cluster.
+
 Observation: TODO: bz?
 
 * `istio-statsd-prom-bridge-*` is not there.
 * 2 jaeger-agent out of 4 desired
+* compare to objects in [istio-doc](https://istio.io/docs/setup/kubernetes/quick-start/#verifying-the-installation)
+    * +: es(2), grafana, jaeger(2), kiadi, tracing, zipkin
+    * -: ingress, statsd-prom-bridge
 
 ```bash
 # oc get pod -o wide | grep jaeger-agent
@@ -144,6 +174,35 @@ http://istio-ingressgateway-istio-system.apps.52.32.1.134.xip.io/productpage
 
 ```
 
+_Notice_ the containers for each service pod: There is an envoy container.
+```bash
+### https://stackoverflow.com/questions/33924198/how-do-you-cleanly-list-all-the-containers-in-a-kubernetes-pod
+### -o jsonpath=
+# oc get pod productpage-v1-69b749ff4c-sw596 -o jsonpath={.spec.containers[*].name}
+productpage istio-proxy
+### OR,
+### -o json with jq
+# oc get pod productpage-v1-69b749ff4c-sw596 -o json | jq -r '.spec.containers[].name'
+productpage
+istio-proxy
+
+```
+
+Those container is [injected automatically](https://istio.io/docs/setup/kubernetes/sidecar-injection/#policy) by pod `istio-sidecar-injector-*` with `sidecar.istio.io/inject: "true"` in the definition of deployment.
+
+Also _notice_ that the above url is from route `istio-ingressgateway` in project `istio-system`:
+* This is the way of visiting the service, not from the route in app namespace anymore.
+* Another is via [the svc definition](https://istio.io/docs/tasks/traffic-management/ingress/#determining-the-ingress-ip-and-ports):
+
+```bash
+# echo  http://$(oc get svc -n istio-system istio-ingressgateway -o jsonpath={.status.loadBalancer.ingress[*].hostname})/productpage
+http://ae67d308ef4bc11e898f102fa9e2e24a-539964417.us-west-2.elb.amazonaws.com/productpage
+
+```
+* The ingress is configured by `bookinfo-gateway.yaml` above, `.spect.selector` of [gateway](https://istio.io/docs/concepts/traffic-management/#gateways).
+* The `VirtualService` defined the routing rules for the gateway which it binds to. See [VirtualService](https://istio.io/docs/concepts/traffic-management/#virtual-services).
+    * spec.http[].route[].destination is the service name in the namespace. Eg, `productpage` will be interpreted as `productpage.myproject.svc.cluster.local`.
+
 In Step `ADD DEFAULT DESTINATION RULES`: how to tell *If you did not enable mutual TLS*?
 
 In the command `oc create -f cr-full.yaml -n istio-operator` above:
@@ -163,6 +222,19 @@ In the command `oc create -f cr-full.yaml -n istio-operator` above:
 
 ```
 
+_Notice_ that the [subnet is defined by pods' labels](https://istio.io/docs/concepts/traffic-management/#rule-configuration) (`app` and `version`):
+
+```bash
+# oc get pod --show-labels 
+NAME                              READY     STATUS    RESTARTS   AGE       LABELS
+details-v1-54b6b58d9c-6wv9p       2/2       Running   0          3h        app=details,pod-template-hash=1062614857,version=v1
+productpage-v1-69b749ff4c-sw596   2/2       Running   0          3h        app=productpage,pod-template-hash=2563059907,version=v1
+ratings-v1-7ffc85d9bf-qfx4f       2/2       Running   0          3h        app=ratings,pod-template-hash=3997418569,version=v1
+reviews-v1-fcd7cc7b6-85k8l        2/2       Running   0          3h        app=reviews,pod-template-hash=978377362,version=v1
+reviews-v2-655cc678db-7rg79       2/2       Running   0          3h        app=reviews,pod-template-hash=2117723486,version=v2
+reviews-v3-645d59bdfd-8mmt8       2/2       Running   0          3h        app=reviews,pod-template-hash=2018156898,version=v3
+
+```
 
 
 [Install](https://istio.io/docs/setup/kubernetes/download-release/) `istioctl`
@@ -349,3 +421,11 @@ Security in Istio involves multiple components:
 * Sidecar and perimeter proxies to implement secure communication between clients and servers
 * Pilot to distribute authentication policies and secure naming information to the proxies
 * Mixer to manage authorization and auditing
+
+TODO: more doc reading
+
+
+## Test with my hello-world app
+https://istio.io/docs/setup/kubernetes/platform-setup/openshift/
+https://istio.io/docs/setup/kubernetes/spec-requirements/
+https://istio.io/docs/setup/kubernetes/sidecar-injection/#policy

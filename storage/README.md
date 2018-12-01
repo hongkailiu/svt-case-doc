@@ -1,5 +1,10 @@
 # Storage
 
+## loop[back] device
+https://en.wikipedia.org/wiki/Loop_device
+https://www.thegeekdiary.com/how-to-create-virtual-block-device-loop-device-filesystem-in-linux/
+http://tldp.org/HOWTO/Cryptoloop-HOWTO/loopdevice-setup.html
+
 ## Block device
 
 * [block-device@wiki](https://en.wikipedia.org/wiki/Device_file#Block_devices)

@@ -410,6 +410,17 @@ root@ip-172-31-55-123: ~ # echo $?
 1
 ```
 
+[Uninstall istio](https://maistra.io/docs/install/#_upgrading_from_a_pre_existing_installation):
+Need to clean up `mutatingwebhookconfigurations`. Otherwise, reinstall won't work.
+
+```bash
+# oc get rs
+NAME                        DESIRED   CURRENT   READY     AGE
+istio-operator-85dc6fbbb9   1         0         0         7m
+...
+  Warning  FailedCreate  1m (x17 over 7m)  replicaset-controller  Error creating: Internal error occurred: failed calling admission webhook "sidecar-injector.istio.io": Post https://istio-sidecar-injector.istio-system.svc:443/inject?timeout=30s: service "istio-sidecar-injector" not found
+```
+
 ## istio components
 
 ### Envoy

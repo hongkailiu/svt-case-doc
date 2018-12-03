@@ -147,4 +147,11 @@ This probably implies that the VG is created in AMI.
 
 As default storage driver for <code>docker-ce 17.09.0-ce-rc2</code> and <code>openshift 3.7</code>.
 
+## config files
 
+```bash
+$ cat /etc/docker/daemon.json
+$ cat /etc/containers/registries.conf 
+$ cat /etc/sysconfig/docker
+
+```

@@ -184,4 +184,27 @@ oc apply -f ./routes.yaml
 
 ```
 
+### all-in-one cluster on centos7
+
 all-in-one cluster on centos7: [GRANT SHIPLEY's blog](https://blog.openshift.com/installing-openshift-3-7-1-30-minutes/)
+
+_Troubleshooting_:
+
+Cannot pull image from `registry.access.redhat.com` on centos:
+
+```bash
+###https://github.com/minishift/minishift-centos-iso/issues/251
+# touch /etc/rhsm/ca/redhat-uep.pem
+
+```
+
+add registry on centos:
+
+```bash
+### modify  /etc/sysconfig/docker
+# grep access /etc/sysconfig/docker
+OPTIONS=' --selinux-enabled --add-registry registry.access.redhat.com  --signature-verification=False'
+
+# systemctl restart docker origin-node.service 
+
+```

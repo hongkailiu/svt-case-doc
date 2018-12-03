@@ -65,6 +65,13 @@ $ oc completion bash > oc_completion.sh
 $ sudo mv oc_completion.sh /usr/share/bash-completion/completions/oc
 ```
 
+for [centos](https://medium.com/@ismailyenigul/how-to-enable-openshift-oc-bash-auto-completion-958b80e56e17)
+
+```
+# yum -y install bash-completion
+# oc completion bash > /etc/bash_completion.d/oc
+```
+
 ## fedora <-> win7
 
 * Make Windows installation usb on Fedora 27: [WoeUSB](https://github.com/slacka/WoeUSB): Tried with WoeUSB-2.2.2-1.fc27.x86_64 and Win7

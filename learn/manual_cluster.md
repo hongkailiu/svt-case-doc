@@ -184,3 +184,4 @@ oc apply -f ./routes.yaml
 
 ```
 
+all-in-one cluster on centos7: [GRANT SHIPLEY's blog](https://blog.openshift.com/installing-openshift-3-7-1-30-minutes/)

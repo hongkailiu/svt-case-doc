@@ -39,12 +39,9 @@ has an envoy sidecar proxy running inside.
 Let us simulate `container2` in this example in the context of k8s with the following modifications:
 * Use 2 containers in the app pods, the additional one is for envoy sidecar.
 * Use test-go-http as the web app
+* `Container1` will become `k8s svc` to do the load-balancing and it will be integreated into `istio`.
 
-Simulation of `pod3` can be done the same way but it is hard for `pod1` because
-it is not possible to know the address of pod2/pod3 when making the docker image
-for `container1`. This could be overcome by inject the config file for envoy by
-configMap. However, let us make something work first.
-
+Demo:
 
 ```bash
 # oc new-project ttt

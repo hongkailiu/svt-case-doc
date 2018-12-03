@@ -119,7 +119,7 @@ _Notice_ that
 * Those values are also [classic](https://aws.amazon.com/elasticloadbalancing/) elb(s) which can be found on ec2 console (Navigate to _Load Balancers_).
     Remember to delete them manually after terminating the test cluster.
 
-Observation: TODO: bz?
+Observation:
 
 * `istio-statsd-prom-bridge-*` is not there.
 * 2 jaeger-agent out of 4 desired

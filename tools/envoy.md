@@ -34,7 +34,7 @@ root        30    18  0 17:53 ?        00:00:00 grep --color=auto envoy
 front-envoy container (envoy) proxies 2 micro-service containers, each of those
 has an envoy sidecar proxy running inside.
 
-![](../../images/envoy.1.png)
+![](../images/envoy.1.png)
 
 Let us simulate `container2` in this example in the context of k8s with the following modifications:
 * Use 2 containers in the app pods, the additional one is for envoy sidecar.

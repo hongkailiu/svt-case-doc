@@ -258,6 +258,7 @@ traffic routing.
 
 ```bash
 # curl -LO https://github.com/istio/istio/releases/download/1.0.4/istio-1.0.4-linux.tar.gz
+# tar xvzf ./istio-1.0.4-linux.tar.gz
 
 # cd ~/bin/
 # ln -s ../istio-1.0.4/bin/istioctl istioctl

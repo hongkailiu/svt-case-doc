@@ -36,10 +36,11 @@ has an envoy sidecar proxy running inside.
 
 ![](../images/envoy.1.png)
 
-Let us simulate `container2` in this example in the context of k8s with the following modifications:
+Let us simulate `container2` in this example in the context of k8s with the following modifications (`container3` can be done in the same way):
 * Use 2 containers in the app pods, the additional one is for envoy sidecar.
 * Use test-go-http as the web app
-* `Container1` will become `k8s svc` to do the load-balancing and it will be integreated into `istio`.
+
+`Container1` will become `k8s svc` to do the load-balancing and it will be integreated into `istio`.
 
 Demo:
 

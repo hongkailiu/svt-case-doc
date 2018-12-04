@@ -494,3 +494,7 @@ Notice that
 * Using the IP of the svc leads to the same results. 
 * When mTLS is enabled on the svc, [the svc is not accessible outside of the mesh](https://istio.io/help/faq/security/#non-istio-to-istio).
 * the weight does not apply to the elb(s). Might not yet found the right way. 
+
+## Debugging
+
+* If `ingress url` does not respond, we could try to wake it up inside the ingress pod, or a client pod inside the mesh.

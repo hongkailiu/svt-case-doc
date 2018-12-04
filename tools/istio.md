@@ -455,8 +455,17 @@ TODO: more doc reading
 
 
 ## Test with my hello-world app
-TODO
 
-* https://istio.io/docs/setup/kubernetes/platform-setup/openshift/
-* https://istio.io/docs/setup/kubernetes/spec-requirements/
-* https://istio.io/docs/setup/kubernetes/sidecar-injection/#policy
+* [platform-setup/openshift](https://istio.io/docs/setup/kubernetes/platform-setup/openshift/)
+* [kubernetes/spec-requirements](https://istio.io/docs/setup/kubernetes/spec-requirements/)
+* [sidecar-injection](https://istio.io/docs/setup/kubernetes/sidecar-injection/#policy)
+
+```bash
+# oc new-project ttt
+# oc adm policy add-scc-to-user anyuid -z default -n ttt
+# oc adm policy add-scc-to-user privileged -z default -n ttt
+
+
+
+
+```

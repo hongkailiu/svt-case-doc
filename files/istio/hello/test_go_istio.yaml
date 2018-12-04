@@ -87,4 +87,23 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
+---
+kind: "Deployment"
+apiVersion: "extensions/v1beta1"
+metadata:
+  name: "centos"
+spec:
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "true"
+      labels:
+        app: "centos"
+        version: v1
+    spec:
+      containers:
+      - name: "centos"
+        image: "docker.io/centos:7"
+        command: ["/usr/sbin/init"]
+  replicas: 1
 

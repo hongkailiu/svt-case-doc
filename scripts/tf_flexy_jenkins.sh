@@ -17,3 +17,5 @@ git -C ./openshift-ansible checkout release-3.11
 readonly TF_BIN=/data/jenkins_home/my-tool/terraform
 
 ${TF_BIN} --version
+
+${TF_BIN} init ./svt-case-doc/files/terraform/4_node_cluster/

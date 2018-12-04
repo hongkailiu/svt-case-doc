@@ -465,6 +465,10 @@ TODO: more doc reading
 # oc adm policy add-scc-to-user anyuid -z default -n ttt
 # oc adm policy add-scc-to-user privileged -z default -n ttt
 
+# oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/istio/hello/test_go_istio.yaml -n ttt
+# oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/istio/hello/test_go_gateway.yaml -n ttt
+### weight not working yet!!!
+# oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/istio/hello/test_go_weight.yaml -n ttt
 
 
 

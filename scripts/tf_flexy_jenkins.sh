@@ -14,4 +14,6 @@ rm -rfv ./openshift-ansible
 git clone https://github.com/openshift/openshift-ansible.git
 git -C ./openshift-ansible checkout release-3.11
 
-terraform --version
+readonly TF_BIN=/data/jenkins_home/my-tool/terraform
+
+${TF_BIN} --version

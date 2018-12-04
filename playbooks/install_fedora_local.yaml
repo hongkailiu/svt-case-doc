@@ -1,3 +1,4 @@
+#$ ansible-playbook -i "192.168.122.206," playbooks/install_fedora_local.yaml
 ---
 - hosts: all
   vars:
@@ -6,6 +7,18 @@
     ansible_python_interpreter: /usr/bin/python3
     ansible_user: fedora
     install_docker: false
+    install_java_openjdk: true
+    jenkins_home_dir: "/data/jenkins_home"
+    jenkins_port: 8081
+    jenkins_username: admin
+    jenkins_password: password
+    reg_auth_password: reg_auth_password
+    reg_auth_user: reg_auth_user
+    aws_access_key_id: aws_access_key_id
+    aws_secret_access_key: aws_secret_access_key
+    wipe_jenkins_home_dir: true
+    cp_secret_files: false
+    perf_private_key_file: /home/hongkliu/.ssh/id_rsa_perf
     ansible_become_pass: 111
   tasks:
   - name: print hostname
@@ -24,6 +37,8 @@
         - bash-completion
         - git
         - tmux
+        - ansible-2.6.5-1.fc29
+        - python3-pip
     become: true
 
 
@@ -48,4 +63,190 @@
     - name: run docker postinstall step 2
       command: "usermod -aG docker {{ ansible_user }}"
     when: install_docker
+    become: true
+
+  - name: Install jenkins
+    block:
+    - name: dnf jdk pkg
+      dnf:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+        - java-1.8.0-openjdk
+    ###https://pkg.jenkins.io/redhat-stable/
+    - name: Download jenkins.repo
+      get_url:
+        url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+    - name: import jenkins repo key
+      rpm_key:
+        state: present
+        key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+    - name: dnf jenkins pkg
+      dnf:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+        - jenkins
+    when: install_java_openjdk
+    become: true
+
+  - name: Clean jenkins home dir
+    file:
+      state: absent
+      path: "{{ jenkins_home_dir }}"
+    when: wipe_jenkins_home_dir
+    become: true
+
+  - name: make jenkins home dir
+    file:
+      state: directory
+      path: "{{ jenkins_home_dir }}"
+      owner: jenkins
+      group: jenkins
+    become: true
+
+  ###https://wiki.jenkins.io/display/JENKINS/Installing+Jenkins+on+Red+Hat+distributions
+  - name: config jenkins home
+    lineinfile:
+      path: /etc/sysconfig/jenkins
+      line: 'JENKINS_HOME="{{ jenkins_home_dir }}"'
+    become: true
+
+  - name: config jenkins port
+    lineinfile:
+      path: /etc/sysconfig/jenkins
+      line: 'JENKINS_PORT="{{ jenkins_port }}"'
+    become: true
+
+  - name: config jenkins java options
+    lineinfile:
+      path: /etc/sysconfig/jenkins
+      line: 'JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false"'
+    become: true
+
+  - name: open 8081 port on firewalld
+    firewalld:
+      zone: public
+      port: "{{ jenkins_port }}/tcp"
+      permanent: true
+      state: enabled
+    become: true
+
+  - name: open 8081 port on firewalld
+    command: firewall-cmd --reload
+    become: true
+
+  - name: start jenkins
+    systemd:
+      name: jenkins
+      state: started
+      enabled: True
+    become: true
+
+  - name: make init.groovy.d dir
+    file:
+      state: directory
+      path: "{{ jenkins_home_dir }}/init.groovy.d/"
+      owner: jenkins
+      group: jenkins
+    become: true
+
+  - name: copy jenkins/security.groovy.j2
+    template:
+      src: jenkins/security.groovy.j2
+      dest: "{{ jenkins_home_dir }}/init.groovy.d/security.groovy"
+      owner: jenkins
+      group: jenkins
+    become: true
+
+  - name: make tool dir
+    file:
+      state: directory
+      path: "{{ jenkins_home_dir }}/my-tool"
+    become: true
+
+  - name: Unarchive tools
+    unarchive:
+      src: "{{ item }}"
+      dest: "{{ jenkins_home_dir }}/my-tool"
+      remote_src: yes
+    loop:
+    - https://github.com/hongkailiu/test-go/releases/download/0.0.1/ocptf-61053ed3-Linux-x86_64.tar.gz
+    - https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
+    become: true
+
+
+  - name: install jjb
+    pip:
+      name: jenkins-job-builder
+    become: true
+
+  - name: make jjb config dir
+    file:
+      state: directory
+      path: "/etc/jenkins_jobs"
+    become: true
+
+  - name: copy jjb config
+    template:
+      src: jjb/jenkins_jobs.ini.j2
+      dest: /etc/jenkins_jobs/jenkins_jobs.ini
+    become: true
+
+  - name: make jjb job dir
+    file:
+      state: directory
+      path: "/data/jjb/jobs"
+    become: true
+
+  - name: copy jjb job files
+    copy:
+      src: jjb/jobs/
+      dest: /data/jjb/jobs/
+      directory_mode: yes
+    become: true
+
+  - name: restarted jenkins
+    systemd:
+      name: jenkins
+      state: restarted
+    become: true
+
+  - name: check if jenkins is up
+    uri:
+      url: http://localhost:8081
+      method: GET
+    register: result
+    until: result.status == 200
+    retries: 5
+    delay: 10
+
+  - name: update jenkins job with jjb
+    shell: jenkins-jobs --flush-cache update --delete-old /data/jjb/jobs
+
+  - name: make secret dir
+    file:
+      state: directory
+      path: "/data/secret"
+    become: true
+
+  - name: copy secret templates
+    template:
+      src: "{{ item }}"
+      dest: "/data/secret/{{ item | basename | regex_replace('\\.j2','') }}"
+    with_fileglob:
+    - templates/secret/*.j2
+    become: true
+    when: cp_secret_files
+
+  - name: copy perf key file
+    copy:
+      src: "{{ perf_private_key_file }}"
+      dest: "/data/secret/id_rsa_perf"
+      owner: jenkins
+      group: jenkins
+      mode: 0600
     become: true

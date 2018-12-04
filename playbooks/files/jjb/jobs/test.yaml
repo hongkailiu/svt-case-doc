@@ -1,0 +1,9 @@
+- job:
+    name: test_job
+    description: 'job description'
+    project-type: freestyle
+    builders:
+    - shell: |
+        rm -rfv ./svt-case-doc
+        git clone https://github.com/hongkailiu/svt-case-doc.git
+        ./svt-case-doc/scripts/tf_flexy_jenkins.sh

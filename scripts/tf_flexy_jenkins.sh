@@ -28,8 +28,8 @@ git -C ./openshift-ansible checkout release-3.11
 
 readonly OCPTF_DIR=/data/jenkins_home/my-tool/ocptf
 ${OCPTF_DIR}/build/ocptf --list
-ansible-playbook -i ${OCPTF_DIR}/build/ocptf -i "${OCPTF_DIR}/test_files/ocpft/inv/2.file" "${OCPTF_DIR}/test_files/ocpft/playbook/test.yaml"
+ansible-playbook -i ${OCPTF_DIR}/build/ocptf -i "${OCPTF_DIR}/test_files/ocpft/inv/2.file" "${OCPTF_DIR}/test_files/ocpft/playbook/test.yaml" --extra-vars "ansible_ssh_private_key_file=/data/secret/id_rsa_perf"
 
 source /data/secret/secret.sh
-#ansible-playbook -i build/ocptf -i test_files/ocpft/inv/2.file ~/openshift-ansible/playbooks/prerequisites.yml
-#ansible-playbook -i build/ocptf -i test_files/ocpft/inv/2.file ~/openshift-ansible/playbooks/deploy_cluster.yml
+#ansible-playbook -i build/ocptf -i test_files/ocpft/inv/2.file ~/openshift-ansible/playbooks/prerequisites.yml  --extra-vars "ansible_ssh_private_key_file=/data/secret/id_rsa_perf"
+#ansible-playbook -i build/ocptf -i test_files/ocpft/inv/2.file ~/openshift-ansible/playbooks/deploy_cluster.yml --extra-vars "ansible_ssh_private_key_file=/data/secret/id_rsa_perf"

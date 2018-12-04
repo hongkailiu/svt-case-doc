@@ -467,9 +467,28 @@ TODO: more doc reading
 
 # oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/istio/hello/test_go_istio.yaml -n ttt
 # oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/istio/hello/test_go_gateway.yaml -n ttt
-### weight not working yet!!!
+
+# istioctl authn tls-check test-go.ttt.svc.cluster.local
+HOST:PORT                              STATUS     SERVER     CLIENT     AUTHN POLICY     DESTINATION RULE
+test-go.ttt.svc.cluster.local:8080     OK         mTLS       mTLS       default/         test-go-destination/ttt
+# oc get svc -n ttt test-go
+NAME      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+test-go   ClusterIP   172.24.137.72   <none>        8080/TCP   14m
+# oc get pod | grep centos
+centos-6bd4964455-74lk7      2/2       Running   0          16m
+
+### curl the service in the pod
+# oc rsh -c centos centos-6bd4964455-74lk7
+sh-4.2# curl test-go.ttt.svc.cluster.local:8080
+
+### add weight to version
 # oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/istio/hello/test_go_weight.yaml -n ttt
 
 
-
 ```
+
+Notice that
+
+* Using the IP of the svc leads to the same results. 
+* When mTLS is enabled on the svc, [the svc is not accessible outside of the mesh](https://istio.io/help/faq/security/#non-istio-to-istio).
+* the weight does not apply to the elb(s). Might not yet found the right way. 

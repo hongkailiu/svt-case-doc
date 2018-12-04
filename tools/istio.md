@@ -410,6 +410,8 @@ root@ip-172-31-55-123: ~ # echo $?
 1
 ```
 
+### Uninstall istio
+
 [Uninstall istio](https://maistra.io/docs/install/#_upgrading_from_a_pre_existing_installation):
 Need to clean up `mutatingwebhookconfigurations`. Otherwise, reinstall won't work.
 

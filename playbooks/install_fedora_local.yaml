@@ -4,8 +4,6 @@
   vars:
     ###https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-handle-python-not-having-a-python-interpreter-at-usr-bin-python-on-a-remote-machine
     ###
-    ansible_python_interpreter: /usr/bin/python3
-    ansible_user: fedora
     install_docker: false
     install_java_openjdk: true
     jenkins_home_dir: "/data/jenkins_home"
@@ -17,9 +15,13 @@
     aws_access_key_id: aws_access_key_id
     aws_secret_access_key: aws_secret_access_key
     wipe_jenkins_home_dir: true
-    cp_secret_files: false
+    cp_secret_files: true
     perf_private_key_file: /home/hongkliu/.ssh/id_rsa_perf
-    ansible_become_pass: 111
+    ###
+    ansible_python_interpreter: /usr/bin/python3
+    ansible_user: fedora
+    ansible_ssh_private_key_file: /home/hongkliu/.ssh/id_rsa_perf
+    #ansible_become_pass: 111
   tasks:
   - name: print hostname
     debug:
@@ -127,7 +129,7 @@
       line: 'JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false"'
     become: true
 
-  - name: open 8081 port on firewalld
+  - name: open jenkins port on firewalld
     firewalld:
       zone: public
       port: "{{ jenkins_port }}/tcp"
@@ -135,7 +137,7 @@
       state: enabled
     become: true
 
-  - name: open 8081 port on firewalld
+  - name: firewall-cmd reload
     command: firewall-cmd --reload
     become: true
 
@@ -217,7 +219,7 @@
 
   - name: check if jenkins is up
     uri:
-      url: http://localhost:8081
+      url: "http://localhost:{{ jenkins_port }}"
       method: GET
     register: result
     until: result.status == 200

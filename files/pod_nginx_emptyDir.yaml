@@ -12,8 +12,7 @@ spec:
         - containerPort: 80
       volumeMounts:
         - mountPath: /var/cache/nginx 
-          name: ddd
+          name: cache-volume
   volumes:
-  - name: ddd
-    persistentVolumeClaim:
-      claimName: pvc-ebs
+  - name: cache-volume
+    emptyDir: {}

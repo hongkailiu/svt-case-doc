@@ -1,26 +1,4 @@
-variable "region" {
-  default = "us-west-2"
-}
 
-variable "cluster_name" {
-  default = "hongkliu-tf"
-}
-
-variable "ami_id" {
-  default = "ami-0feb1655b7868b845"
-}
-
-variable "instance_type" {
-  default = "m5.xlarge"
-}
-
-variable "kubernetes_cluster_value" {
-  default = "hongkliu-ocp"
-}
-
-variable "gluster_volume_size" {
-  default = 1000
-}
 
 provider "aws" {
   access_key = "${var.access_key}"
@@ -30,7 +8,7 @@ provider "aws" {
 
 resource "aws_instance" "worker" {
   ami           = "${var.ami_id}"
-  instance_type = "${var.instance_type}"
+  instance_type = "${var.worker_instance_type}"
   subnet_id = "subnet-4879292d"
   security_groups = [ "sg-5c5ace38" ]
   key_name = "id_rsa_perf"
@@ -43,12 +21,12 @@ resource "aws_instance" "worker" {
       volume_type = "gp2"
       delete_on_termination =  true
     }
-  count = 2
+  count = "${var.worker_instance_count}"
 }
 
 resource "aws_instance" "infra" {
   ami           = "${var.ami_id}"
-  instance_type = "${var.instance_type}"
+  instance_type = "${var.infra_instance_type}"
   subnet_id = "subnet-4879292d"
   security_groups = [ "sg-5c5ace38" ]
   key_name = "id_rsa_perf"
@@ -61,13 +39,13 @@ resource "aws_instance" "infra" {
       volume_type = "gp2"
       delete_on_termination =  true
     }
-  count = 1
+  count = "${var.infra_instance_count}"
 }
 
 
 resource "aws_instance" "master" {
   ami           = "${var.ami_id}"
-  instance_type = "${var.instance_type}"
+  instance_type = "${var.master_instance_type}"
   subnet_id = "subnet-4879292d"
   security_groups = [ "sg-5c5ace38" ]
   key_name = "id_rsa_perf"
@@ -80,12 +58,12 @@ resource "aws_instance" "master" {
     volume_type = "gp2"
     delete_on_termination =  true
   }
-  count = 1
+  count = "${var.master_instance_count}"
 }
 
 resource "aws_instance" "gluster" {
   ami           = "${var.ami_id}"
-  instance_type = "${var.instance_type}"
+  instance_type = "${var.gluster_instance_type}"
   subnet_id = "subnet-4879292d"
   security_groups = [ "sg-5c5ace38" ]
   key_name = "id_rsa_perf"
@@ -105,5 +83,5 @@ resource "aws_instance" "gluster" {
     volume_type = "gp2"
     delete_on_termination =  true
   }
-  count = 0
+  count = "${var.gluster_instance_count}"
 }

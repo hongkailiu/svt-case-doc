@@ -8,7 +8,8 @@ readonly VAR_FILE_NAME="./var_file_${BUILD_NUMBER}.tfvars"
 curl -L ${my_var_file} -o "${VAR_FILE_NAME}"
 echo "======"
 cat "${VAR_FILE_NAME}"
-echo "\n======"
+echo ""
+echo "======"
 
 readonly TF_BIN=/data/jenkins_home/my-tool/terraform
 ${TF_BIN} --version

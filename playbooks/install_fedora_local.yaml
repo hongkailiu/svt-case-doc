@@ -176,7 +176,7 @@
       dest: "{{ jenkins_home_dir }}/my-tool"
       remote_src: yes
     loop:
-    - https://github.com/hongkailiu/test-go/releases/download/0.0.1/ocptf-61053ed3-Linux-x86_64.tar.gz
+    - https://github.com/hongkailiu/test-go/releases/download/0.0.2/ocptf-337816ff-Linux-x86_64.tar.gz
     - https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
     become: true
 

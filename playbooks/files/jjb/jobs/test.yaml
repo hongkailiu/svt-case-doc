@@ -5,7 +5,7 @@
     parameters:
     - string:
           name: my_var_file
-          default: 'https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/terraform/4_node_cluster/default_var_file.tfvars'
+          default: 'https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/terraform/ocp_var/var_file_all_in_one.tfvars'
     builders:
     - shell: |
         rm -rfv ./svt-case-doc

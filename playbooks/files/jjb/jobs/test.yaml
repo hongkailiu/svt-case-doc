@@ -2,6 +2,10 @@
     name: test_job
     description: 'job description'
     project-type: freestyle
+    parameters:
+    - string:
+          name: my_var_file
+          default: 'https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/terraform/4_node_cluster/default_var_file.tfvars'
     builders:
     - shell: |
         rm -rfv ./svt-case-doc

@@ -4,10 +4,16 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+readonly VAR_FILE_NAME="./var_file_${BUILD_NUMBER}.tfvars"
+curl -L ${my_var_file} -o "${VAR_FILE_NAME}"
+echo "======"
+cat "${VAR_FILE_NAME}"
+echo "\n======"
+
 readonly TF_BIN=/data/jenkins_home/my-tool/terraform
 ${TF_BIN} --version
 ${TF_BIN} init ./svt-case-doc/files/terraform/4_node_cluster/
-${TF_BIN} apply -auto-approve -var-file="/data/secret/secret.tfvars" ./svt-case-doc/files/terraform/4_node_cluster/
+${TF_BIN} apply -auto-approve -var-file="/data/secret/secret.tfvars" -var-file="${VAR_FILE_NAME}" ./svt-case-doc/files/terraform/4_node_cluster/
 
 sleep 60
 export terraform_tf_state_file=$(readlink -f ./terraform.tfstate)

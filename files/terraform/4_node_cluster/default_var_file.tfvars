@@ -9,4 +9,4 @@ worker_instance_count = "1"
 worker_instance_type = "m5.xlarge"
 gluster_instance_count" = "0"
 gluster_instance_type" = "m5.4xlarge"
-gluster_volume_size" = 1000
+gluster_volume_size" = "1000"

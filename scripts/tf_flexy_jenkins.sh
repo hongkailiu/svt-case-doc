@@ -5,7 +5,7 @@ set -o nounset
 set -o pipefail
 
 readonly VAR_FILE_NAME="./var_file_${BUILD_NUMBER}.tfvars"
-curl -L -H 'Cache-Control: no-cache' ${my_var_file} -o "${VAR_FILE_NAME}"
+curl -L ${my_var_file}/?RANDOM=${RANDOM} -o "${VAR_FILE_NAME}"
 echo "======"
 cat "${VAR_FILE_NAME}"
 echo "\n======"

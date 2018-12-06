@@ -184,3 +184,68 @@ Lots of puzzles there:
 * what is so special of `openshift4-libvirt` images?
 * which part enables nested virtualization?
 * [packer](https://www.packer.io/) seems a cool tool. Want to learn it.
+
+
+## 4.0 hacking day: 20181206
+Email:
+* Christopher Alfonso: OCP 4.0 Installer - Jump on in!
+* Eric Paris: Thursday kinda hack day, Friday hack day. For every single engineer.
+
+http://try.openshift.com/
+
+Please everyone, do not all try to use us-east-1, spread out across all
+4 us regions. PLEASE also bring your cluster down when you are
+finished. (Hint: the installer can do that too)
+
+No matter what you try you need to fill in your information on [this spreadsheet](https://docs.google.com/spreadsheets/d/1X0DIEN_uxTzKAtVkEOe9lffq81DCgz2LJ2shMQl4i80).
+
+
+My steps:
+
+Open http://try.openshift.com/ with chrome (logged in with id obtained from https://developers.redhat.com/).
+
+```bash
+### Create fedora29 as above and ssh to it after running the above playbook
+### but use the released binary instead of building it from src
+$ fdr.sh ec2-34-217-108-124.us-west-2.compute.amazonaws.com
+### the content is copied from http://try.openshift.com/
+$ vi ~/.secrets/openshift_pull_secret.json
+
+$ mkdir bin
+$ cd bin/
+$ curl -LO https://github.com/openshift/installer/releases/download/v0.5.0/openshift-install-linux-amd64
+$ mv openshift-install-linux-amd64 openshift-install
+$ chmod +x ./openshift-install
+
+$ cd
+$ curl -LO https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
+$ sudo dnf install unzip -y
+$ unzip terraform_0.11.10_linux_amd64.zip 
+
+$ mv terraform bin/
+
+$ openshift-install version
+openshift-install v0.5.0
+Terraform v0.11.10
+
+
+```
+
+Open `https://openshift-dev.signin.aws.amazon.com/console` with Firefox. Login with aws-account
+obtained above. Switch the region to `us-west-1`.
+
+```bash
+###Choose us-west-1 (N. Cal)
+$ vi ~/.aws/config
+$ vi /tmp/openshift_env.sh
+
+$ source /tmp/openshift_env.sh
+$ mkdir aaa
+$ cd aaa
+$ openshift-install create cluster --log-level=debug
+
+### checking things with oc
+
+$ source /tmp/openshift_env.sh 
+$ openshift-install destroy cluster --log-level=debug
+```

@@ -172,6 +172,35 @@ $ oc import-image -n openshift jenkins
 $ oc explain DeploymentConfig.spec.template.spec
 ```
 
+What if same name with different version?
+
+```
+# oc api-resources | grep deployments
+deployments                           deploy         apps                           true         Deployment
+deployments                           deploy         extensions                     true         Deployment
+```
+
+```bash
+# oc api-versions  -h
+Print the supported API versions on the server, in the form of "group/version"
+
+# oc api-versions  | grep -E "apps|extensions"
+apiextensions.k8s.io/v1beta1
+apps.openshift.io/v1
+apps/v1
+apps/v1beta1
+apps/v1beta2
+extensions/v1beta1
+
+```
+
+Then,
+
+```bash
+# oc explain deployments --api-version='apps/v1'
+```
+
+
 ## pbench-fio leftover
 
 ```sh
@@ -225,4 +254,11 @@ $ cat /etc/hosts
 ```sh
 # ansible-playbook -i "ansible-host," jenkins-test.yaml --tags run
 # pbench-move-results --prefix=jenkins_test_results
+```
+
+## [list the namespaced resources](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/#not-all-objects-are-in-a-namespace)
+
+```bash
+$ kubectl api-resources --namespaced=true
+
 ```

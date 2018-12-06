@@ -433,12 +433,18 @@ istio-operator-85dc6fbbb9   1         0         0         7m
 
 ### Pilot
 
-The core component used for traffic management in Istio
+* the core component used for traffic management in Istio.
+
+* distribute authentication policies and secure naming information to the proxies
+ 
 
 ### Mixer
 
+manage authorization and auditing
+
 ### citadal
 
+key and certificate management
 
 ## [rule configuration](https://istio.io/docs/concepts/traffic-management/#rule-configuration)
 

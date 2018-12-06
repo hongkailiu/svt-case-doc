@@ -27,7 +27,7 @@ A policy defines what a [user/group](https://docs.openshift.com/container-platfo
 
 ## [SCC](https://docs.openshift.org/latest/architecture/additional_concepts/authorization.html#security-context-constraints)
 
-SCC defines what a pod can do. Those 7 SCCs come out of the box (_restricted_ is default):
+SCC defines what a _pod_ can do. Those 7 SCCs come out of the box (_restricted_ is default):
 
 ```sh
 # oc get scc
@@ -48,7 +48,7 @@ SCC can define [Linux capabilities](https://docs.docker.com/engine/reference/run
 SA gives a way to impersonate. Those 3 SCCs come out of the box: builder/deployer to run build/deploy pods, default to run other pods, or do any object operation.
 
 ```sh
-# oc get sa
+# oc get sa -n default
 NAME       SECRETS   AGE
 builder    2         14h
 default    3         14h
@@ -185,3 +185,85 @@ web       1/1       Running   0          1m        172.20.0.23   ip-172-31-37-36
 
 TODO: Can we do better than <code>privileged: true</code>?
 
+## Learning round2: 20181205
+
+### [User](https://docs.openshift.com/container-platform/3.11/architecture/core_concepts/projects_and_users.html#users):
+
+* regular users
+* system users: created by the system, `system:admin`
+* service accounts: `oc get sa -n <namespace>`. By default, 3 SAs (`builder`, `default`, and `deployer`) are created 
+    when a namespace is created.
+    
+Relevant resources:
+
+```bash
+# oc api-resources | grep -E "user|identit"
+groups                                               user.openshift.io              false        Group
+identities                                           user.openshift.io              false        Identity
+useridentitymappings                                 user.openshift.io              false        UserIdentityMapping
+users                                                user.openshift.io              false        User
+
+```
+
+### [Identity provider](https://docs.openshift.com/container-platform/3.11/install_config/configuring_authentication.html#identity-providers_parameters)
+
+At installation, [var `openshift_master_identity_providers` in the inventory](https://docs.openshift.com/container-platform/3.11/install/configuring_inventory_file.html#configuring-cluster-variables),
+eg,
+
+```bash
+openshift_master_identity_providers=[{'name': 'allow_all', 'login': 'true', 'challenge': 'true', 'kind': 'AllowAllPasswordIdentityProvider'}]
+```
+
+Then the above var becomes
+
+```bash
+# grep "identityProviders" /etc/origin/master/master-config.yaml  -A7
+  identityProviders:
+  - challenge: true
+    login: true
+    mappingMethod: claim
+    name: allow_all
+    provider:
+      apiVersion: v1
+      kind: AllowAllPasswordIdentityProvider
+
+```
+
+### Group
+
+A set of users.
+
+### authorization
+
+[Authorization](https://docs.openshift.com/container-platform/3.11/architecture/additional_concepts/authorization.html#overview)
+ is managed using:
+ 
+* Rules: Sets of permitted verbs (get, list, create, update, delete, deletecollection or watch) on a set of objects (containers, pods, users, templates, etc).
+ 
+* Roles: Collections of rules. Users and groups can be associated with, or bound to, multiple roles at the same time.
+ 
+* Bindings: Associations between users and/or groups with a role.
+
+[Viewing cluster/local roles and rolebinding](https://docs.openshift.com/container-platform/3.11/admin_guide/manage_rbac.html#viewing-cluster-roles)
+
+```bash
+### every unusual oc command because the object such as 'clusterrole.rbac' is not even a resource
+### role-based access control (RBAC)
+$ oc describe clusterrole.rbac
+$ oc describe clusterrolebinding.rbac
+$ oc describe role.rbac -n <project_name>
+$ oc describe rolebinding.rbac -n <project_name>
+
+```
+
+[Managing role bindings](https://docs.openshift.com/container-platform/3.11/admin_guide/manage_rbac.html#managing-role-bindings)
+
+`$ oc adm policy ...` eg,
+
+```bash
+### add cluster-role 'cluster-admin' to user 'redhat'
+# oc adm policy add-cluster-role-to-user cluster-admin redhat
+
+```
+
+See the meeting of `policy` above. I believe the term `policy` is replaced by `rbac`.

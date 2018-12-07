@@ -16,7 +16,7 @@
 
 * Fill the form in the above gdoc to get an IAM account on aws.
 
-Then the application got replied, all the credentials for the IAM user are encrypted as a file
+Then the application got replied (James Russell's email), all the credentials for the IAM user are encrypted as a file
 in the attachment. Decrypt by:
 
 ```bash
@@ -249,3 +249,97 @@ $ openshift-install create cluster --log-level=debug
 $ source /tmp/openshift_env.sh 
 $ openshift-install destroy cluster --log-level=debug
 ```
+
+## 4.0 hacking day: 20181207
+* No running of the playbook `install_fedora_ocp4.yaml`.
+* Interactive way of installer.
+
+My steps:
+
+Open http://try.openshift.com/ with chrome (logged in with id obtained from https://developers.redhat.com/).
+
+```bash
+$ fdr.sh ec2-34-217-108-124.us-west-2.compute.amazonaws.com
+
+$ mkdir bin
+$ cd bin/
+$ curl -LO https://github.com/openshift/installer/releases/download/v0.5.0/openshift-install-linux-amd64
+$ mv openshift-install-linux-amd64 openshift-install
+$ chmod +x ./openshift-install
+
+$ cd
+$ curl -LO https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
+$ sudo dnf install unzip -y
+$ unzip terraform_0.11.10_linux_amd64.zip 
+$ rm terraform_0.11.10_linux_amd64.zip
+
+$ mv terraform bin/
+
+$ openshift-install version
+openshift-install v0.5.0
+Terraform v0.11.10
+
+
+```
+
+Open `https://openshift-dev.signin.aws.amazon.com/console` with Firefox. Login with aws-account
+obtained above. Switch the region to `us-west-2` (Oregon).
+
+```bash
+###Choose us-west-2
+### set up aws account as indicated by the James Russell's email ~/.aws/{config|credentials}
+### use `us-west-2`
+$ vi ~/.aws/config
+
+
+$ mkdir aaa
+$ cd aaa
+
+$ openshift-install create cluster 
+? Email Address <secret>@redhat.com
+? Password [? for help] ******
+? SSH Public Key /home/fedora/.ssh/libra.pub
+? Base Domain devcluster.openshift.com
+? Cluster Name hongkliu
+? Pull Secret {"auths":{"cloud.openshift.com":{"auth":"bla=","email":"<secret>@redhat.com"},"quay.io":{"auth":"=","email":"<secret>@redhat.com"}}}
+? Platform aws
+? Region us-west-2
+INFO Using Terraform to create cluster...         
+
+### checking things with oc
+
+$ source /tmp/openshift_env.sh 
+$ openshift-install destroy cluster --log-level=debug
+
+```
+
+Notice
+
+* `SSH Public Key /home/fedora/.ssh/libra.pub` does not show when you do not have a public key in the `~/.ssh/` folder.
+```bash
+$ ll ~/.ssh/libra.p*
+-rw-------. 1 fedora fedora 1675 Dec  7 16:27 /home/fedora/.ssh/libra.pem
+-rw-rw-r--. 1 fedora fedora  381 Dec  7 16:27 /home/fedora/.ssh/libra.pub
+
+```
+
+* `~/.aws/{config|credentials}` use `default` section for creating the cluster:
+ 
+ 
+ ```bash
+$ cat ~/.aws/config 
+[default]
+region = us-west-2
+[fedora@ip-172-31-46-165 ~]$ cat ~/.aws/credentials 
+[default]
+aws_access_key_id = aaa
+aws_secret_access_key = bbb
+
+
+```
+
+If you change default to eg, `openshift-dev` as indicated in the James Russell's email. It won't
+work unless you set up by `export AWS_PROFILE="openshift-dev"`.
+
+* Walid found it might be helpful if we delete (or move it to other folder for backup reason)
+`~/.terraform.d/`.

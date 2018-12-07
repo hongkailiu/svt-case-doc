@@ -308,8 +308,7 @@ INFO Using Terraform to create cluster...
 
 ### checking things with oc
 
-$ source /tmp/openshift_env.sh 
-$ openshift-install destroy cluster --log-level=debug
+$ openshift-install destroy cluster
 
 ```
 

@@ -341,5 +341,8 @@ aws_secret_access_key = bbb
 If you change default to eg, `openshift-dev` as indicated in the James Russell's email. It won't
 work unless you set up by `export AWS_PROFILE="openshift-dev"`.
 
-* Walid found it might be helpful if we delete (or move it to other folder for backup reason)
+* More info
+    * (Not tried myself) Walid found it might be helpful if we delete (or move it to other folder for backup reason)
 `~/.terraform.d/`.
+
+    * (did not find the password) https://github.com/openshift/installer/issues/411#issuecomment-444620427

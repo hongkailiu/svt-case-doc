@@ -188,6 +188,16 @@ oc apply -f ./routes.yaml
 
 all-in-one cluster on centos7: [GRANT SHIPLEY's blog](https://blog.openshift.com/installing-openshift-3-7-1-30-minutes/)
 
+[set up static ip](../../network/network_basics.md#configure-static-ip), eg, `192.168.122.133` and `hostnamectl set-hostname 192.168.122.133.xip.io`:
+
+```
+# export DOMAIN=192.168.122.133.xip.io
+# export USERNAME=redhat
+# export PASSWORD=redhat
+# curl https://raw.githubusercontent.com/gshipley/installcentos/master/install-openshift.sh | INTERACTIVE=false /bin/bash
+
+```
+
 _Troubleshooting_:
 
 Cannot pull image from `registry.access.redhat.com` on centos:

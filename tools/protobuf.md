@@ -46,7 +46,51 @@ $ make test-pb
 
 
 ## Use pb to transfer data
-TODO
+
+### [gRPG](https://grpc.io/docs/tutorials/basic/go.html)
+
+Add service definition into addressbook.proto, and then
+
+```bash
+### Update the generated code
+$ protoc -I=./pkg/probuf/  --plugin=protoc-gen-grpc --go_out=plugins=grpc:./pkg/probuf/gen ./pkg/probuf/proto/addressbook.proto
+
+### Use it in server/client code, and run:
+$ go run ./pkg/grpc/helloworld/server/main.go
+
+### User another terminal
+$ go run ./pkg/grpc/helloworld/client/main.go 67
+2018/12/08 00:57:55 Person: name:"John Doe" id:67 email:"jdoe@example.com" phones:<number:"555-4321" type:HOME > 
+
+``` 
+
+
+Troubleshooting
+
+```bash
+### undefined: unix.GetsockoptLinger
+### https://github.com/grpc/grpc-go/issues/2181#issuecomment-414324934
+
+$ vi glide.yaml
+
+- name: golang.org/x/sys
+  version: 1c9583448a9c3aa0f9a6a5241bf73c0bd8aafded
+  subpackages:
+
+### undefined: proto.ProtoPackageIsVersion3
+### https://github.com/golang/protobuf/issues/763#issuecomment-443760051
+$ go test -v ./pkg/probuf/...
+# github.com/hongkailiu/test-go/pkg/probuf/gen/proto
+pkg/probuf/gen/proto/addressbook.pb.go:24:11: undefined: proto.ProtoPackageIsVersion3
+FAIL    github.com/hongkailiu/test-go/pkg/probuf/unittest [build failed]
+
+$ cd $GOPATH/src/github.com/golang/protobuf/protoc-gen-go
+$ git checkout v1.2.0
+$ go install
+
+```
+
+TODO: See how the [test in the example](https://github.com/grpc/grpc-go/blob/master/examples/helloworld/mock_helloworld/hw_mock_test.go) is done with [gomock](https://github.com/golang/mock). 
 
 ## How pb is used in k8s implementation
 TODO

@@ -44,7 +44,7 @@
     become: true
 
 
-  - name: Install Apache
+  - name: dnf pkgs
     block:
     - name: dnf docker pkg
       dnf:

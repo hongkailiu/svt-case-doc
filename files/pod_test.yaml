@@ -6,7 +6,12 @@ metadata:
     app: web
 spec:
   containers:
-    - name: test-go
-      image: quay.io/hongkailiu/test-go:http-0.0.10
-      ports:
-        - containerPort: 8080
+  - name: test-go
+    image: quay.io/hongkailiu/test-go:http-0.0.12
+    command: ["/http"]
+    args: ["start", "-v"]
+    env:
+    - name: GIN_MODE
+      value: release
+    ports:
+    - containerPort: 8080

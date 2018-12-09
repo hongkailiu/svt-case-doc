@@ -4,42 +4,39 @@
 
 ```bash
 # oc new-project ttt
-# oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/pod_nginx_emptyDir.yaml
+# oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/pod_test.yaml
 
 # oc get pod web -o json | jq .spec.volumes
 [
   {
-    "emptyDir": {},
-    "name": "cache-volume"
-  },
-  {
-    "name": "default-token-9w8qf",
+    "name": "default-token-kz2r2",
     "secret": {
       "defaultMode": 420,
-      "secretName": "default-token-9w8qf"
+      "secretName": "default-token-kz2r2"
     }
   }
 ]
 
-# oc get sa default -o yaml
+
+$ oc get sa default -o yaml
 apiVersion: v1
 imagePullSecrets:
-- name: default-dockercfg-f2hxx
+- name: default-dockercfg-75gjq
 kind: ServiceAccount
 metadata:
-  creationTimestamp: 2018-12-06T19:53:15Z
+  creationTimestamp: 2018-12-09T04:11:33Z
   name: default
-  namespace: ttt
-  resourceVersion: "47832"
-  selfLink: /api/v1/namespaces/ttt/serviceaccounts/default
-  uid: 91b9db86-f990-11e8-9c3c-02d258615392
+  namespace: myproject
+  resourceVersion: "2136"
+  selfLink: /api/v1/namespaces/myproject/serviceaccounts/default
+  uid: 83b09bd3-fb68-11e8-9ba1-525400e74360
 secrets:
-- name: default-token-9w8qf
-- name: default-dockercfg-f2hxx
+- name: default-token-kz2r2
+- name: default-dockercfg-75gjq
 
-# oc get secret default-token-9w8qf 
+# oc get secret default-token-kz2r2
 NAME                  TYPE                                  DATA      AGE
-default-token-9w8qf   kubernetes.io/service-account-token   4         6m
+default-token-kz2r2   kubernetes.io/service-account-token   4         6m
 
 ```
 

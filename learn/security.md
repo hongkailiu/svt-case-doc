@@ -45,7 +45,10 @@ SCC can define [Linux capabilities](https://docs.docker.com/engine/reference/run
 
 ## [SA](https://docs.openshift.org/latest/dev_guide/service_accounts.html)
 
-SA gives a way to impersonate. Those 3 SCCs come out of the box: builder/deployer to run build/deploy pods, default to run other pods, or do any object operation.
+* SA gives a way to impersonate.
+* [A service account provides an identity for processes that run in a Pod.](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) 
+
+Those 3 SCCs come out of the box: builder/deployer to run build/deploy pods, default to run other pods, or do any object operation.
 
 ```sh
 # oc get sa -n default

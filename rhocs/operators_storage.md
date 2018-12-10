@@ -323,6 +323,8 @@ gcs3
 
 ```
 
+Blocked by [gcs/issues/46](https://github.com/gluster/gcs/issues/46).
+
 ## Volume Snapshot
 
 ## Operators for storage

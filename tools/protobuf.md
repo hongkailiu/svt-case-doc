@@ -49,7 +49,7 @@ $ make test-pb
 
 ### [gRPG](https://grpc.io/docs/tutorials/basic/go.html)
 
-Add service definition into addressbook.proto, and then
+_Add service definition into `addressbook.proto`_, and then
 
 ```bash
 ### Update the generated code

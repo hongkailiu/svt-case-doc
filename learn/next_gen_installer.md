@@ -48,8 +48,9 @@ Launch a cluster:
 
 ```bash
 $ cd go/src/github.com/openshift/installer/
+### removed script: https://github.com/openshift/installer/commit/aff2e983f9438717dec2d182799ba7250035912d
 ### download terraform into bin folder
-$ ./hack/get-terraform.sh
+(obsoleted 20181211) $ ./hack/get-terraform.sh
 ### build openshift-install binary in bin folder
 $ ./hack/build.sh
 ### launch a cluster:

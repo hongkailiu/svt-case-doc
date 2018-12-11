@@ -81,13 +81,18 @@ ip-10-0-27-83.ec2.internal     Ready     master    34m       v1.11.0+d4cacc0
 ip-10-0-34-184.ec2.internal    Ready     master    34m       v1.11.0+d4cacc0
 ip-10-0-9-10.ec2.internal      Ready     master    34m       v1.11.0+d4cacc0
 
-### ssh to node
+### ssh to master node
 $ oc describe node ip-10-0-27-83.ec2.internal | grep ExternalDNS
   ExternalDNS:  ec2-54-197-216-70.compute-1.amazonaws.com
 
 $ ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ~/.ssh/libra.pem  core@ec2-54-197-216-70.compute-1.amazonaws.com
 $ sudo -i
 # 
+
+### ssh to worker nodes
+### Since there is no public dns associated with worker nodes,
+### we have to ssh to worker nodes from a master node as jump node.
+### Also need to have the private key file (mode 0600) on the jump node 
 
 ```
 

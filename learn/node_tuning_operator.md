@@ -205,5 +205,96 @@ tuned 2.10.0
 Created [tuned-containerized/issues/1](https://github.com/jmencak/tuned-containerized/issues/1)
 
 ### Test with OCP 4.0
-TODO
+
+After `openshift-install create cluster` (and `export KUBECONFIG=${PWD}/auth/kubeconfig`):
+
+```bash
+$ oc version
+oc v4.0.0-0.94.0
+kubernetes v1.11.0+3db990d20d
+features: Basic-Auth GSSAPI Kerberos SPNEGO
+
+Server https://hongkliu-api.devcluster.openshift.com:6443
+kubernetes v1.11.0+231d012
+
+$ oc get all -n openshift-cluster-node-tuning-operator
+NAME                                                READY     STATUS    RESTARTS   AGE
+pod/cluster-node-tuning-operator-7676f485cc-zp9pp   1/1       Running   0          1h
+pod/tuned-827wp                                     1/1       Running   1          1h
+pod/tuned-85cgm                                     1/1       Running   0          1h
+pod/tuned-9fvrf                                     1/1       Running   0          1h
+pod/tuned-nn69g                                     1/1       Running   1          1h
+pod/tuned-pbkqx                                     1/1       Running   0          1h
+pod/tuned-zz4m5                                     1/1       Running   1          1h
+
+NAME                   DESIRED   CURRENT   READY     UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/tuned   6         6         6         6            6           <none>          1h
+
+NAME                                           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/cluster-node-tuning-operator   1         1         1            1           1h
+
+NAME                                                      DESIRED   CURRENT   READY     AGE
+replicaset.apps/cluster-node-tuning-operator-7676f485cc   1         1         1         1h
+
+$ oc get cm -n openshift-cluster-node-tuning-operator
+NAME              DATA      AGE
+tuned-profiles    1         1h
+tuned-recommend   1         1h
+
+
+```
+
+Check on nodes: `tuned` is not even installed.
+
+```bash
+# systemctl status tuned.service
+Unit tuned.service could not be found.
+
+```
+
+Check the image version:
+
+```bash
+$ oc get ds tuned -o json | jq -r .spec.template.spec.containers[].image
+registry.svc.ci.openshift.org/openshift/origin-v4.0-2018-12-11-071126@sha256:6667ac4aecae183dfd4e6ae4277dd86ca977e0a3b9feefee653043105503c6d6
+$ oc get deploy -o json cluster-node-tuning-operator | jq -r .spec.template.spec.containers[].image
+registry.svc.ci.openshift.org/openshift/origin-v4.0-2018-12-11-071126@sha256:04b6a2c614fb3840782db830c5739ff00b74ba596c768b0c4de457b5584bdecd
+
+```
+
+Demo:
+
+```bash
+$ oc project openshift-cluster-node-tuning-operator
+
+###label a worker node as a es node
+$ oc get node ip-10-0-134-189.us-west-2.compute.internal --show-labels
+NAME                                         STATUS    ROLES     AGE       VERSION           LABELS
+ip-10-0-134-189.us-west-2.compute.internal   Ready     worker    2h        v1.11.0+231d012   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/instance-type=m4.large,beta.kubernetes.io/os=linux,failure-domain.beta.kubernetes.io/region=us-west-2,failure-domain.beta.kubernetes.io/zone=us-west-2a,kubernetes.io/hostname=ip-10-0-134-189,node-role.kubernetes.io/worker=
+
+$ oc get pod tuned-nn69g -o wide
+NAME          READY     STATUS    RESTARTS   AGE       IP             NODE                                         NOMINATED NODE
+tuned-nn69g   1/1       Running   1          2h        10.0.134.189   ip-10-0-134-189.us-west-2.compute.internal   <none>
+
+$ oc logs tuned-nn69g | grep applied
+2018-12-11 16:08:46,119 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-node' applied
+2018-12-11 16:10:01,317 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-node' applied
+2018-12-11 16:12:47,959 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-node' applied
+2018-12-11 16:13:40,140 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-node' applied
+
+$ oc label node ip-10-0-134-189.us-west-2.compute.internal tuned.openshift.io/elasticsearch=""
+
+### NOT seeing any logs about es profile applied
+
+$ oc get cm tuned-profiles -o yaml | grep kernel.pid_max
+      kernel.pid_max=>131072
+### on one of master:
+# sysctl -n kernel.pid_max
+32768
+
+### So the parameter is NOT working either.
+
+
+
+```
 

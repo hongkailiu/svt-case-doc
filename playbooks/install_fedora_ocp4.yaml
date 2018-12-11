@@ -30,6 +30,8 @@
         ###- origin-clients
         ### useful pkgs
         - bash-completion
+        - jq
+        - tmux
     become: true
 
   - name: dnf origin-clients

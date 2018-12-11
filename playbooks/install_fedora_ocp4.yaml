@@ -7,6 +7,9 @@
     ansible_python_interpreter: /usr/bin/python3
     ###ansible_become_pass: 111
     kerberos_id: hongkliu
+    ###
+    install_oc_rpm: false
+    install_oc_tar: true
   vars_files:
     - external_vars.yaml
   tasks:
@@ -24,8 +27,35 @@
         - golang-bin
         - gcc-c++
         ### this will install kubectl as well on fedora
-        - origin-clients
+        ###- origin-clients
+        ### useful pkgs
+        - bash-completion
     become: true
+
+  - name: dnf origin-clients
+    dnf:
+      name: "{{ packages }}"
+      state: present
+    vars:
+      packages:
+      - origin-clients
+    when: install_oc_rpm
+    become: true
+
+  - name: install oc cli via tar
+    block:
+    - name: make sure ~/bin folder exists
+      file:
+        path: ~/bin
+        state: directory
+    - name: unarchive oc.tar.gz
+      unarchive:
+        src: "{{ item }}"
+        dest: "~/bin"
+        remote_src: yes
+      loop:
+      - https://mirror.openshift.com/pub/openshift-v3/clients/4.0.0-0.94.0/linux/oc.tar.gz
+    when: install_oc_tar
 
   - name: create aws configuration folder
     file:

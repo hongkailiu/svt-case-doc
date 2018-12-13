@@ -241,6 +241,9 @@ NAME              DATA      AGE
 tuned-profiles    1         1h
 tuned-recommend   1         1h
 
+$ oc get tuned
+NAME      AGE
+default   9m
 
 ```
 
@@ -262,7 +265,7 @@ registry.svc.ci.openshift.org/openshift/origin-v4.0-2018-12-11-071126@sha256:04b
 
 ```
 
-Demo:
+[Jiri's Demo](https://primetime.bluejeans.com/a2m/events/playback/fcda2a58-e664-4ff3-be05-0c3df8ae8604): at 01:41:01
 
 ```bash
 $ oc project openshift-cluster-node-tuning-operator
@@ -294,7 +297,11 @@ $ oc get cm tuned-profiles -o yaml | grep kernel.pid_max
 
 ### So the parameter is NOT working either.
 
+### changed the value of `net.netfilter.nf_conntrack_max`
+$ oc edit tuned default
 
+### on master `$ sysctl net.netfilter.nf_conntrack_max` shows the updated value
+### the logs of tuned also shows one more line of `applied`.
 
 ```
 

@@ -355,4 +355,5 @@ work unless you set up by `export AWS_PROFILE="openshift-dev"`.
 
 ## installer 0.6.0: 20181213
 
-default aws profile; no need for terraform installation.
+* default aws profile; no need for terraform installation.
+* console pod is running but URL `https://console-openshift-console.apps.hongkliu.devcluster.openshift.com/` is not working

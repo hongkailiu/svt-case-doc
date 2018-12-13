@@ -351,3 +351,8 @@ work unless you set up by `export AWS_PROFILE="openshift-dev"`.
 `~/.terraform.d/`.
 
     * (did not find the password) https://github.com/openshift/installer/issues/411#issuecomment-444620427
+
+
+## installer 0.6.0: 20181213
+
+default aws profile; no need for terraform installation.

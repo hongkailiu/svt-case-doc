@@ -6,7 +6,7 @@
 * [sysctls@k8s](https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/)
 * [sysctl_params](https://www.kernel.org/doc/Documentation/sysctl/)
 * tuned: [rh-doc1](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/power_management_guide/Tuned#sect-tuned-powertop2tuned), [rh-doc2](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/performance_tuning_guide/chap-red_hat_enterprise_linux-performance_tuning_guide-tuned), [tuned@oc](https://docs.openshift.com/container-platform/3.11/scaling_performance/host_practices.html#scaling-performance-capacity-tuned-profile)
-
+* github.repos: [openshift/openshift-tuned](https://github.com/openshift/openshift-tuned), [openshift/cluster-node-tuning-operator](https://github.com/openshift/cluster-node-tuning-operator)
 
 ## Background
 
@@ -296,6 +296,12 @@ $ oc get cm tuned-profiles -o yaml | grep kernel.pid_max
 32768
 
 ### So the parameter is NOT working either.
+
+$ oc rsh tuned-<hash>  
+sh-4.2# tuned --version
+tuned 2.9.0
+### we will have to wait until 2.10.0 is used in the centos pod
+
 
 ### changed the value of `net.netfilter.nf_conntrack_max`
 $ oc edit tuned default

@@ -359,3 +359,4 @@ work unless you set up by `export AWS_PROFILE="openshift-dev"`.
 * console pod is running but URL `https://console-openshift-console.apps.hongkliu.devcluster.openshift.com/` is not working
     * tried in the afternoon, the url is working. The username and password is at the end of the output of installer.
     * it is an `okd` deployment from the login page and the link to the doc page.
+    * seems logout does not work. ^_^

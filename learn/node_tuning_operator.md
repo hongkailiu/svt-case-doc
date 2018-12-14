@@ -270,24 +270,52 @@ registry.svc.ci.openshift.org/openshift/origin-v4.0-2018-12-11-071126@sha256:04b
 ```bash
 $ oc project openshift-cluster-node-tuning-operator
 
-###label a worker node as a es node
-$ oc get node ip-10-0-134-189.us-west-2.compute.internal --show-labels
-NAME                                         STATUS    ROLES     AGE       VERSION           LABELS
-ip-10-0-134-189.us-west-2.compute.internal   Ready     worker    2h        v1.11.0+231d012   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/instance-type=m4.large,beta.kubernetes.io/os=linux,failure-domain.beta.kubernetes.io/region=us-west-2,failure-domain.beta.kubernetes.io/zone=us-west-2a,kubernetes.io/hostname=ip-10-0-134-189,node-role.kubernetes.io/worker=
+$ oc get tuned default -o yaml | grep recommend -A 20
+  recommend:
+  - match:
+    - label: tuned.openshift.io/elasticsearch
+      match:
+      - label: node-role.kubernetes.io/master
+      - label: node-role.kubernetes.io/infra
+      type: pod
+    priority: 10
+    profile: openshift-control-plane-es
+  - match:
+    - label: tuned.openshift.io/elasticsearch
+      type: pod
+    priority: 20
+    profile: openshift-node-es
+  - match:
+    - label: node-role.kubernetes.io/master
+    - label: node-role.kubernetes.io/infra
+    priority: 30
+    profile: openshift-control-plane
+  - priority: 40
+    profile: openshift-node
 
-$ oc get pod tuned-nn69g -o wide
-NAME          READY     STATUS    RESTARTS   AGE       IP             NODE                                         NOMINATED NODE
-tuned-nn69g   1/1       Running   1          2h        10.0.134.189   ip-10-0-134-189.us-west-2.compute.internal   <none>
+###not found any logging project/pod installed
+###fake my own
+$ oc new-project my-logging-project
+$ oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/pod_test.yaml
+$ oc label pod web -n my-logging-project  tuned.openshift.io/elasticsearch=
+$ oc get pod -o wide
+NAME      READY     STATUS    RESTARTS   AGE       IP           NODE                                        NOMINATED NODE
+web       1/1       Running   0          10s       10.128.2.8   ip-10-0-159-78.us-west-2.compute.internal   <none>
 
-$ oc logs tuned-nn69g | grep applied
-2018-12-11 16:08:46,119 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-node' applied
-2018-12-11 16:10:01,317 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-node' applied
-2018-12-11 16:12:47,959 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-node' applied
-2018-12-11 16:13:40,140 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-node' applied
+$ oc project openshift-cluster-node-tuning-operator
+$ oc get pod -o wide | grep 78 | grep tuned
+tuned-5rr44                                     1/1       Running   0          46m       10.0.159.78    ip-10-0-159-78.us-west-2.compute.internal    <none>
 
-$ oc label node ip-10-0-134-189.us-west-2.compute.internal tuned.openshift.io/elasticsearch=""
+###not seeing expected log in tuned pod
+###from Jiri: Need to fix
+E1214 14:50:31.839156       7 streamwatcher.go:109] Unable to decode an event from the watch stream: http2: server sent GOAWAY and closed the connection; LastStreamID=3, ErrCode=NO_ERROR, debug=""
 
-### NOT seeing any logs about es profile applied
+###workaround from Jiri:
+$ oc delete pod tuned-5rr44
+$ oc get pod -o wide | grep 78 | grep tuned
+tuned-zkc48                                     1/1       Running   0          12s       10.0.159.78    ip-10-0-159-78.us-west-2.compute.internal    <none>
+[fedora@ip-172-31-32-37 bbb]$ oc logs tuned-zkc48  | grep applied
+2018-12-14 15:40:24,637 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-node-es' applied
 
 $ oc get cm tuned-profiles -o yaml | grep kernel.pid_max
       kernel.pid_max=>131072
@@ -295,7 +323,7 @@ $ oc get cm tuned-profiles -o yaml | grep kernel.pid_max
 # sysctl -n kernel.pid_max
 32768
 
-### So the parameter is NOT working either.
+### So the parameter (with `=>`) is NOT working either.
 
 $ oc rsh tuned-<hash>  
 sh-4.2# tuned --version
@@ -308,6 +336,16 @@ $ oc edit tuned default
 
 ### on master `$ sysctl net.netfilter.nf_conntrack_max` shows the updated value
 ### the logs of tuned also shows one more line of `applied`.
+
+### priority
+### change the priority from 40 to 15 for profile `openshift-node`
+$ oc edit tuned default
+  - priority: 15
+    profile: openshift-node
+
+$ oc logs tuned-zkc48  | grep applied
+2018-12-14 15:40:24,637 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-node-es' applied
+2018-12-14 16:00:08,949 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-node' applied
 
 ```
 

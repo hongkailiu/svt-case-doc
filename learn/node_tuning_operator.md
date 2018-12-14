@@ -111,14 +111,14 @@ drwxr-xr-x. 2 root root    6 Sep  7 12:56 recommend.d
 
 Those profiles are installed and avtived by [tuned role](https://github.com/openshift/openshift-ansible/tree/master/roles/tuned/) of openshift-ansible.
 
-## Node tuning operator for OCP 4.0
+## Node tuning operator
 
 [We want to maintain the tuned profiles in a pod, instead of a node (servers in OCP cluster)](https://docs.google.com/document/d/1voWLsQBVOQpLHV-coYudIZn1-3NKRJyKDMPuJ53Ei90/edit#).
 
 * [design doc](https://docs.google.com/document/d/1VLH3VD5mzIX-k9B_2tOg72LUEYGiY1Sl6weDUbPpHQQ/edit)
 * [POC](https://github.com/jmencak/tuned-containerized/)
 
-### Practicing POC:
+### Practicing POC
 
 Tested with OCP 3.11:
 
@@ -203,6 +203,44 @@ tuned 2.10.0
 ```
 
 Created [tuned-containerized/issues/1](https://github.com/jmencak/tuned-containerized/issues/1)
+
+### Test with OCP 311
+
+Deploy the operator:
+
+```bash
+# git clone https://github.com/openshift/cluster-node-tuning-operator.git
+# cd cluster-node-tuning-operator/manifests/
+# oc create -f ./01-namespace.yaml 
+# oc project openshift-cluster-node-tuning-operator
+# oc create -f 02-crd.yaml 
+# oc create -f 03-rbac.yaml 
+# oc create -f 04-operator.yaml
+
+# oc get all
+NAME                                                READY     STATUS    RESTARTS   AGE
+pod/cluster-node-tuning-operator-78f87b497b-d78tc   1/1       Running   0          16m
+pod/tuned-4blhm                                     1/1       Running   0          16m
+pod/tuned-dm59j                                     1/1       Running   0          16m
+pod/tuned-p85qr                                     1/1       Running   0          16m
+
+NAME                   DESIRED   CURRENT   READY     UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+daemonset.apps/tuned   3         3         3         3            3           <none>          16m
+
+NAME                                           DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/cluster-node-tuning-operator   1         1         1            1           16m
+
+NAME                                                      DESIRED   CURRENT   READY     AGE
+replicaset.apps/cluster-node-tuning-operator-78f87b497b   1         1         1         16m
+
+```
+
+|                                              | ocp311 | origin4.0: installer-0.6.0     |
+|----------------------------------------------|--------|--------------------------------|
+| A. es pod labeling                           | Y      | Y* (need restart pod manually) |
+| B1. kernel.pid_max=>131072                   | Y      | N (wait until tuned 2.10.0)    |
+| B2. net.netfilter.nf_conntrack_max=1048573   | Y      | Y                              |
+| C. priority: 15#from 40 for `openshift-node` | Y      | Y                              |
 
 ### Test with OCP 4.0
 

@@ -5,7 +5,7 @@
 * [OPENSHIFTQ-12520](https://projects.engineering.redhat.com/browse/OPENSHIFTQ-12520) and [PROD-608](https://jira.coreos.com/browse/PROD-608)
 * [sysctls@k8s](https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster/)
 * [sysctl_params](https://www.kernel.org/doc/Documentation/sysctl/)
-* tuned: [rh-doc1](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/power_management_guide/Tuned#sect-tuned-powertop2tuned), [rh-doc2](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/performance_tuning_guide/chap-red_hat_enterprise_linux-performance_tuning_guide-tuned), [tuned@oc](https://docs.openshift.com/container-platform/3.11/scaling_performance/host_practices.html#scaling-performance-capacity-tuned-profile)
+* [tuned](https://github.com/redhat-performance/tuned): [rh-doc1](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/power_management_guide/Tuned#sect-tuned-powertop2tuned), [rh-doc2](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/performance_tuning_guide/chap-red_hat_enterprise_linux-performance_tuning_guide-tuned), [tuned@oc](https://docs.openshift.com/container-platform/3.11/scaling_performance/host_practices.html#scaling-performance-capacity-tuned-profile)
 * github.repos: [openshift/openshift-tuned](https://github.com/openshift/openshift-tuned), [openshift/cluster-node-tuning-operator](https://github.com/openshift/cluster-node-tuning-operator)
 
 ## Background

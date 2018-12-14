@@ -388,3 +388,19 @@ $ oc logs tuned-zkc48  | grep applied
 
 ```
 
+## Test Automation
+TODO
+
+Function case:
+
+We could automate the above test cases.
+The routine is somehow
+1. change a param by `oc edit tuned default` or `oc apply -f filename.yaml`
+2. check (with a timeout) if the expect line shows up in the log of the tuned pod
+3. check (with a timeout) if the param is updated on the node
+
+We could use test utils from operator-framework: https://github.com/operator-framework/operator-sdk/tree/master/test/test-framework
+Or implement the above logic without the framework.
+
+System case:
+Check how long it takes to pass 1 change onto monster cluster.

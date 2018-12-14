@@ -235,12 +235,13 @@ replicaset.apps/cluster-node-tuning-operator-78f87b497b   1         1         1 
 
 ```
 
-|                                              | ocp311 | origin4.0: installer-0.6.0     |
+| case\setup                                   | ocp311 | origin4.0: installer-0.6.0     |
 |----------------------------------------------|--------|--------------------------------|
 | A. es pod labeling                           | Y      | Y* (need restart pod manually) |
 | B1. kernel.pid_max=>131072                   | Y      | N (wait until tuned 2.10.0)    |
 | B2. net.netfilter.nf_conntrack_max=1048573   | Y      | Y                              |
 | C. priority: 15#from 40 for `openshift-node` | Y      | Y                              |
+
 
 ### Test with OCP 4.0
 

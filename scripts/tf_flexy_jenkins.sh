@@ -28,6 +28,7 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 rm -rfv ./openshift-ansible
 git clone https://github.com/openshift/openshift-ansible.git
 git -C ./openshift-ansible checkout release-3.11
+git -C ./openshift-ansible log --oneline -1
 
 
 readonly OCPTF_DIR=/data/jenkins_home/my-tool/ocptf

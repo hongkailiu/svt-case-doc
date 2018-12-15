@@ -6,6 +6,9 @@
     - string:
           name: my_var_file
           default: 'https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/terraform/ocp_var/var_file_all_in_one.tfvars'
+    - string:
+          name: static_ocp_inventory
+          default: 'https://raw.githubusercontent.com/hongkailiu/test-go/master/test_files/ocpft/inv/2.file'
     builders:
     - shell: |
         rm -rfv ./svt-case-doc

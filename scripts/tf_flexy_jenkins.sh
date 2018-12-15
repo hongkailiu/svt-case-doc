@@ -8,7 +8,7 @@ readonly VAR_FILE_NAME="./var_file_${BUILD_NUMBER}.tfvars"
 curl -L ${my_var_file} -o "${VAR_FILE_NAME}"
 readonly OCPTF_STATIC_INVENTORY="./2_${BUILD_NUMBER}.file"
 curl -L ${static_ocp_inventory} -o "${OCPTF_STATIC_INVENTORY}"
-echo "======"
+echo "======VAR_FILE_NAME: ${VAR_FILE_NAME}"
 cat "${VAR_FILE_NAME}"
 echo ""
 echo "======"
@@ -33,13 +33,16 @@ git -C ./openshift-ansible checkout release-3.11
 readonly OCPTF_DIR=/data/jenkins_home/my-tool/ocptf
 readonly OCPTF_DYNAMIC_INVENTORY="./ocptf_${BUILD_NUMBER}.file"
 install_ocp_gluster=false ${OCPTF_DIR}/build/ocptf --list --static > "${OCPTF_DYNAMIC_INVENTORY}"
-echo "======"
+echo "======OCPTF_DYNAMIC_INVENTORY: ${OCPTF_DYNAMIC_INVENTORY}"
 cat "${OCPTF_DYNAMIC_INVENTORY}"
 echo ""
 echo "======"
 
+echo "======running playbook: test.yaml"
 ansible-playbook -i "${OCPTF_DYNAMIC_INVENTORY}" -i "${OCPTF_STATIC_INVENTORY}" "${OCPTF_DIR}/test_files/ocpft/playbook/test.yaml" --extra-vars "ansible_ssh_private_key_file=/data/secret/id_rsa_perf" -vvv
 
 source /data/secret/secret.sh
+echo "======running playbook: prerequisites.yml"
 ansible-playbook -i "${OCPTF_DYNAMIC_INVENTORY}" -i "${OCPTF_STATIC_INVENTORY}" ./openshift-ansible/playbooks/prerequisites.yml  --extra-vars "ansible_ssh_private_key_file=/data/secret/id_rsa_perf"
+echo "======running playbook: deploy_cluster.yml"
 ansible-playbook -i "${OCPTF_DYNAMIC_INVENTORY}" -i "${OCPTF_STATIC_INVENTORY}" ./openshift-ansible/playbooks/deploy_cluster.yml --extra-vars "ansible_ssh_private_key_file=/data/secret/id_rsa_perf"

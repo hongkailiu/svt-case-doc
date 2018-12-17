@@ -1,10 +1,10 @@
 ---
 - hosts: all
   tasks:
-  - name: Delete docker images: 1st round
+  - name: Delete docker images (1st round)
     shell: docker rmi $(docker images -q)
 
-  - name: Delete docker images: 2nd round
+  - name: Delete docker images (2nd round)
     shell: docker rmi $(docker images -q)
 
   - name: replace docker with containers in /etc/fstab

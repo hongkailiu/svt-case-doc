@@ -1,6 +1,6 @@
 cluster_name = "hongkliu-tf"
 kubernetes_cluster_value = "hongkliu-ocp"
-ami_id = "ami-0601ec325b0d8c261"
+ami_id = "ami-047d6cf014ef7c3e4"
 master_instance_count = "1"
 master_instance_type = "m5.xlarge"
 infra_instance_count = "1"

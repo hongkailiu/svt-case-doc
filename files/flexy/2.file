@@ -100,7 +100,7 @@ openshift_clusterid=hongkliu-ocp
 
 ##crio
 openshift_use_crio=true
-openshift_use_crio_only=true
+#openshift_use_crio_only=true
 
 [lb]
 

@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+  - name: Delete docker images
+    shell: docker rmi -f $(docker images -q)
+
+  - name: replace docker with containers in /etc/fstab
+    replace:
+      dest: /etc/fstab
+      regexp: 'docker'
+      replace: 'containers'

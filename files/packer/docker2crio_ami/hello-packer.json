@@ -1,0 +1,33 @@
+{
+  "variables": {
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "aws_ssh_private_key_file": "",
+    "source_ami_id": "",
+    "target_ami_name": ""
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "us-west-2",
+      "source_ami": "{{user `source_ami_id`}}",
+      "instance_type": "m5.large",
+      "ssh_username": "root",
+      "ssh_keypair_name": "id_rsa_perf",
+      "ssh_private_key_file": "{{user `aws_ssh_private_key_file`}}",
+      "security_group_id": "sg-5c5ace38",
+      "subnet_id": "subnet-4879292d",
+      "ami_name": "{{user `target_ami_name`}}",
+      "ami_description": "Provided by Red Hat, Inc."
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "./playbook.yml",
+      "user": "root"
+    }
+  ]
+}

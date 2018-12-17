@@ -4,5 +4,5 @@
   "aws_ssh_private_key_file": "/home/fedora/id_rsa_perf",
   "file_path": "/etc/foo.conf",
   "source_ami_id": "ami-0e1be3be76a9d42bc",
-  "target_ami_name": "hongkliu-packer-crio-{{timestamp}}"
+  "target_ami_name": "hongkliu-packer-crio"
 }

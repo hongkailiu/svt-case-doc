@@ -19,7 +19,7 @@
       "ssh_private_key_file": "{{user `aws_ssh_private_key_file`}}",
       "security_group_id": "sg-5c5ace38",
       "subnet_id": "subnet-4879292d",
-      "ami_name": "{{user `target_ami_name`}}",
+      "ami_name": "{{user `target_ami_name`}}-{{timestamp}}",
       "ami_description": "Provided by Red Hat, Inc."
     }
   ],

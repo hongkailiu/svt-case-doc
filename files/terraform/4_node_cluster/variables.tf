@@ -50,5 +50,9 @@ variable "gluster_instance_type" {
 }
 
 variable "gluster_volume_size" {
-  default = 1000
+  default = "1000"
+}
+
+variable "root_block_device_volume_size" {
+  default = "23"
 }

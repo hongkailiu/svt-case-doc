@@ -17,7 +17,7 @@ resource "aws_instance" "worker" {
     KubernetesCluster = "${var.kubernetes_cluster_value}"
   }
   root_block_device = {
-      volume_size = 60
+      volume_size = "${var.root_block_device_volume_size}"
       volume_type = "gp2"
       delete_on_termination =  true
     }
@@ -35,7 +35,7 @@ resource "aws_instance" "infra" {
     KubernetesCluster = "${var.kubernetes_cluster_value}"
   }
   root_block_device = {
-      volume_size = 60
+      volume_size = "${var.root_block_device_volume_size}"
       volume_type = "gp2"
       delete_on_termination =  true
     }
@@ -54,7 +54,7 @@ resource "aws_instance" "master" {
     KubernetesCluster = "${var.kubernetes_cluster_value}"
   }
   root_block_device = {
-    volume_size = 60
+    volume_size = "${var.root_block_device_volume_size}"
     volume_type = "gp2"
     delete_on_termination =  true
   }
@@ -72,7 +72,7 @@ resource "aws_instance" "gluster" {
     KubernetesCluster = "${var.kubernetes_cluster_value}"
   }
   root_block_device = {
-    volume_size = 60
+    volume_size = "${var.root_block_device_volume_size}"
     volume_type = "gp2"
     delete_on_termination =  true
   }

@@ -43,7 +43,7 @@ echo ""
 echo "======"
 
 echo "======running playbook: test.yaml"
-ansible-playbook -i "${OCPTF_DYNAMIC_INVENTORY}" -i "${OCPTF_STATIC_INVENTORY}" "${OCPTF_DIR}/test_files/ocpft/playbook/test.yaml" --extra-vars "ansible_ssh_private_key_file=/data/secret/id_rsa_perf" -vvv
+ansible-playbook -i "${OCPTF_DYNAMIC_INVENTORY}" -i "${OCPTF_STATIC_INVENTORY}" "${OCPTF_DIR}/test_files/ocpft/playbook/test.yaml" --extra-vars "ansible_ssh_private_key_file=/data/secret/id_rsa_perf"
 
 source /data/secret/secret.sh
 echo "======running playbook: prerequisites.yml"

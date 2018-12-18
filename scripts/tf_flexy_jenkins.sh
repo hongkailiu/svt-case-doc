@@ -34,6 +34,8 @@ git -C ./openshift-ansible log --oneline -1
 
 
 readonly OCPTF_DIR=/data/jenkins_home/my-tool/ocptf
+###wait 22 port open
+${OCPTF_DIR}/build/ocptf --list | jq -r .nodes.hosts[] | while read host; do wait-port -t 300000 "${host}:22"; done
 readonly OCPTF_DYNAMIC_INVENTORY="./ocptf_${BUILD_NUMBER}.file"
 install_ocp_gluster=false ${OCPTF_DIR}/build/ocptf --list --static > "${OCPTF_DYNAMIC_INVENTORY}"
 echo "======OCPTF_DYNAMIC_INVENTORY: ${OCPTF_DYNAMIC_INVENTORY}"

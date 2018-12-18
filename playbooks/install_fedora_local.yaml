@@ -41,8 +41,14 @@
         - tmux
         - ansible-2.6.5-1.fc29
         - python3-pip
+        - npm
     become: true
 
+  - name: Install "wait-port" node.js package globally.
+    npm:
+      name: wait-port
+      global: yes
+    become: true
 
   - name: dnf pkgs
     block:
@@ -252,3 +258,6 @@
       group: jenkins
       mode: 0600
     become: true
+
+##
+## TODO packer install

@@ -19,7 +19,6 @@ ${TF_BIN} init ./svt-case-doc/files/terraform/4_node_cluster/
 ${TF_BIN} apply -auto-approve -var-file="/data/secret/secret.tfvars" -var-file="${VAR_FILE_NAME}" ./svt-case-doc/files/terraform/4_node_cluster/
 mv -v ./terraform.tfstate "./terraform_${BUILD_NUMBER}.tfstate"
 
-sleep 60
 export terraform_tf_state_file=$(readlink -f "./terraform_${BUILD_NUMBER}.tfstate")
 ls -al "${terraform_tf_state_file}"
 

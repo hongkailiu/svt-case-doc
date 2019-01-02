@@ -360,3 +360,18 @@ work unless you set up by `export AWS_PROFILE="openshift-dev"`.
     * tried in the afternoon, the url is working. The username and password is at the end of the output of installer.
     * it is an `okd` deployment from the login page and the link to the doc page.
     * seems logout does not work. ^_^
+
+## installer 0.8.0: 20190102
+
+Hit the error below. Ignoring it seems OK.
+
+```bash
+$ openshift-install create cluster
+? SSH Public Key /home/fedora/.ssh/libra.pub
+? Platform aws
+? Region us-west-2
+ERROR list hosted zones: Throttling: Rate exceeded
+        status code: 400, request id: 21f65da3-0ec9-11e9-b6a3-39da04a3cd7d 
+? Base Domain devcluster.openshift.com
+
+```

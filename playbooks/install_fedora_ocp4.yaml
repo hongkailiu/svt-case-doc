@@ -56,7 +56,7 @@
         dest: "~/bin"
         remote_src: yes
       loop:
-      - https://mirror.openshift.com/pub/openshift-v3/clients/4.0.0-0.94.0/linux/oc.tar.gz
+      - https://mirror.openshift.com/pub/openshift-v3/clients/4.0.0-0.119.0/linux/oc.tar.gz
     when: install_oc_tar
 
   - name: create aws configuration folder

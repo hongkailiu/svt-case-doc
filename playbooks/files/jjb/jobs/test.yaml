@@ -9,6 +9,10 @@
     - string:
           name: static_ocp_inventory
           default: 'https://raw.githubusercontent.com/hongkailiu/test-go/master/test_files/ocpft/inv/2.file'
+    - bool:
+          name: crio
+          default: false
+          description: "A parameter named crio, defaults to 'false'."
     builders:
     - shell: |
         rm -rfv ./svt-case-doc

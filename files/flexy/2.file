@@ -99,7 +99,7 @@ openshift_clusterid=hongkliu-ocp
 #openshift_master_default_subdomain=apps.23.23.23.24.xip.io
 
 ##crio
-openshift_use_crio=true
+#openshift_use_crio=true
 #openshift_use_crio_only=true
 
 [lb]

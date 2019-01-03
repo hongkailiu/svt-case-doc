@@ -25,6 +25,14 @@ $ oc adm policy add-cluster-role-to-user cluster-admin redhat
 $ oc get pods -o wide
 ```
 
+## custom oc output
+
+```sh
+# oc get pod tuned-bqlws -o custom-columns=name:.spec.containers[].name
+name
+tuned
+```
+
 ## delete project
 
 ```sh

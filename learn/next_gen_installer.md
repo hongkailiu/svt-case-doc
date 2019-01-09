@@ -377,6 +377,24 @@ ERROR list hosted zones: Throttling: Rate exceeded
 
 ```
 
+## installer 0.9.1: 20190109
+
+Using aws account from Aleks:
+
+```
+$ openshift-install version
+openshift-install v0.9.1
+
+$ openshift-install create cluster
+? SSH Public Key /home/fedora/.ssh/libra.pub
+? Platform aws
+? Region us-east-2
+? Base Domain qe.devcluster.openshift.com
+? Cluster Name hongkliu
+? Pull Secret [? for help] *************************************************************************************************
+INFO Creating cluster...            
+
+```
 
 
 

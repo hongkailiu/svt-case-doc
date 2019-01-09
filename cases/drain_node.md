@@ -110,3 +110,58 @@ If there are more than 2 compute nodes, or default node selector is not set, the
 
   ```
 
+```
+$ oc get node | grep worker
+ip-10-0-132-122.us-east-2.compute.internal   Ready     worker    2h        v1.11.0+406fc897d8
+ip-10-0-146-194.us-east-2.compute.internal   Ready     worker    2h        v1.11.0+406fc897d8
+ip-10-0-164-234.us-east-2.compute.internal   Ready     worker    2h        v1.11.0+406fc897d8
+
+$ export NODE_1=ip-10-0-132-122.us-east-2.compute.internal
+$ export NODE_2=ip-10-0-146-194.us-east-2.compute.internal
+
+$ oc label node ${NODE_1} aaa=bbb
+$ oc label node ${NODE_2} aaa=bbb
+```
+
+Problem 1: `error: pods with local storage`
+
+```
+$ oc adm drain ${NODE_1} --ignore-daemonsets
+node/ip-10-0-132-122.us-east-2.compute.internal already cordoned
+error: unable to drain node "ip-10-0-132-122.us-east-2.compute.internal", aborting command...
+
+There are pending nodes to be drained:
+ ip-10-0-132-122.us-east-2.compute.internal
+error: pods with local storage (use --delete-local-data to override): alertmanager-main-1, grafana-58456d859d-q2cdh, prometheus-k8s-0
+
+$ oc get pod -n fioatest0 --show-labels
+NAME          READY     STATUS    RESTARTS   AGE       LABELS
+fio-0-snddl   1/1       Running   0          31m       run=fio,test=fio
+(svtenv) [fedora@ip-172-31-32-37 openshift_scalability]$ oc adm drain ${NODE_1} --ignore-daemonsets --pod-selector='test=fio'
+node/ip-10-0-132-122.us-east-2.compute.internal already cordoned
+pod/fio-0-snddl evicted
+
+```
+
+Problem 2: `1 node(s) had no available volume zone`
+
+```
+$ oc get pod
+NAME          READY     STATUS    RESTARTS   AGE
+fio-0-2tgx5   0/1       Pending   0          16m
+
+$ oc describe pod fio-0-2tgx5
+...
+Events:
+...
+  Warning  FailedScheduling  1m (x602 over 16m)  default-scheduler  0/6 nodes are available: 1 node(s) had no available volume zone, 1 node(s) were unschedulable, 4 node(s) didn't match node selector.
+
+$ oc describe node ${NODE_1} | grep ProviderID
+ProviderID:                               aws:///us-east-2a/i-05058c0a174142b1e
+$ oc describe node ${NODE_2} | grep ProviderID
+ProviderID:                               aws:///us-east-2b/i-0f2440cccfc16deb3
+
+
+```
+
+Probably we cannot do this because we cannot move ebs PV from an instance in `us-east-2a` to another instance in `us-east-2b`.

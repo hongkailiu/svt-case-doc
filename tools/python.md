@@ -2,7 +2,7 @@
 
 ## virtualenv
 
-[Set up `virtualenv` with python2 when python 3 is the default python version](https://virtualenv.pypa.io/en/latest/reference/#virtualenv-command): Tested with Fedora 29.
+Set up `virtualenv` with python2 [when python 3 is the default python version](https://virtualenv.pypa.io/en/latest/reference/#virtualenv-command): Tested with Fedora 29.
 
 ```
 ### default python version

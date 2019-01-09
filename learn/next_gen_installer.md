@@ -193,6 +193,10 @@ Lots of puzzles there:
 * [packer](https://www.packer.io/) seems a cool tool. Want to learn it.
 
 
+## SVT cases:
+
+For python version of cluster loader and concurrent build scripts, we can [set up python virtualenv](../tools/python.md).
+
 ## 4.0 hacking day: 20181206
 Email:
 * Christopher Alfonso: OCP 4.0 Installer - Jump on in!

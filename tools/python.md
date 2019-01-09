@@ -23,4 +23,6 @@ $ source svtenv/bin/activate
 (svtenv) [fedora@ip-172-31-32-37 svt]$ python -V
 Python 2.7.15
 
+$ pip install boto3 python-cephlibs flask pyyaml pytimeparse
+
 ```

@@ -92,3 +92,21 @@ Drain node <code>node1</code>.
 ```sh
 # oc adm drain $node1_name
 ```
+
+## ocp 4.0
+
+Config `KUBE_MAX_PD_VOLS`: TODO
+
+If there are more than 2 compute nodes, or default node selector is not set, then
+* choose 2 compute nodes and then label them with `aaa=bbb`
+* use `fio-template2.json` instead of `fio-template1.json` where 
+
+  ```
+  $ diff fio-template1.json fio-template2.json 
+  53a54,56
+  >                     "nodeSelector": {
+  > 			"aaa": "bbb"
+  > 		},
+
+  ```
+

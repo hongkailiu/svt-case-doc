@@ -195,7 +195,15 @@ Lots of puzzles there:
 
 ## SVT cases:
 
-For python version of cluster loader and concurrent build scripts, we can [set up python virtualenv](../tools/python.md).
+For python version of cluster loader and concurrent build scripts, we can 
+
+* copy the kube config to the right path:
+
+    ```
+    $ cp ${PWD}/auth/kubeconfig ~/.kube/config
+    ```
+
+* [set up python virtualenv](../tools/python.md).
 
 ## 4.0 hacking day: 20181206
 Email:
@@ -400,6 +408,33 @@ INFO Creating cluster...
 
 ```
 
+Tested with Vikas' instructions:
+
+```
+###Step 4:
+$ docker login -u $(oc whoami) -p $(oc whoami -t) registry.svc.ci.openshift.org
+
+###Step 5:
+export _OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-08-152529
+export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-08-152529
+
+```
+
+```
+$ openshift-install create cluster
+? SSH Public Key /home/fedora/.ssh/libra.pub
+? Platform aws
+? Region us-west-2
+ERROR list hosted zones: Throttling: Rate exceeded
+        status code: 400, request id: e0035898-1452-11e9-baee-cf7f448afe36 
+? Base Domain devcluster.openshift.com
+? Cluster Name hongkliu
+? Pull Secret [? for help] *************************************************************************************************WARNING Found override for ReleaseImage. Please be warned, this is not advised 
+INFO Creating cluster...                          
+INFO Waiting up to 30m0s for the Kubernetes API... 
+FATAL waiting for Kubernetes API: context deadline exceeded 
+
+```
 
 
 ## Things are different in 4.0

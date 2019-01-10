@@ -1,4 +1,8 @@
-# [RPM-OSTREE](http://www.projectatomic.io/docs/os-updates/)
+# ostree
+
+https://ostree.readthedocs.io/en/latest/manual/introduction/
+
+## [RPM-OSTREE](http://www.projectatomic.io/docs/os-updates/)
 
 On Atomic Host, <code>rpm-ostree</code> is integrated into <code>atomic host</code> command.
 
@@ -27,5 +31,3 @@ Deployments:
               GPGSignature: Valid signature by E641850B77DF435378D1D7E2812A6B4B64DAB85D
 
 ```
-
-

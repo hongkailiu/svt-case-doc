@@ -1,5 +1,7 @@
 # OCP 4.0
 
+* [OpenShift 4.0 Technical Enablement](https://mojo.redhat.com/docs/DOC-1187782)
+
 ## Configuration
 
 ### default node selector

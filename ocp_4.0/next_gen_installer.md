@@ -413,16 +413,32 @@ Note that the base domain `qe.devcluster.openshift.com` is auto-filled by the in
 Tested with Vikas' instructions:
 
 ```
+###1. Please have your pull secret from try.openshift,com ready before you do this.
+###2. Login (with your github id) to https://api.ci.openshift.org/console/catalog and note your userid and login token
+###3. oc login https://api.ci.openshift.org --token <api.ci login token>
 ###Step 4:
 $ docker login -u $(oc whoami) -p $(oc whoami -t) registry.svc.ci.openshift.org
 
 ###Step 5:
-export _OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-08-152529
-export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-08-152529
+$ export _OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-08-152529
+$ export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-08-152529
+
+###Step 6: Thanks to Jianlin
+$ cat ~/.docker/config.json 
+{
+	"auths": {
+		"registry.svc.ci.openshift.org": {
+			"auth": "<secret>"
+		}
+	}
+}
+
+###Add an auth for "registry.svc.ci.openshift.org" into the pull secret.
 
 ```
 
 ```
+### without step 6: 20190109
 $ openshift-install create cluster
 ? SSH Public Key /home/fedora/.ssh/libra.pub
 ? Platform aws
@@ -438,4 +454,27 @@ FATAL waiting for Kubernetes API: context deadline exceeded
 
 ```
 
+```
+### with step 6: 20190110
+$ openshift-install create cluster --dir=./20190110.vikas
+? SSH Public Key /home/fedora/.ssh/libra.pub
+? Platform aws
+? Region us-west-2
+ERROR list hosted zones: Throttling: Rate exceeded
+        status code: 400, request id: 19a9f38a-14e7-11e9-889f-b9e1f6d95d40 
+? Base Domain devcluster.openshift.com
+? Cluster Name hongkliu
+? Pull Secret [? for help] *************************************************************************************************WARNING Found override for ReleaseImage. Please be warned, this is not advised 
+INFO Creating cluster...                          
+INFO Waiting up to 30m0s for the Kubernetes API... 
+INFO API v1.11.0+406fc897d8 up                    
+INFO Waiting up to 30m0s for the bootstrap-complete event... 
+INFO Destroying the bootstrap resources...        
+INFO Waiting up to 10m0s for the openshift-console route to be created... 
+INFO Install complete!                            
+INFO Run 'export KUBECONFIG=/home/fedora/20190110.vikas/auth/kubeconfig' to manage the cluster with 'oc', the OpenShift CLI. 
+INFO The cluster is ready when 'oc login -u kubeadmin -p <secret>' succeeds (wait a few minutes). 
+INFO Access the OpenShift web-console here: https://console-openshift-console.apps.hongkliu.devcluster.openshift.com 
+INFO Login to the console with user: kubeadmin, password: <secret>
 
+```

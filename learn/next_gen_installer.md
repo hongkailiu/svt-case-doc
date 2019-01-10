@@ -408,6 +408,8 @@ INFO Creating cluster...
 
 ```
 
+Note that the base domain `qe.devcluster.openshift.com` is auto-filled by the installer.
+
 Tested with Vikas' instructions:
 
 ```

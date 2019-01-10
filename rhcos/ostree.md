@@ -84,6 +84,13 @@ Deployments:
 ```
 
 Remember in Xiaoli's email, _Please note: 47.249 should be treated as Beta candidate build and used for beta testing._
+We can also obtain this information by:
+
+```
+$ cat /etc/*release | grep OSTREE_VERSION
+OSTREE_VERSION=47.249
+
+```
 
 Install a pkg: Maybe disabled by RHCOS build.
 

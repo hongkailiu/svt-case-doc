@@ -1,7 +1,6 @@
 # Next-Gen Installer for OCP 4.0
 
 * [repo](https://github.com/openshift/installer)
-* [training](https://github.com/openshift/training)
 
 ## Doc
 
@@ -410,7 +409,7 @@ INFO Creating cluster...
 
 Note that the base domain `qe.devcluster.openshift.com` is auto-filled by the installer.
 
-Tested with Vikas' instructions:
+Tested with Vikas' instructions: _This will install OCP images instead of OKD images._
 
 ```
 ###1. Please have your pull secret from try.openshift,com ready before you do this.
@@ -455,7 +454,6 @@ FATAL waiting for Kubernetes API: context deadline exceeded
 ```
 
 ```
-### with step 6: 20190110
 $ openshift-install create cluster --dir=./20190110.vikas
 ? SSH Public Key /home/fedora/.ssh/libra.pub
 ? Platform aws
@@ -476,5 +474,20 @@ INFO Run 'export KUBECONFIG=/home/fedora/20190110.vikas/auth/kubeconfig' to mana
 INFO The cluster is ready when 'oc login -u kubeadmin -p <secret>' succeeds (wait a few minutes). 
 INFO Access the OpenShift web-console here: https://console-openshift-console.apps.hongkliu.devcluster.openshift.com 
 INFO Login to the console with user: kubeadmin, password: <secret>
+
+```
+
+Checking:
+
+```
+$ oc get clusterversion version -o json | jq .status.current
+{
+  "payload": "registry.svc.ci.openshift.org/ocp/release@sha256:f820eaad16c66f08fe53acfccd9c27a665c36cf714aeefba44dc923432ac840e",
+  "version": "4.0.0-0.nightly-2019-01-08-152529"
+}
+
+### some cool 4.0 commands:
+$ oc adm release info --pullspecs
+$ oc adm release extract --from=registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-10-030048 --to=./abc
 
 ```

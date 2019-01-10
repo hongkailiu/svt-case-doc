@@ -2,6 +2,14 @@
 
 https://coreos.slack.com/messages/
 
+## threads
+
+https://slackhq.com/threaded-messaging-comes-to-slack
+
+## reactions
+
+https://slackhq.com/722-ways-to-say-i-got-your-message
+
 ## reminders
 
 https://get.slack.help/hc/en-us/articles/208423427-Set-a-reminder#desktop-1

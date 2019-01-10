@@ -1,7 +1,13 @@
 # OCP 4.0
 
+## Doc 
+
 * [OpenShift 4.0 Technical Enablement](https://mojo.redhat.com/docs/DOC-1187782)
 * [training](https://github.com/openshift/training)
+
+## Build
+
+* [releases-redhat-coreos](https://releases-redhat-coreos.cloud.paas.upshift.redhat.com/)
 * [Release Status: 4.0.0-0.nightly](https://openshift-release.svc.ci.openshift.org/)
 
 ## Configuration

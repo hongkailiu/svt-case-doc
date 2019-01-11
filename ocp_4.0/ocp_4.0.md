@@ -2,12 +2,19 @@
 
 ## Doc 
 
-* [OpenShift 4.0 Technical Enablement](https://mojo.redhat.com/docs/DOC-1187782)
+* mojo pages (RH internal):
+  * [OCP 4.0 AWS Architecture](https://mojo.redhat.com/docs/DOC-1188781)
+  * [OpenShift 4.0 Technical Enablement](https://mojo.redhat.com/docs/DOC-1187782)
+    * [OCP 4.0 Technical Enablement 1 (Beta)](https://mojo.redhat.com/events/4974)
+    * [OCP 4.0 Technical Enablement 2 (Beta)](https://mojo.redhat.com/events/4975)
+    * [OCP 4.0 Technical Enablement 3 (Beta)](https://mojo.redhat.com/events/4976)
+
 * [training](https://github.com/openshift/training)
 
 ## Build
 
 * [releases-redhat-coreos](https://releases-redhat-coreos.cloud.paas.upshift.redhat.com/)
+* [aos-puddles](http://download.eng.bos.redhat.com/rcm-guest/puddles/RHAOS/AtomicOpenShift/4.0/)
 * [Release Status: 4.0.0-0.nightly](https://openshift-release.svc.ci.openshift.org/)
 
 ## Configuration

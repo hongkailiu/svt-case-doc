@@ -410,6 +410,7 @@ INFO Creating cluster...
 Note that the base domain `qe.devcluster.openshift.com` is auto-filled by the installer.
 
 Tested with Vikas' instructions: _This will install OCP images instead of OKD images._
+[art-notes](https://mojo.redhat.com/groups/atomicopenshift/blog/2019/01/11/ocp-40-high-touch-beta-htb-notes-from-art)
 
 ```
 ###1. Please have your pull secret from try.openshift,com ready before you do this.

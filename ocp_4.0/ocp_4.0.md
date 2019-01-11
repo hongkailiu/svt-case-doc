@@ -17,6 +17,81 @@
 * [aos-puddles: 4.0](http://download.eng.bos.redhat.com/rcm-guest/puddles/RHAOS/AtomicOpenShift/4.0/)
 * [Images: Release Status: 4.0.0-0.nightly](https://openshift-release.svc.ci.openshift.org/)
 
+### pick up the right build
+
+#### aos puddles
+Starting from a particular puddles, we can get the puddle number: eg, you are insterested in [puddle v4.0.0-0.131.0_2019-01-10.1](http://download.eng.bos.redhat.com/rcm-guest/puddles/RHAOS/AtomicOpenShift/4.0/v4.0.0-0.131.0_2019-01-10.1/).
+
+Then we need to find out the installer binary for that puddle which is in a docker image: 
+
+Method 1: docker
+
+Set up docker config:
+
+```
+$ cat ~/.docker/config.json 
+{
+	"auths": {
+		"registry.svc.ci.openshift.org": {
+			"auth": "<registry.svc.ci.openshift.org_token>"
+		},
+    "quay.io": {
+            "auth": "<https://try.openshift.com/_pull_secret>"
+    }
+	}
+}
+
+```
+
+```
+$ export ID=$(docker create quay.io/openshift-release-dev/ocp-v4.0-art-dev:v4.0.0-0.131.0.0-ose-installer)
+$ docker cp $ID:/usr/bin/openshift-install .
+$ docker rm $ID
+```
+
+Method 2: skopeo
+
+```
+$ export quay_secret="<https://try.openshift.com/_pull_secret>"
+$ export quay_creds=$(echo ${quay_secret} | base64 --decode)
+###if you want to do a inspect
+$ skopeo inspect docker://quay.io/openshift-release-dev/ocp-v4.0-art-dev:v4.0.0-0.131.0.0-ose-installer --creds ${quay_creds} | jq -r .RepoTags[] | grep "ose-installer"
+
+### ref: https://github.com/containers/libpod/blob/master/docs/podman-cp.1.md
+### NOTE we have to use root for this
+$ sudo -i
+# export quay_secret="<https://try.openshift.com/_pull_secret>"
+# export quay_creds=$(echo ${quay_secret} | base64 --decode)
+# podman pull quay.io/openshift-release-dev/ocp-v4.0-art-dev:v4.0.0-0.131.0.0-ose-installer --creds ${quay_creds}
+# export ID=$(podman create quay.io/openshift-release-dev/ocp-v4.0-art-dev:v4.0.0-0.131.0.0-ose-installer)
+# mnt=$(podman mount ${ID})
+# cp ${mnt}/bin/openshift-install .
+# podman umount ${ID}
+# podman rm ${ID}
+# ./openshift-install version
+./openshift-install v4.0.0-0.131.0.0-dirty
+
+```
+
+Then choose a night build from [Images: Release Status: 4.0.0-0.nightly](https://openshift-release.svc.ci.openshift.org/) and set up `OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE`, eg,
+
+```
+$ export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-11-155526
+$ openshift-install create cluster --dir=./20190111
+### make sure the pull secret contains auth for registry.svc.ci.openshift.org
+
+```
+
+Note that the mapping between puddle and nightly build is still unclear to me.
+
+However, Tim Tielawa suggested we should use installer from registry.svc.ci.openshift.org/ocp, eg, `registry.svc.ci.openshift.org/ocp/4.0-art-latest-2019-01-11-000044:installer`. 
+
+This way the matching of installer and images are ensured but we do not know which puddle we are testing.
+
+After the cluster is created, we can `rpm-ostree status` on one of the nodes
+to check rhcos verison. It should matching one in [Red Hat CoreOS release](https://releases-redhat-coreos.cloud.paas.upshift.redhat.com/).
+
+
 ## Configuration
 
 ### default node selector

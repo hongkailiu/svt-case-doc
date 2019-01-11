@@ -71,6 +71,9 @@ $ sudo -i
 # ./openshift-install version
 ./openshift-install v4.0.0-0.131.0.0-dirty
 
+### how come it's dirty?
+### https://mojo.redhat.com/groups/atomicopenshift/blog/2019/01/11/ocp-40-high-touch-beta-htb-notes-from-art
+
 ```
 
 Then choose a night build from [Images: Release Status: 4.0.0-0.nightly](https://openshift-release.svc.ci.openshift.org/) and set up `OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE`, eg,

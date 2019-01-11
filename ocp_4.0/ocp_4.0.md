@@ -91,6 +91,15 @@ However, Tim Tielawa suggested we should use installer from registry.svc.ci.open
 
 This way the matching of installer and images are ensured but we do not know which puddle we are testing.
 
+A more convienent way to get installer image id for exacting installer:
+
+```
+$ oc adm release info --pullspecs registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-11-205323 | grep installer
+  installer                                     registry.svc.ci.openshift.org/ocp/4.0-art-latest-2019-01-11-205323@sha256:58b5bc0f10caa359d520b7ee2cf695b60c1971d3c141abe99d33b8e024ef114f
+$ export ID=$(docker create registry.svc.ci.openshift.org/ocp/4.0-art-latest-2019-01-11-205323@sha256:58b5bc0f10caa359d520b7ee2cf695b60c1971d3c141abe99d33b8e024ef114f)
+...
+```
+
 After the cluster is created, we can `rpm-ostree status` on one of the nodes
 to check rhcos verison. It should matching one in [Red Hat CoreOS release](https://releases-redhat-coreos.cloud.paas.upshift.redhat.com/).
 

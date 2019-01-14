@@ -492,3 +492,8 @@ $ oc adm release info --pullspecs
 $ oc adm release extract --from=registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-10-030048 --to=./abc
 
 ```
+
+## troubleshooting
+
+* From Mike: tip  - waiting for bootstrap complete too long -> ssh into the bootstrap node and journalctl the kubelet service.
+* [troubleshooting.doc@github](https://github.com/openshift/installer/blob/master/docs/user/troubleshooting.md)

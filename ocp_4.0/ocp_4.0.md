@@ -131,6 +131,15 @@ Set: [issues/1021](https://github.com/openshift/installer/issues/1021)
      value: "60" 
 ```
 
+### network cdr
+
+* Mike Fiedler [9:57 AM]
+    1) openshift-install create installconfig
+    2) edit the yaml
+    3) openshift-install create manifests
+    4) openshift-install create cluster
+
+
 ## Components: where are the <openshift|kube>-pods?
 
 Master-<api|controller> seems split into 2 namespaces.

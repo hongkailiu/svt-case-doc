@@ -493,6 +493,16 @@ $ oc adm release extract --from=registry.svc.ci.openshift.org/ocp/release:4.0.0-
 
 ```
 
+## extract bin from nightly builds
+
+Steps: [install_output.md](../install_output.md).
+
+### 20190114: 4.0.0-0.nightly-2019-01-12-000105: Good
+
+```
+$ oc adm release info --pullspecs registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-12-000105 | grep installer
+```
+
 ## troubleshooting
 
 * From Mike: tip  - waiting for bootstrap complete too long -> ssh into the bootstrap node and journalctl the kubelet service.

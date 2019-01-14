@@ -139,6 +139,9 @@ Set: [issues/1021](https://github.com/openshift/installer/issues/1021)
     3) openshift-install create manifests
     4) openshift-install create cluster
 
+### Default build configuration
+
+https://groups.google.com/forum/#!topic/openshift-4-dev-preview/VkTG-f5CyG8
 
 ## Components: where are the <openshift|kube>-pods?
 

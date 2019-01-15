@@ -19,6 +19,7 @@ https://get.slack.help/hc/en-us/articles/208423427-Set-a-reminder#desktop-1
 ###Add new reminders
 /remind #aos-svt-qe “svt-scrum starts at 9:45 https://bluejeans.com/540285617” at 9:40AM every weekday
 /remind #aos-svt-qe "aos-qe-us sprint-retro starts at 21:15 https://bluejeans.com/540285617?src=calendarLink" on October 23, at 21:10PM,every 3 weeks
+/remind #aos-svt-qe “@here scrum meeting with Xiaoli starts at 8:15PM” at 8:10PM
 ###list reminders
 /remind list
 ```

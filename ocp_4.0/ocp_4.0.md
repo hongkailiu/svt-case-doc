@@ -166,6 +166,24 @@ Set: [issues/1021](https://github.com/openshift/installer/issues/1021)
 
 https://groups.google.com/forum/#!topic/openshift-4-dev-preview/VkTG-f5CyG8
 
+It seems that by default, the build pods run only on workers:
+
+```
+$ oc get node | grep worker
+ip-10-0-143-241.us-east-2.compute.internal   Ready     worker    1h        v1.11.0+c69f926354
+ip-10-0-144-88.us-east-2.compute.internal    Ready     worker    1h        v1.11.0+c69f926354
+ip-10-0-160-168.us-east-2.compute.internal   Ready     worker    1h        v1.11.0+c69f926354
+
+$ oc get pod --all-namespaces -o wide | grep "\-build" | awk '{print $8}' | sort -u
+ip-10-0-143-241.us-east-2.compute.internal
+ip-10-0-144-88.us-east-2.compute.internal
+ip-10-0-160-168.us-east-2.compute.internal
+
+$ oc get pod --all-namespaces -o wide | grep "\-build" | awk '{print $8}' | wc -l
+50
+
+```
+
 ### AllowAll IDP for oauthconfig
 
 https://mojo.redhat.com/docs/DOC-1186975

@@ -26,12 +26,12 @@ https://get.slack.help/hc/en-us/articles/208423427-Set-a-reminder#desktop-1
 
 Note that whether or not you get notifications of those reminders depends on your notification setting on the channel. We could also monify it in the way with @channel (see [here](https://get.slack.help/hc/en-us/articles/202009646-Notify-a-channel-or-workspace) for details).
 
-## Google carlendar integration
+## Google calendar integration
 
 It works but I need to figure out how to prevent others abusing the settings.
-The advantage (vs remidner) of this integration is to sync automatically with Google caleanders.
+The advantage (vs reminder) of this integration is to sync automatically with Google calenders.
 
-## Github integrateion
+## Github integration
 
 https://github.com/integrations/slack
 

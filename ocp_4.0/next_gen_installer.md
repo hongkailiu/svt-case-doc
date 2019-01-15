@@ -534,6 +534,7 @@ $  oc get clusterversion version -o json | jq .status.desired
 
 ```
 
+_The web console does not work. Seems not a router issue. Tested with my own pod. Pod IP is not accessible._
 
 ## troubleshooting
 

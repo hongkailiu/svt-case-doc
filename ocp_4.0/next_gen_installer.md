@@ -503,6 +503,38 @@ Steps: [install_output.md](../install_output.md).
 $ oc adm release info --pullspecs registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-12-000105 | grep installer
 ```
 
+### 20190115
+
+4.0.0-0.nightly-2019-01-15-010905 and 4.0.0-0.nightly-2019-01-15-034457: Bad
+
+```
+$ ./openshift-install version
+./openshift-install v4.0.0-0.139.0.0-dirty
+
+ERROR: logging before flag.Parse: E0115 14:25:49.385659    1111 streamwatcher.go:109] Unable to decode an event from the watch stream: http2: server sent GOAWAY and closed the connection; LastStreamID=1, ErrCode=NO_ERROR, debug=""
+WARNING RetryWatcher - getting event failed! Re-creating the watcher. Last RV: 6569 
+DEBUG added openshift-master-controllers.157a0bce09346f7c: controller-manager-m24s7 became leader 
+ERROR: logging before flag.Parse: E0115 14:26:48.320336    1111 streamwatcher.go:109] Unable to decode an event from the watch stream: http2: server sent GOAWAY and closed the connection; LastStreamID=1, ErrCode=NO_ERROR, debug=""
+WARNING RetryWatcher - getting event failed! Re-creating the watcher. Last RV: 9507 
+FATAL waiting for bootstrap-complete: timed out waiting for the condition
+```
+
+4.0.0-0.nightly-2019-01-15-064327: good
+
+```
+$ oc get clusterversion
+NAME      VERSION                             AVAILABLE   PROGRESSING   SINCE     STATUS
+version   4.0.0-0.nightly-2019-01-15-064327   True        False         1m        Cluster version is 4.0.0-0.nightly-2019-01-15-064327
+
+$  oc get clusterversion version -o json | jq .status.desired
+{
+  "payload": "registry.svc.ci.openshift.org/ocp/release@sha256:584f8f454184f6ece5679bf8103560f450e557d1d98711a4540d822c255fbeee",
+  "version": "4.0.0-0.nightly-2019-01-15-064327"
+}
+
+```
+
+
 ## troubleshooting
 
 * From Mike: tip  - waiting for bootstrap complete too long -> ssh into the bootstrap node and journalctl the kubelet service.

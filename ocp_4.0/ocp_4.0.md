@@ -166,6 +166,10 @@ Set: [issues/1021](https://github.com/openshift/installer/issues/1021)
 
 https://groups.google.com/forum/#!topic/openshift-4-dev-preview/VkTG-f5CyG8
 
+### AllowAll IDP for oauthconfig
+
+https://mojo.redhat.com/docs/DOC-1186975
+
 ## Components: where are the <openshift|kube>-pods?
 
 Master-<api|controller> seems split into 2 namespaces.

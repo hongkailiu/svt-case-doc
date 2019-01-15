@@ -85,7 +85,7 @@ $ openshift-install create cluster --dir=./20190111
 
 ```
 
-Note that the mapping between puddle and nightly build is still unclear to me.
+Note that the mapping between puddle and nightly build is still unclear to me (See the update on 20190115 below).
 
 However, Tim Tielawa suggested we should use installer from registry.svc.ci.openshift.org/ocp, eg, `registry.svc.ci.openshift.org/ocp/4.0-art-latest-2019-01-11-000044:installer`. 
 
@@ -102,6 +102,29 @@ $ export ID=$(docker create registry.svc.ci.openshift.org/ocp/4.0-art-latest-201
 
 After the cluster is created, we can `rpm-ostree status` on one of the nodes
 to check rhcos verison. It should matching one in [Red Hat CoreOS release](https://releases-redhat-coreos.cloud.paas.upshift.redhat.com/).
+
+Update on 20190115:
+
+When art-nightly builds are pushed to quay.io registry (notified by Xiaoli's email for the monent. A more automated procedure would be nice), we could use the
+following steps to consume the builds:
+
+1.  Extracted installer from latest build (quay.io image)
+2. `export OPENSHIFT_INSTALL_OS_IMAGE_OVERRIDE=ami-<hash>`
+3. Run the installer - should not need the oc login/docker login/build override or extra pull secrets
+
+In Xiaoli's email, this information showed up:
+
+```
+1. 4.0-art-latest-2019-01-15-010905 mirrored to quay.io: quay.io/openshift-release-dev/ocp-release:4.0.0-0.1
+2. RHCOS Build 47.249 is our latest RHCOS beta candidate build
+```
+
+Item 1 indicates we should use the installer binary in `quay.io/openshift-release-dev/ocp-release:4.0.0-0.1`.
+
+Item 2 indicates to get the AMI id from [Red Hat CoreOS release](https://releases-redhat-coreos.cloud.paas.upshift.redhat.com/) by:
+
+* RHCOS Build 47.249
+* region: in our case: `us-east-2	ami-085b89e82b74a76b5`
 
 
 ## Configuration

@@ -526,7 +526,7 @@ $ oc get clusterversion
 NAME      VERSION                             AVAILABLE   PROGRESSING   SINCE     STATUS
 version   4.0.0-0.nightly-2019-01-15-064327   True        False         1m        Cluster version is 4.0.0-0.nightly-2019-01-15-064327
 
-$  oc get clusterversion version -o json | jq .status.desired
+$ oc get clusterversion version -o json | jq .status.desired
 {
   "payload": "registry.svc.ci.openshift.org/ocp/release@sha256:584f8f454184f6ece5679bf8103560f450e557d1d98711a4540d822c255fbeee",
   "version": "4.0.0-0.nightly-2019-01-15-064327"

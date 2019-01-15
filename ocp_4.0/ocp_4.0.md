@@ -103,7 +103,7 @@ $ export ID=$(docker create registry.svc.ci.openshift.org/ocp/4.0-art-latest-201
 After the cluster is created, we can `rpm-ostree status` on one of the nodes
 to check rhcos verison. It should matching one in [Red Hat CoreOS release](https://releases-redhat-coreos.cloud.paas.upshift.redhat.com/).
 
-Update on 20190115:
+#### Update on 20190115:
 
 When art-nightly builds are pushed to quay.io registry (notified by Xiaoli's email for the monent. A more automated procedure would be nice), we could use the
 following steps to consume the builds:

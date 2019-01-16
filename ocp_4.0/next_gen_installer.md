@@ -534,9 +534,23 @@ $ oc get clusterversion version -o json | jq .status.desired
 
 ```
 
-_The web console does not work. Seems not a router issue. Tested with my own pod. Pod IP is not accessible._
+The web console does not work: [bz 1666846](https://bugzilla.redhat.com/show_bug.cgi?id=1666846)
+
+### 20190116: 0.10.0: app routes still broken
+
+```
+$ ./openshift-install version
+./openshift-install v0.10.0
+
+```
+
+Mike and Jeremy: "_OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE" works and the one without underscore does not.
 
 ## troubleshooting
 
-* From Mike: tip  - waiting for bootstrap complete too long -> ssh into the bootstrap node and journalctl the kubelet service.
+* Mike's tips
+    * waiting for bootstrap complete too long -> ssh into the bootstrap node and journalctl the kubelet service.
+    * Cluster Name <kerberos-id><n>: use `n` to make the cluster name unique for all clusters.
+    * There are 4 parts of the AWS console to look for orphaned resources:  EC2, Route53, VPC and IAM roles.
+
 * [troubleshooting.doc@github](https://github.com/openshift/installer/blob/master/docs/user/troubleshooting.md)

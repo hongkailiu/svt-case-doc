@@ -20,6 +20,8 @@ podman.x86_64                                       0.3.5-2.gitdb6bf9e.fc27     
 
 ## podman
 
+[podman-managing-containers-pods](https://developers.redhat.com/blog/2019/01/15/podman-managing-containers-pods/)
+
 Tested on Fedora 27:
 
 ```sh

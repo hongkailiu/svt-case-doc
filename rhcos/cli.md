@@ -1,6 +1,6 @@
 # CLI
 
-[Dan's doc](https://docs.google.com/document/d/1BwviZAw_7sfTQmOv1V5spibnNyW8iBOjJfQJWQTKJp8/edit) on this topic.
+[Dan's doc](https://docs.google.com/document/d/1BwviZAw_7sfTQmOv1V5spibnNyW8iBOjJfQJWQTKJp8/edit) and [crictl-vs-podman blog](https://blog.openshift.com/crictl-vs-podman/) on this topic.
 
 Installation via `yum`/`dnf`:
 ```sh

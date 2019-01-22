@@ -546,6 +546,40 @@ $ ./openshift-install version
 
 Mike and Jeremy: "_OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE" works and the one without underscore does not.
 
+### 20190122: 4.0.0-0.nightly-2019-01-21-005139 
+
+```
+$ ./openshift-install version
+./openshift-install v4.0.0-0.143.0.0-dirty
+
+$ ./openshift-install create install-config
+###https://gist.github.com/akrzos/a04b25e1adadfdccf9d7785a4e8f6f7b
+$ vi ./install-config.yaml 
+...
+machines:
+- name: master
+  platform: 
+    aws:
+      type: m5.xlarge
+      rootVolume:
+        size: 100
+        type: gp2
+  replicas: 3
+- name: worker
+  platform: 
+    aws:
+      type: m5.xlarge
+      rootVolume:
+        iops: 2400
+        size: 200
+        type: io1
+  replicas: 3
+...
+
+```
+
+Tried also with `build from src` and `replicas: 2` for both master and worker. Hit problems.
+
 ## troubleshooting
 
 * Mike's tips

@@ -20,7 +20,7 @@
 ### pick up the right build
 
 #### aos puddles
-Starting from a particular puddles, we can get the puddle number: eg, you are insterested in [puddle v4.0.0-0.131.0_2019-01-10.1](http://download.eng.bos.redhat.com/rcm-guest/puddles/RHAOS/AtomicOpenShift/4.0/v4.0.0-0.131.0_2019-01-10.1/).
+Starting from a particular puddles, we can get the puddle number: eg, you are interested in [puddle v4.0.0-0.131.0_2019-01-10.1](http://download.eng.bos.redhat.com/rcm-guest/puddles/RHAOS/AtomicOpenShift/4.0/v4.0.0-0.131.0_2019-01-10.1/).
 
 Then we need to find out the installer binary for that puddle which is in a docker image: 
 
@@ -186,7 +186,9 @@ $ oc get pod --all-namespaces -o wide | grep "\-build" | awk '{print $8}' | wc -
 
 ### AllowAll IDP for oauthconfig
 
-https://mojo.redhat.com/docs/DOC-1186975
+[mojo.page](https://mojo.redhat.com/docs/DOC-1186975) and [discussion@mailing-list](http://post-office.corp.redhat.com/archives/aos-qe/2019-January/msg00110.html)
+
+
 
 ## Components: where are the <openshift|kube>-pods?
 

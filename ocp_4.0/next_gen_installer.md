@@ -576,6 +576,23 @@ machines:
   replicas: 3
 ...
 
+master:
+[core@ip-10-0-4-53 ~]$ lsblk 
+NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+nvme0n1     259:0    0  100G  0 disk 
+├─nvme0n1p1 259:1    0  300M  0 part /boot
+└─nvme0n1p2 259:2    0 99.7G  0 part /sysroot
+
+worker:
+[core@ip-10-0-143-36 ~]$ lsblk 
+NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+nvme0n1     259:0    0   200G  0 disk 
+├─nvme0n1p1 259:1    0   300M  0 part /boot
+└─nvme0n1p2 259:2    0 199.7G  0 part /sysroot
+
+### we can also check with ec2 console, the instance type, the storage type, io1 or gp2
+### and iops value for io1
+
 ```
 
 Tried also with `build from src` and `replicas: 2` for both master and worker. Hit problems.

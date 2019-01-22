@@ -592,6 +592,7 @@ nvme0n1     259:0    0   200G  0 disk
 
 ### we can also check with ec2 console, the instance type, the storage type, io1 or gp2
 ### and iops value for io1
+### they all work as defined in the above install-config.yaml
 
 ```
 

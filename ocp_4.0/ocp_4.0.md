@@ -126,6 +126,23 @@ Item 2 indicates to get the AMI id from [Red Hat CoreOS release](https://release
 * RHCOS Build 47.249
 * region: in our case: `us-east-2	ami-085b89e82b74a76b5`
 
+#### Update on 20190122
+
+Clayton Coleman's email `As of 4.0, all OKD images are being pushed to`: `quay.io/openshift/origin-COMPONENT:v4.0`. Eg,
+
+```
+$ skopeo inspect docker://quay.io/openshift/origin-pod:v4.0 --creds ${quay_creds}
+```
+
+Qs: 
+
+* what is the relationship among those repos?
+
+    * [registry.svc.ci.openshift.org/openshift/origin-release:v4.0](https://github.com/openshift/installer/blob/master/pkg/asset/ignition/bootstrap/bootstrap.go#L39)
+    * registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-11-155526
+    * quay.io/openshift-release-dev/ocp-v4.0-art-dev:v4.0.0-0.131.0.0-ose-installer
+
+* if the default one is `registry.svc.ci.openshift.org/openshift/origin-release:v4.0`
 
 ## Configuration
 

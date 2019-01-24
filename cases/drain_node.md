@@ -165,3 +165,31 @@ ProviderID:                               aws:///us-east-2b/i-0f2440cccfc16deb3
 ```
 
 Probably we cannot do this because we cannot move ebs PV from an instance in `us-east-2a` to another instance in `us-east-2b`.
+
+Update on 20190124: Create 4 workers
+
+```
+$ oc get machines -n openshift-cluster-api  
+NAME                                 INSTANCE              STATE     TYPE        REGION      ZONE         AGE
+hongkliu19-master-0                  i-0414d68a548f98c76   running   m5.xlarge   us-east-2   us-east-2a   5h
+hongkliu19-master-1                  i-0c44213340309e025   running   m5.xlarge   us-east-2   us-east-2b   5h
+hongkliu19-master-2                  i-089851f1f00be7d06   running   m5.xlarge   us-east-2   us-east-2c   5h
+hongkliu19-worker-us-east-2a-c8kj7   i-09e386cb1e4b6a698   running   m5.xlarge   us-east-2   us-east-2a   5h
+hongkliu19-worker-us-east-2a-nfncf   i-05167a2283dbb423f   running   m5.xlarge   us-east-2   us-east-2a   5h
+hongkliu19-worker-us-east-2b-xzxp5   i-0fef07730257e6199   running   m5.xlarge   us-east-2   us-east-2b   5h
+hongkliu19-worker-us-east-2c-lnggj   i-0fbd1e08ac70e1bb2   running   m5.xlarge   us-east-2   us-east-2c   5h
+```
+
+So `hongkliu19-worker-us-east-2a-c8kj7` and `hongkliu19-worker-us-east-2a-nfncf` are in the same zone `us-east-2a`.
+
+```
+$ oc get machines -n openshift-cluster-api hongkliu19-worker-us-east-2a-c8kj7 -o yaml | grep address | grep ip
+  - address: ip-10-0-131-229.us-east-2.compute.internal
+$ oc get machines -n openshift-cluster-api hongkliu19-worker-us-east-2a-nfncf -o yaml | grep address | grep ip
+  - address: ip-10-0-141-124.us-east-2.compute.internal
+```
+
+Label those 2 nodes as above.
+
+New problem: the PV can be created in a zone which is not `us-east-2a`, and then the pod is stuck in `Pending` forever.
+

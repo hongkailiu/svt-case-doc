@@ -598,6 +598,35 @@ nvme0n1     259:0    0   200G  0 disk
 
 Tried also with `build from src` and `replicas: 2` for both master and worker. Hit problems.
 
+### 20190124: 4.0.0-0.nightly-2019-01-23-075151 
+
+```
+$ ./openshift-install version
+./openshift-install v4.0.0-0.145.0.0-dirty
+
+$ vi ./install-config.yaml 
+...
+machines:
+- name: master
+  platform: 
+    aws:
+      type: m5.xlarge
+      rootVolume:
+        size: 100
+        type: gp2
+  replicas: 3
+- name: worker
+  platform: 
+    aws:
+      type: m5.xlarge
+      rootVolume:
+        size: 100
+        type: gp2
+  replicas: 4
+...
+
+```
+
 ## troubleshooting
 
 * Mike's tips

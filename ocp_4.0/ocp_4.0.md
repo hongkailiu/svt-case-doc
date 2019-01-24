@@ -134,6 +134,8 @@ Clayton Coleman's email `As of 4.0, all OKD images are being pushed to`: `quay.i
 $ skopeo inspect docker://quay.io/openshift/origin-pod:v4.0 --creds ${quay_creds}
 ```
 
+See [the component list](https://github.com/openshift/origin/blob/0a62a17d585336f8c977939baba39843e484c395/hack/lib/constants.sh#L302-L319) from Maciej Szulik's email.
+
 Qs: 
 
 * what is the relationship among those repos?

@@ -627,6 +627,21 @@ machines:
 
 ```
 
+### 20190125: 4.0.0-0.nightly-2019-01-25-034943
+
+```
+### Using rhel gold ami as jump node
+$ aws ec2 run-instances --image-id ami-0a306989ad7802401     --security-group-ids sg-5c5ace38 --count 1 --instance-type m5.xlarge --key-name id_rsa_perf     --subnet subnet-4879292d     --query 'Instances[*].InstanceId'     --tag-specifications="[{\"ResourceType\":\"instance\",\"Tags\":[{\"Key\":\"Name\",\"Value\":\"qe-hongkliu-gold-jn\"}]}]"
+
+```
+
+```
+# ./openshift-install version
+./openshift-install v4.0.0-0.147.0.0-dirty
+
+```
+
+
 ## troubleshooting
 
 * Mike's tips

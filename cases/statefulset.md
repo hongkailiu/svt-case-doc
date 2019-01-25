@@ -102,3 +102,13 @@ Change according to real number of created projects:
 ```sh
 # for i in {0..2}; do oc delete project "clusterproject$i"; done
 ```
+
+## OCP 4.0: 20190125
+
+For OCP 4.0 and m5 instances:
+Suppose we have n zones in the region of the cluster. Then create m X n workers.
+
+Region `us-east-2` has 3 zones. Then create 6 workers (2 in each zone).
+
+It should support 25 (max_volume) X 6 / 2 = 75 statefulsets.
+

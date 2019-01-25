@@ -144,6 +144,14 @@ i-048c94c680090ce7d	ec2-54-200-204-22.us-west-2.compute.amazonaws.com
 $ aws ec2 attach-volume --volume-id vol-08af3a4de14c8b5da --instance-id i-0fc84b5d38fa1a5ac --device /dev/sdf
 ```
 
+### regions and zones
+
+```
+$ aws ec2 describe-availability-zones --region us-east-2
+$ aws ec2 describe-regions
+
+```
+
 See [more examples](http://docs.aws.amazon.com/cli/latest/userguide/controlling-output.html) on query.
 
 [Examples](http://docs.aws.amazon.com/cli/latest/reference/ec2/create-volume.html#examples) of creating Volumes.

@@ -1,0 +1,55 @@
+###$ ansible-playbook -i "ec2-18-236-85-195.us-west-2.compute.amazonaws.com," playbooks/install_rhel_ocp4.yaml -e "aws_access_key_id=aaa aws_secret_access_key=bbb"
+---
+- hosts: all
+  vars_files:
+    - external_vars.yaml
+  vars:
+    - aws_access_key_id: aaa
+    - aws_secret_access_key: bbb
+  tasks:
+  - name: print hostname
+    debug:
+      msg: "hostname: {{ inventory_hostname }}"
+
+  - name: yum pkgs - uninstall oc client
+    yum:
+      name: "{{ packages }}"
+      state: absent
+    vars:
+      packages:
+        - atomic-openshift-clients
+
+  - name: install oc cli via tar
+    block:
+    - name: make sure ~/bin folder exists
+      file:
+        path: ~/bin
+        state: directory
+    - name: unarchive oc.tar.gz
+      unarchive:
+        src: "{{ item }}"
+        dest: "~/bin"
+        remote_src: yes
+      loop:
+      - https://mirror.openshift.com/pub/openshift-v3/clients/4.0.0-0.147.0/linux/oc.tar.gz
+
+  - name: create aws configuration folder
+    file:
+      path: ~/.aws
+      state: directory
+
+  - name: configure aws files
+    template:
+      src: "{{ item }}"
+      dest: "~/.aws/{{ item | basename | regex_replace('\\.j2','') }}"
+    with_fileglob:
+      - templates/ocp4/aws/*.j2
+
+  - name: copy the libra.pem file
+    copy:
+      src: "{{ libra_pem_key_file }}"
+      dest: "~/.ssh/libra.pem"
+      mode: 0600
+
+  - name: generate libra pub key
+    shell: ssh-keygen -y -f ~/.ssh/libra.pem > ~/.ssh/libra.pub

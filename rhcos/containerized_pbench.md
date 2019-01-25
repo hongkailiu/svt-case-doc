@@ -1,4 +1,64 @@
 # Containerized Pbench
+
+
+Updated on 20190124: pbench of OCP 4.0.
+
+[Ravi's doc](https://docs.google.com/document/d/1GBqRLRbvN-YewglF90VJjix1lzKAPB39LqeV9rIgUmc/edit).
+
+```
+$ sudo -i
+### aws cli need to be installed
+### oc cli needs to be installed and logged into the cluster
+# ln -s /home/fedora/.aws ~/.aws
+# git clone https://github.com/chaitanyaenr/ocp-automation.git /root/ocp-automation
+# cd /root/ocp-automation
+# vi ocp.yml
+### comment out role install and quickstart
+
+# vi ocp.inv
+[all]
+localhost ansible_connection=local
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python2
+OPENSHIFT_INSTALL_PLATFORM=aws
+OPENSHIFT_INSTALL_CLUSTER_NAME="hongkliu19"
+OPENSHIFT_INSTALL_BASE_DOMAIN="qe.devcluster.openshift.com"
+poll_attempts=600
+rhcos_infra_node_instance_type=m5.xlarge
+rhcos_pbench_node_instance_type=m5.xlarge
+
+```
+
+
+```
+# oc delete -f infra-node-machineset.yml,pbench-node-machineset.yml
+# rm -f cluster-monitoring-config.yml infra-node-machineset.yml ocp.retry pbench-node-machineset.yml 
+
+```
+
+Some ssh config
+
+```
+# cat ~/.ssh/
+authorized_keys  config           id_rsa_perf      known_hosts      
+[root@ip-172-31-32-37 ocp-automation]# cat ~/.ssh/config 
+Host ip*
+   StrictHostKeyChecking no
+   ProxyCommand ssh -i /home/fedora/.ssh/libra.pem -W %h:%p 18.216.245.85
+   UserKnownHostsFile=/dev/null
+   User core
+   IdentityFile /home/fedora/.ssh/libra.pem
+
+Host *
+   UserKnownHostsFile=/dev/null
+   StrictHostKeyChecking no
+   User core
+   IdentityFile /home/fedora/.ssh/libra.pem 
+
+```
+
+
 Pbench is not installed on Atomic Host instances. We need to run pbench-agent on a container
 to collect data.
 

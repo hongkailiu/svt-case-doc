@@ -32,7 +32,7 @@ readonly IMAGE=$(oc adm release info --pullspecs registry.svc.ci.openshift.org/o
 readonly ID=$(docker create ${IMAGE})
 docker cp ${ID}:/usr/bin/openshift-install "./${INSTALL_FOLDER}/"
 docker rm ${ID}
-echo "sing the installer bin from IMAGE: ${IMAGE}"
+echo "using the installer bin from IMAGE: ${IMAGE}"
 echo "installer version: $(./${INSTALL_FOLDER}/openshift-install version)"
 
 echo "Continue installation with the following commands:"

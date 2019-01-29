@@ -117,3 +117,54 @@ Or we can still use the trick above when we set glusterfs up already (creating P
 ```sh
 $ oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/registry_pvc_glusterfs.yaml -n default
 ```
+
+## OCP 4.0
+
+Image registry is installed by [openshift/cluster-image-registry-operator](https://github.com/openshift/cluster-image-registry-operator).
+
+Check the config:
+
+```
+### By default, it uses S3 on AWS.
+# oc get configs.imageregistry.operator.openshift.io instance -o yaml | grep storageManaged -B3
+    s3:
+      bucket: image-registry-us-east-2-60a6ad0e25334332ae9ae079191ae4e2-a61c
+      region: us-east-2
+  storageManaged: true
+
+```
+
+Use the previous trick above with the modification of new `namespace` and `deployment`:
+
+```
+
+# oc create -n openshift-image-registry -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/registry_pvc.yaml
+# oc get pvc -n openshift-image-registry
+# oc set volume -n openshift-image-registry deploy/image-registry --add --name=registry-storage -t pvc --claim-name=registry --overwrite -m /registry
+
+# curl -LO https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/registry_secret.yaml
+# oc create secret generic dockerregistry --from-file=./registry_secret.yaml -n openshift-image-registry
+
+# oc set volume -n openshift-image-registry deploy/image-registry --add --name=dockersecrets -m /etc/registryconfig --type=secret --secret-name=dockerregistry
+# oc set env -n openshift-image-registry deploy/image-registry REGISTRY_CONFIGURATION_PATH=/etc/registryconfig/registry_secret.yaml
+
+```
+
+Testing:
+
+```
+### https://github.com/openshift/client-go/blob/master/examples/build/README.md#running-this-example
+$ oc new-project testproject
+### Create an app
+$ oc new-app https://github.com/sclorg/cakephp-ex
+
+### found nothing
+# oc exec image-registry-755d488476-5fjqx -- ls /registry
+lost+found
+### also checked on the s3 console, it still pushes there
+
+```
+
+Created [issues/175](https://github.com/openshift/cluster-image-registry-operator/issues/175).
+
+PVC will be supported by the operator, Cool. We do not need this trick anymore.

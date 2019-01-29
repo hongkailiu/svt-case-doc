@@ -18,7 +18,7 @@ readonly IMAGE=$(oc adm release info --pullspecs registry.svc.ci.openshift.org/o
 readonly ID=$(docker create ${IMAGE})
 docker cp ${ID}:/usr/bin/openshift-install .
 docker rm ${ID}
-echo "installer version: $()./openshift-install version)"
+echo "installer version: $(./openshift-install version)"
 
 echo "export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:${BUILD_VERSION}"
 echo "export _OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:${BUILD_VERSION}"

@@ -1,11 +1,13 @@
 #!/bin/bash
 
 ### create a jump node inside cluster VPC
+### with the same security group and subnet
 
 set -o errexit
 set -o nounset
 set -o pipefail
 
+### change those vars
 readonly KERBEROS_ID='hongkliu'
 readonly PRIVATE_KEY="${HOME}/.ssh/libra.pem"
 

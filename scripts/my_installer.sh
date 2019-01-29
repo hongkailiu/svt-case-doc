@@ -28,6 +28,7 @@ mkdir ${INSTALL_FOLDER}
 echo "INSTALL_FOLDER: ${INSTALL_FOLDER}"
 
 readonly BUILD_VERSION=$1
+echo "${BUILD_VERSION}" >> "${INSTALL_FOLDER}/version.txt"
 readonly IMAGE=$(oc adm release info --pullspecs registry.svc.ci.openshift.org/ocp/release:${BUILD_VERSION} | grep installer | awk '{print $2}')
 readonly ID=$(docker create ${IMAGE})
 docker cp ${ID}:/usr/bin/openshift-install "./${INSTALL_FOLDER}/"

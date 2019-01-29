@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# curl -LO https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/scripts/my_installer.sh
+# bash ./my_installer.sh <4.0.0-0.nightly-2019-01-29-025207>
+
 set -o errexit
 set -o nounset
 set -o pipefail

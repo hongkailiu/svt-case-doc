@@ -436,8 +436,6 @@ $ cat ~/.docker/config.json
 ###Add an auth for "registry.svc.ci.openshift.org" into the pull secret.
 
 ```
-
-```
 ### without step 6: 20190109
 $ openshift-install create cluster
 ? SSH Public Key /home/fedora/.ssh/libra.pub

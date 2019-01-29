@@ -2,6 +2,8 @@
 
 ## 20190111
 
+We can use a [wrapper script](../scripts/my_installer.sh) for the following setup steps.
+
 ```
 $ oc adm release info --pullspecs registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-11-205323 | grep installer
   installer                                     registry.svc.ci.openshift.org/ocp/4.0-art-latest-2019-01-11-205323@sha256:58b5bc0f10caa359d520b7ee2cf695b60c1971d3c141abe99d33b8e024ef114f

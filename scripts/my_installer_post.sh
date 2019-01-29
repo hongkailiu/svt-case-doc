@@ -5,6 +5,10 @@
 ### the jump node uses ami-0f7e779f5a384f9fc (clean fedora 29)
 ### ami-0f7e779f5a384f9fc is at us-east-2
 ### so your aws account has to set the default profile to that region for this script to work
+### REMEMBER to terminate this instance of jump node BEFORE destroy your cluster
+
+### curl -LO https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/scripts/my_installer_post.sh
+### bash ./my_installer_post.sh
 
 set -o errexit
 set -o nounset

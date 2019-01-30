@@ -65,7 +65,6 @@ openshift_master_portal_net=172.24.0.0/14
 openshift_portal_net=172.24.0.0/14
 osm_cluster_network_cidr=172.20.0.0/14
 osm_host_subnet_length=9
-openshift_node_kubelet_args={"pods-per-core": ["0"], "max-pods": ["510"]}
 debug_level=2
 openshift_set_hostname=true
 openshift_override_hostname_check=true

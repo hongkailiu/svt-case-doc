@@ -8,6 +8,11 @@
 ### https://github.com/hongkailiu/svt-case-doc/blob/master/ocp_4.0/ocp_4.0.md#aos-puddles
 ### https://github.com/hongkailiu/svt-case-doc/blob/master/ocp_4.0/next_gen_installer.md#installer-091-20190109
 ### Also make sure the auth token is up to date for `registry.svc.ci.openshift.org`.
+### HOW to verify if the tokens are still valid: Just try to pull images
+### docker pull quay.io/openshift-release-dev/ocp-v4.0-art-dev:v4.0.0-0.131.0.0-ose-installer
+### docker pull registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-29-025207
+### Do NOT `oc logout` on the jump node which will expire the token
+
 ### Find the nightly build number: https://openshift-release.svc.ci.openshift.org/
 
 # curl -LO https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/scripts/my_installer.sh

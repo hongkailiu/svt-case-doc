@@ -437,6 +437,8 @@ $ cat ~/.docker/config.json
 
 ```
 ### without step 6: 20190109
+
+```
 $ openshift-install create cluster
 ? SSH Public Key /home/fedora/.ssh/libra.pub
 ? Platform aws

@@ -1,0 +1,38 @@
+[OSEv3:children]
+masters
+nodes
+glusterfs
+
+
+[OSEv3:vars]
+ansible_ssh_user=core
+openshift_deployment_type=openshift-enterprise
+oreg_url=registry.reg-aws.openshift.com:443/openshift3/ose-${component}:${version}
+oreg_auth_user={{ lookup('env','REG_AUTH_USER') }}
+oreg_auth_password={{ lookup('env','REG_AUTH_PASSWORD') }}
+
+openshift_storage_glusterfs_wipe=true
+openshift_storage_glusterfs_image=registry.reg-aws.openshift.com:443/rhgs3/rhgs-server-rhel7:3.11.0-3
+openshift_storage_glusterfs_heketi_image=registry.reg-aws.openshift.com:443/rhgs3/rhgs-volmanager-rhel7:3.11.0-5
+openshift_hosted_registry_glusterfs_swap=true
+openshift_storage_glusterfs_block_deploy=true
+openshift_storage_glusterfs_block_image=registry.reg-aws.openshift.com:443/rhgs3/rhgs-gluster-block-prov-rhel7:3.11.0-2
+openshift_storage_glusterfs_block_host_vol_size=200
+openshift_storage_glusterfs_block_storageclass=true
+openshift_storage_glusterfs_timeout=900
+
+[masters]
+ip-10-0-11-89.us-east-2.compute.internal openshift_node_group_name="node-config-master"
+ip-10-0-11-89.us-east-2.compute.internal openshift_node_group_name="node-config-master"
+ip-10-0-11-89.us-east-2.compute.internal openshift_node_group_name="node-config-master"
+
+
+[nodes]
+ip-10-0-170-140.us-east-2.compute.internal openshift_node_group_name="node-config-compute"
+ip-10-0-163-155.us-east-2.compute.internal openshift_node_group_name="node-config-compute"
+ip-10-0-161-45.us-east-2.compute.internal openshift_node_group_name="node-config-compute"
+
+[glusterfs]
+ip-10-0-170-140.us-east-2.compute.internal glusterfs_devices='["/dev/xvdf"]'
+ip-10-0-163-155.us-east-2.compute.internal glusterfs_devices='["/dev/xvdf"]'
+ip-10-0-161-45.us-east-2.compute.internal glusterfs_devices='["/dev/xvdf"]'

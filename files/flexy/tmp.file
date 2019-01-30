@@ -1,0 +1,22 @@
+qe_kubelet_args="[{'key': 'kubeletArguments.pods-per-core', 'value': ['0']}, {'key': 'kubeletArguments.minimum-container-ttl-duration', 'value': ['10s']}, {'key': 'kubeletArguments.maximum-dead-containers-per-container', 'value': ['1']}, {'key': 'kubeletArguments.maximum-dead-containers', 'value': ['20']}, {'key': 'kubeletArguments.image-gc-high-threshold', 'value': ['80']}, {'key': 'kubeletArguments.image-gc-low-threshold', 'value': ['70']}]"
+
+
+qe_node_group_all_in_one_1="{ 'name': 'qe-all-in-one-1', 'labels': ['node-role.kubernetes.io/master=true', 'node-role.kubernetes.io/infra=true', 'node-role.kubernetes.io/compute=true'], 'edits': {{ qe_kubelet_args }} }"
+qe_node_group_all_in_one_2="{ 'name': 'qe-all-in-one-2', 'labels': ['node-role.kubernetes.io/master=true', 'role=node', 'registry=enabled', 'router=enabled', 'node-role.kubernetes.io/compute=true'], 'edits': {{ qe_kubelet_args }} }"
+qe_node_group_registry_router="{ 'name': 'qe-registry-router', 'labels': ['role=node', 'registry=enabled', 'router=enabled'], 'edits': {{ qe_kubelet_args }} }"
+qe_node_group_registry="{ 'name': 'qe-registry', 'labels': ['role=node', 'registry=enabled'], 'edits': {{ qe_kubelet_args }} }"
+qe_node_group_router="{ 'name': 'qe-router', 'labels': ['role=node', 'router=enabled'], 'edits': {{ qe_kubelet_args }} }"
+qe_node_group_primary="{ 'name': 'qe-primary', 'labels': ['role=node', 'region=primary'], 'edits': {{ qe_kubelet_args }} }"
+qe_node_group_compute="{ 'name': 'qe-compute', 'labels': ['role=node', 'node-role.kubernetes.io/compute=true'], 'edits': {{ qe_kubelet_args }} }"
+qe_node_group_infra="{ 'name': 'qe-infra', 'labels': ['role=node', 'node-role.kubernetes.io/infra=true'], 'edits': {{ qe_kubelet_args }} }"
+qe_node_group_master="{ 'name': 'qe-master', 'labels': ['node-role.kubernetes.io/master=true'], 'edits': {{ qe_kubelet_args }} }"
+qe_node_group_glusterfs="{ 'name': 'qe-glusterfs', 'labels': ['role=node', 'region=glusterfs'], 'edits': {{ qe_kubelet_args }} }"
+qe_node_group_glusterfs_registry="{ 'name': 'qe-glusterfs-registry', 'labels': ['role=node', 'region=glusterfs-registry'], 'edits': {{ qe_kubelet_args }} }"
+
+openshift_node_groups=[{{ qe_node_group_all_in_one_1 }}, {{ qe_node_group_all_in_one_2 }}, {{ qe_node_group_registry_router }}, {{ qe_node_group_registry }}, {{ qe_node_group_router }}, {{ qe_node_group_primary }}, {{ qe_node_group_compute }}, {{ qe_node_group_master }}, {{ qe_node_group_infra }}, {{ qe_node_group_glusterfs }}, {{ qe_node_group_glusterfs_registry }}]
+
+
+[nodes]
+ec2-3-84-246-0.compute-1.amazonaws.com ansible_user=root ansible_ssh_user=root ansible_ssh_private_key_file="/home/slave1/workspace/Launch Environment Flexy/private/config/keys/libra.pem" openshift_public_hostname=ec2-3-84-246-0.compute-1.amazonaws.com  openshift_node_group_name='qe-master'
+ec2-100-24-51-224.compute-1.amazonaws.com ansible_user=root ansible_ssh_user=root ansible_ssh_private_key_file="/home/slave1/workspace/Launch Environment Flexy/private/config/keys/libra.pem" openshift_public_hostname=ec2-100-24-51-224.compute-1.amazonaws.com  openshift_node_group_name='qe-registry-router'
+ec2-54-227-193-239.compute-1.amazonaws.com ansible_user=root ansible_ssh_user=root ansible_ssh_private_key_file="/home/slave1/workspace/Launch Environment Flexy/private/config/keys/libra.pem" openshift_public_hostname=ec2-54-227-193-239.compute-1.amazonaws.com  openshift_node_group_name='qe-compute'

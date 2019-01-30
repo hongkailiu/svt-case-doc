@@ -31,15 +31,10 @@ openshift_auth_type=allowall
 openshift_master_identity_providers=[{'name': 'allow_all', 'login': 'true', 'challenge': 'true', 'kind': 'AllowAllPasswordIdentityProvider'}]
 
 
-
-
- openshift_node_labels="{'region': 'primary', 'zone': 'default'}" openshift_node_group_name="node-config-compute"
-
-
-
 openshift_release=v3.11
 openshift_deployment_type=openshift-enterprise
-openshift_cockpit_deployer_prefix=registry.reg-aws.openshift.com:443/openshift3/
+osm_use_cockpit=false
+osm_cockpit_plugins=['cockpit-kubernetes']
 oreg_url=registry.reg-aws.openshift.com:443/openshift3/ose-${component}:${version}
 oreg_auth_user={{ lookup('env','REG_AUTH_USER') }}
 oreg_auth_password={{ lookup('env','REG_AUTH_PASSWORD') }}

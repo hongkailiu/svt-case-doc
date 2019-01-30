@@ -2,7 +2,7 @@
 
 ### create a jump node inside cluster VPC
 ### with the same security group and subnet
-### the jump node uses `ami-0f7e779f5a384f9fc` (clean fedora 29) which is at us-east-2
+### the jump node uses `ami-0f7e779f5a384f9fc` (clean fedora 29) which is in US East (Ohio), ie, us-east-2
 ### 1. Your aws account has to set the default profile to REGION us-east-2 for this script to work
 ### 2. `pip install awscli` if not yet
 ### 3. It is ASSSUMED that the libra key is used for 4.0 OCP cluster

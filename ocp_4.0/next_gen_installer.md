@@ -641,6 +641,85 @@ $ aws ec2 run-instances --image-id ami-0a306989ad7802401     --security-group-id
 
 ```
 
+### 20190130: gluster
+
+1. Add auth for `registry.reg-aws.openshift.com:443` into your pull secret.
+
+```
+$ oc login https://api.reg-aws.openshift.com --token=<secret_for_qe_user_ask_your_admin>
+$ docker login -u $(oc whoami) -p $(oc whoami -t) registry.reg-aws.openshift.com:443
+# cat ~/.docker/config.json
+### add an auth entry for `registry.reg-aws.openshift.com:443` into your pull secret for 4.0 installer
+```
+
+2. make 3 workers in the same zone;
+
+```
+# oc project openshift-cluster-api
+### we choose this zone: `us-east-2c`
+### change the replicas to 3, for example
+# oc edit machineset hongkliu27-worker-us-east-2c
+# oc get machineset hongkliu27-worker-us-east-2c
+NAME                           DESIRED   CURRENT   READY     AVAILABLE   AGE
+hongkliu26-worker-us-east-2c   3         3         3         3           3h
+
+# oc get machine | grep worker | grep us-east-2c | awk '{print $1}' | while read i; do oc get machine $i -o json | jq -r .status.nodeRef.name; done
+ip-10-0-170-140.us-east-2.compute.internal
+ip-10-0-163-155.us-east-2.compute.internal
+ip-10-0-161-45.us-east-2.compute.internal
+
+# oc get machine | grep worker | grep us-east-2c | awk '{print $1}' | while read i; do oc get machine $i -o json | jq -r .status.providerStatus.instanceId; done
+i-070265799391e5c90
+i-0e84814d88760fab2
+i-09d93148b7356d1dc
+
+# for i in {1..3}; do aws ec2 create-volume --size 1000 --region us-east-2 --availability-zone us-east-2c --volume-type gp2 --tag-specifications="[{\"ResourceType\":\"volume\",\"Tags\":[{\"Key\":\"Name\",\"Value\":\"qe-hongkliu-gluster-${i}\"}]}]" | jq -r .VolumeId; done
+vol-0aad2c324d8278563
+vol-0b7acac0bcab990ad
+vol-0e417a360fa54500c
+
+# aws ec2 attach-volume --volume-id vol-0aad2c324d8278563  --instance-id i-070265799391e5c90 --device /dev/sdf
+# aws ec2 attach-volume --volume-id vol-0b7acac0bcab990ad  --instance-id i-0e84814d88760fab2 --device /dev/sdf
+# aws ec2 attach-volume --volume-id vol-0e417a360fa54500c  --instance-id i-09d93148b7356d1dc --device /dev/sdf
+
+### check on ec2 console or ssh to the chosen nodes then `lsblk` to check if the device is attached. Eg,
+
+$ ssh core@ip-10-0-169-178.us-east-2.compute.internal
+[core@ip-10-0-169-178 ~]$ lsblk 
+NAME    MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+xvda    202:0    0   32G  0 disk 
+├─xvda1 202:1    0  300M  0 part /boot
+└─xvda2 202:2    0 31.7G  0 part /sysroot
+xvdf    202:80   0 1000G  0 disk 
+
+
+
+```
+2. get a jump node on in the same VPC. The script [my_install_post.sh](../scripts/my_install_post.sh) can help.
+
+```
+# ssh -i /root/.ssh/libra.pem -o UserKnownHostsFile=/dev/null fedora@ec2-13-59-153-69.us-east-2.compute.amazonaws.com
+$ sudo dnf install -y ansible-2.6.5-1.fc29
+### set up ansible
+$ cat ~/.ansible.cfg
+[defaults]
+host_key_checking = False
+
+$ git clone https://github.com/openshift/openshift-ansible.git
+$ git -C ./openshift-ansible checkout devel-40
+$ git -C ./openshift-ansible log --oneline -1
+84b7199c4 (HEAD -> devel-40, origin/devel-40) Merge pull request #10985 from vrutkovs/devel-40-scaleup-ci
+
+$ curl -LO https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/gfs_inv_4.0.file
+### modify `gfs_inv_4.0.file` to use the right nodes
+
+$ touch /home/fedora/install-config-ansible.yml
+$ ansible-playbook -i ./gfs_inv_4.0.file ./openshift-ansible/playbooks/openshift-glusterfs/config.yml
+
+```
+
+3. 
+
 
 ## troubleshooting
 

@@ -10,6 +10,7 @@ openshift_deployment_type=openshift-enterprise
 oreg_url=registry.reg-aws.openshift.com:443/openshift3/ose-${component}:${version}
 oreg_auth_user={{ lookup('env','REG_AUTH_USER') }}
 oreg_auth_password={{ lookup('env','REG_AUTH_PASSWORD') }}
+openshift_install_config_path="~/install-config-ansible.yml"
 
 openshift_storage_glusterfs_wipe=true
 openshift_storage_glusterfs_image=registry.reg-aws.openshift.com:443/rhgs3/rhgs-server-rhel7:3.11.0-3
@@ -22,8 +23,6 @@ openshift_storage_glusterfs_block_storageclass=true
 openshift_storage_glusterfs_timeout=900
 
 [masters]
-ip-10-0-11-89.us-east-2.compute.internal openshift_node_group_name="node-config-master"
-ip-10-0-11-89.us-east-2.compute.internal openshift_node_group_name="node-config-master"
 ip-10-0-11-89.us-east-2.compute.internal openshift_node_group_name="node-config-master"
 
 

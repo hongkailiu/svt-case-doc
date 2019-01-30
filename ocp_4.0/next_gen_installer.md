@@ -695,7 +695,7 @@ xvdf    202:80   0 1000G  0 disk
 
 
 ```
-2. get a jump node on in the same VPC. The script [my_install_post.sh](../scripts/my_install_post.sh) can help.
+3. get a jump node on in the same VPC. The script [my_install_post.sh](../scripts/my_install_post.sh) can help.
 
 ```
 # ssh -i /root/.ssh/libra.pem -o UserKnownHostsFile=/dev/null fedora@ec2-13-59-153-69.us-east-2.compute.amazonaws.com
@@ -716,9 +716,10 @@ $ curl -LO https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/file
 $ touch /home/fedora/install-config-ansible.yml
 $ ansible-playbook -i ./gfs_inv_4.0.file ./openshift-ansible/playbooks/openshift-glusterfs/config.yml
 
-```
+### Failed at TASK [Ensure openshift-ansible installer package deps are installed] 
+fatal: [ip-10-0-170-140.us-east-2.compute.internal]: FAILED! => {"attempts": 3, "changed": false, "msg": "missing required arguments: image, backend"}
 
-3. 
+```
 
 
 ## troubleshooting

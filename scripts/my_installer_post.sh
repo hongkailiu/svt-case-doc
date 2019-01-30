@@ -4,8 +4,10 @@
 ### with the same security group and subnet
 ### the jump node uses ami-0f7e779f5a384f9fc (clean fedora 29)
 ### ami-0f7e779f5a384f9fc is at us-east-2
-### so your aws account has to set the default profile to that region for this script to work
-### `pip install awscli` if not yet
+### 1. Your aws account has to set the default profile to REGION us-east-2 for this script to work
+### 2. `pip install awscli` if not yet
+### 3. It is ASSSUMED that the libra key is used for 4.0 OCP cluster
+####################################################################################
 ### REMEMBER to terminate this instance of jump node BEFORE destroy your cluster
 
 ### curl -LO https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/scripts/my_installer_post.sh
@@ -15,7 +17,8 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-### change those vars
+####################################################################################
+### CHANGE those vars
 readonly KERBEROS_ID='hongkliu'
 readonly PRIVATE_KEY="${HOME}/.ssh/libra.pem"
 

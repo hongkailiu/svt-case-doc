@@ -650,6 +650,22 @@ $ oc login https://api.reg-aws.openshift.com --token=<secret_for_qe_user_ask_you
 $ docker login -u $(oc whoami) -p $(oc whoami -t) registry.reg-aws.openshift.com:443
 # cat ~/.docker/config.json
 ### add an auth entry for `registry.reg-aws.openshift.com:443` into your pull secret for 4.0 installer
+
+### we can verify that the pull secret works with this pod def:
+# cat ./pod_test.yaml 
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web
+  labels:
+    app: web
+spec:
+  containers:
+  - name: test-go
+    image: registry.reg-aws.openshift.com:443/hongkliu-test/fio:3.11.7-1
+    ports:
+    - containerPort: 8080
+
 ```
 
 2. make 3 workers in the same zone;

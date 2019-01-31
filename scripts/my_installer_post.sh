@@ -53,8 +53,8 @@ scp -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null ~/.kube/config "fedora@$
 
 ssh -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null -n fedora@${PUBLIC_DNS_NAME} 'sudo dnf install -y origin-clients'
 # OR
-#ssh -i ~/.ssh/libra.pem -o UserKnownHostsFile=/dev/null -n fedora@ec2-18-224-51-162.us-east-2.compute.amazonaws.com 'mkdir -p ~/bin'
-#scp -i ~/.ssh/libra.pem -o UserKnownHostsFile=/dev/null ~/bin/oc fedora@ec2-18-224-51-162.us-east-2.compute.amazonaws.com:~/bin/oc
+#ssh -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null -n fedora@${PUBLIC_DNS_NAME} 'mkdir -p ~/bin'
+#scp -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null ~/bin/oc fedora@${PUBLIC_DNS_NAME}:~/bin/oc
 
 scp -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null "${PRIVATE_KEY}" fedora@${PUBLIC_DNS_NAME}:~/.ssh/id_rsa
 

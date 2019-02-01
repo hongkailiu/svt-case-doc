@@ -11,7 +11,9 @@
 ### HOW to verify if the tokens are still valid: Just try to pull images
 ### docker pull quay.io/openshift-release-dev/ocp-v4.0-art-dev:v4.0.0-0.131.0.0-ose-installer
 ### docker pull registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-29-025207
+
 ### Do NOT `oc logout` on the jump node which will expire the token
+### @pruan: DO NOT PASTE the pull scecret dirtly from try.openshift.com
 
 ### Find the nightly build number: https://openshift-release.svc.ci.openshift.org/
 

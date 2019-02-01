@@ -746,3 +746,5 @@ fatal: [ip-10-0-170-140.us-east-2.compute.internal]: FAILED! => {"attempts": 3, 
     * There are 4 parts of the AWS console to look for orphaned resources:  EC2, Route53, VPC and IAM roles.
 
 * [troubleshooting.doc@github](https://github.com/openshift/installer/blob/master/docs/user/troubleshooting.md)
+
+* Clean up (thanks to Siva): If you lost your install dir, you want to clean up your installed cluster, you could follow  [solutions/3826921](https://access.redhat.com/solutions/3826921), which is covered in [OCP-22168](https://polarion.engineering.redhat.com/polarion/#/project/OSE/workitem?id=OCP-22168).

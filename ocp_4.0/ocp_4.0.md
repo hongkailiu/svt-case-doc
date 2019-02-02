@@ -173,11 +173,11 @@ Set: [issues/1021](https://github.com/openshift/installer/issues/1021)
      value: "60" 
 ```
 ### Updating kubeltArgument "maxPods"
-The default value for maxPods on all the nodes is 250 pods.  In order to change it, you'll need to first create a KubeletConfig CRD and then apply it.
+The default value for maxPods on all the nodes is 250 pods.  In order to change it, you'll need to first create a KubeletConfig CR (Custom Resource) and then apply it.
 
 Additional documentation can be found in this [demo](https://drive.google.com/file/d/1Fg92EKqBpKBhjuN-tV3BcdE3FWU3w3sP/view)
 
-Create the following CRD with the desired value for maxPods, and label for the mahcineConfigPool selector, set to "custom-kubelet: large-pods"
+Create the following CR with the desired value for maxPods, and label for the mahcineConfigPool selector, set to "custom-kubelet: large-pods"
 
 worker-kube-config-change-maxPods-crd.yaml:
 ```
@@ -195,7 +195,10 @@ spec:
 
 Next, add the matching label "custom-kubelet: large-pods" in the metadata section under "labels:", in the worker machineConfigPool:
 
+```
 $ oc edit machineconfigpool worker:
+```
+
 add:
 ```
 apiVersion: machineconfiguration.openshift.io/v1
@@ -206,14 +209,12 @@ metadata:
   labels:
     custom-kubelet: large-pods
   name: worker
-.
-.
-.
+...
 
 ```
 Save the edited worker machineconfigpool.
 
-Apply the KubeletConfig CRD to force the change to the maxPods value on all the worker nodes:
+Apply the KubeletConfig CR to force the change to the maxPods value on all the worker nodes:
 
 ```
 $ oc create -f worker-kube-config-change-maxPods-crd.yaml
@@ -276,7 +277,7 @@ systemReserved:
   memory: 500Mi
 ```
 
-Also as a result of applyin the kubeltconfig CRD, a new managed worker machineconfig "99-worker-<....>-kubelet" is created:
+Also as a result of applyin the kubeltconfig CR, a new managed worker machineconfig "99-worker-<....>-kubelet" is created:
 
 ```
 # oc get machineconfig

@@ -245,6 +245,7 @@ TODO: configure ceph to use Additional device
 # go get -d github.com/openshift/external-storage
 # cd /root/go/src/github.com/openshift/external-storage/ceph/cephfs/deploy
 ### use 3-11 branch: PROBLEM with rbac ... need access to endpoints
+### https://bugzilla.redhat.com/show_bug.cgi?id=1672750
 # git checkout release-3.11
 # git log --oneline -1
 04aa20d Merge pull request #6 from tsmetana/release-3.11-spec-fix

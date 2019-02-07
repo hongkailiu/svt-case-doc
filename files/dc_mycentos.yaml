@@ -1,0 +1,16 @@
+kind: "DeploymentConfig"
+apiVersion: "v1"
+metadata:
+  name: "centos"
+spec:
+  template:
+    metadata:
+      labels:
+        name: "centos"
+    spec:
+      containers:
+        - name: "centos"
+          image: "docker.io/hongkailiu/mycentos:001"
+  triggers:
+    - type: "ConfigChange"
+  replicas: 1

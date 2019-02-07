@@ -234,7 +234,48 @@ sh-4.2# ceph status
 
 ```
 
-TODO: configure ceph to use Additional device
+Configure ceph to [use Additional device](https://rook.io/docs/rook/v0.9/ceph-cluster-crd.html):
+
+```
+### Tested with 3 storage nodes with
+### lsblk
+...
+nvme2n1     259:1    0 1000G  0 disk 
+
+###
+# vi cluster.yaml
+spec:
+  storage:
+  ...
+    devices:             # specific devices to use for storage can be specified for each node
+      - name: "nvme2n1"
+...
+
+### after creating cluster and verify if the device is used on the storage nodes:
+# lsblk | grep nvme2n1 -A1
+nvme2n1                                                                                              259:1    0 1000G  0 disk 
+└─ceph--12669933--fe96--4442--b2ef--9e1a2d269fdb-osd--data--46ce65a7--7a8d--4daf--b57e--a11a52637380 253:0    0 1000G  0 lvm  
+
+### check the status by tool-box
+# oc rsh -n rook-ceph rook-ceph-tools-98f57449f-msgdk
+sh-4.2# ceph status
+  cluster:
+    id:     3899fd99-a392-4825-8b51-937564603084
+    health: HEALTH_OK
+ 
+  services:
+    mon: 3 daemons, quorum a,c,b
+    mgr: a(active)
+    osd: 3 osds: 3 up, 3 in
+ 
+  data:
+    pools:   1 pools, 100 pgs
+    objects: 0  objects, 0 B
+    usage:   3.0 GiB used, 2.9 TiB / 2.9 TiB avail
+    pgs:     100 active+clean
+
+
+```
 
 ## [External Provisioner](https://mojo.redhat.com/docs/DOC-1189365)
 
@@ -301,5 +342,84 @@ pvc-86a321db-2975-11e9-9235-025ec4c47606   1Gi        RWX            Delete     
 
 ```
 
+## [Block Storage](https://rook.io/docs/rook/v0.9/ceph-block.html)
+```
+# kubectl create -f storageclass.yaml
+# oc get sc rook-ceph-block
+NAME              PROVISIONER          AGE
+rook-ceph-block   ceph.rook.io/block   2m
 
-TODO: block storage, object storage
+# oc new-project ttt
+# oc process -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/pvc_template.yaml -p PVC_NAME=claim1 -p STORAGE_CLASS_NAME=rook-ceph-block | oc create -f -
+persistentvolumeclaim/claim1 created
+root@ip-172-31-19-126: ~/go/src/github.com/rook/rook/cluster/examples/kubernetes/ceph # oc get pvc
+NAME      STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS      AGE
+claim1    Bound     pvc-64d1ab33-2af0-11e9-bbcf-0201ad0bb47e   3Gi        RWO            rook-ceph-block   4s
+
+
+```
+
+## [Object Storage](https://rook.io/docs/rook/v0.9/ceph-object.html)
+
+```
+### https://rook.io/docs/rook/v0.9/openshift.html
+# git diff object.yaml
+...
+     # The port that RGW pods will listen on (http)
+-    port: 80
++    port: 8080
+...
+
+# kubectl create -f object.yaml
+# oc get pod -l app=rook-ceph-rgw -n rook-ceph
+NAME                                      READY     STATUS    RESTARTS   AGE
+rook-ceph-rgw-my-store-7488dc696b-pl28j   1/1       Running   0          58s
+
+### Create the object store user
+# kubectl create -f object-user.yaml
+
+# kubectl -n rook-ceph get secret rook-ceph-object-user-my-store-my-user -o yaml | grep AccessKey | awk '{print $2}' | base64 --decode
+W4TLO9OBDHDAYB5DJDKP
+# kubectl -n rook-ceph get secret rook-ceph-object-user-my-store-my-user -o yaml | grep SecretKey | awk '{print $2}' | base64 --decode
+T8hz7zBU9Pxvj2xRiRnvHGVSTxcwDFXyt2CX1koB
+
+# kubectl -n rook-ceph get svc rook-ceph-rgw-my-store
+NAME                     TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+rook-ceph-rgw-my-store   ClusterIP   172.24.238.53   <none>        8080/TCP   59m
+
+### https://github.com/s3tools/s3cmd/blob/master/INSTALL
+# yum install -y s3cmd
+# s3cmd --version
+s3cmd version 2.0.2
+
+### could use this pod for s3cmd
+### oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/dc_mycentos.yaml
+
+export AWS_HOST=rook-ceph-rgw-my-store.rook-ceph
+export AWS_ENDPOINT=172.24.238.53:8080
+export AWS_ACCESS_KEY_ID=W4TLO9OBDHDAYB5DJDKP
+export AWS_SECRET_ACCESS_KEY=T8hz7zBU9Pxvj2xRiRnvHGVSTxcwDFXyt2CX1koB
+
+# s3cmd mb --no-ssl --host=${AWS_HOST} --host-bucket=  s3://rookbucket
+ERROR: [Errno -2] Name or service not known
+ERROR: Connection Error: Error resolving a server hostname.
+Please check the servers address specified in 'host_base', 'host_bucket', 'cloudfront_host', 'website_endpoint'
+
+### if i use the svc dns + port, then
+# s3cmd ls --no-ssl --host=${AWS_HOST}.svc.cluster.local:8080 --access_key=W4TLO9OBDHDAYB5DJDKP --secret_key=T8hz7zBU9Pxvj2xRiRnvHGVSTxcwDFXyt2CX1koB
+ERROR: S3 error: 403 (InvalidAccessKeyId)
+
+# oc logs rook-ceph-rgw-my-store-7488dc696b-pl28j
+...
+2019-02-07 20:43:26.200 7f140da92700  1 ====== starting new request req=0x7f140da89850 =====
+2019-02-07 20:43:26.202 7f140da92700  1 ====== req done req=0x7f140da89850 op status=0 http_status=403 ======
+2019-02-07 20:43:26.202 7f140da92700  1 civetweb: 0x55bfbff92000: 172.20.0.1 - - [07/Feb/2019:20:43:26 +0000] "GET / HTTP/1.1" 403 399 - -
+2019-02-07 20:43:30.828 7f1430dac700  0 WARNING: RGWRados::log_usage(): user name empty (bucket=), skipping
+
+
+```
+
+Blocked by [rook/issues/2627](https://github.com/rook/rook/issues/2627).
+
+## Useful commands on ceph
+TODO

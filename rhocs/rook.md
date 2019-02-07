@@ -7,7 +7,7 @@
 ## Installation
 
 ```
-#  go get -d github.com/rook/rook
+# go get -d github.com/rook/rook
 # cd /root/go/src/github.com/rook/rook/cluster/examples/kubernetes/ceph/
 ### use the latest release branch
 ### I did not see osd pods with master on 20190205

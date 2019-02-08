@@ -18,7 +18,7 @@
     debug:
       msg: "hostname: {{ inventory_hostname }}"
 
-   - name: dnf pkgs
+  - name: dnf pkgs
     dnf:
       name: "{{ packages }}"
       state: present

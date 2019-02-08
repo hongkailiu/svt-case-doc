@@ -11,7 +11,7 @@
     ansible_python_interpreter: /usr/bin/python3
     ansible_user: hongkliu
     ansible_become_pass: 111
-    redhat_internal_cert_rpm: "/home/hongkliu//svt-secret/rh_vpn_rpm/redhat-internal-cert-install-0.1-9.el7.csb.noarch.rpm"
+    redhat_internal_cert_rpm: "/home/hongkliu/svt-secret/rh_vpn_rpm/redhat-internal-cert-install-0.1-9.el7.csb.noarch.rpm"
     redhat_internal_NetworkManager_openvpn_profiles_rpm: "/home/hongkliu/svt-secret/rh_vpn_rpm/redhat-internal-NetworkManager-openvpn-profiles-0.1-30.el7.csb.noarch.rpm"
   tasks:
   - name: print hostname

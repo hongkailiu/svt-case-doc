@@ -1,16 +1,30 @@
-###$ ansible-playbook -i "ec2-18-236-85-195.us-west-2.compute.amazonaws.com," playbooks/install_fedora_ocp4.yaml -e "aws_access_key_id=aaa aws_secret_access_key=bbb"
-### https://gist.github.com/alces/caa3e7e5f46f9595f715f0f55eef65c1
+### $ sudo dnf install -y git ansible
+### $ git clone https://github.com/hongkailiu/svt-case-doc.git
+### $ git clone https://gitlab.com/hongkailiu/svt-secret.git
+### $ ansible-playbook ./svt-case-doc/playbooks/install_fedora_internal.yaml -e "ansible_become_pass=<secret>"
 
 ---
+### https://gist.github.com/alces/caa3e7e5f46f9595f715f0f55eef65c1
 - hosts: 127.0.0.1
   connection: local
   vars:
     ansible_python_interpreter: /usr/bin/python3
     ansible_user: hongkliu
     ansible_become_pass: 111
+    redhat_internal_cert_rpm: "./svt-secret/rh_vpn_rpm/redhat-internal-cert-install-0.1-9.el7.csb.noarch.rpm"
+    redhat_internal_NetworkManager_openvpn_profiles_rpm: "./svt-secret/rh_vpn_rpm/redhat-internal-NetworkManager-openvpn-profiles-0.1-30.el7.csb.noarch.rpm"
   tasks:
   - name: print hostname
     debug:
       msg: "hostname: {{ inventory_hostname }}"
 
- 
+   - name: dnf pkgs
+    dnf:
+      name: "{{ packages }}"
+      state: present
+    vars:
+      packages:
+        - "{{ redhat_internal_cert_rpm }}"
+        - "{{ redhat_internal_NetworkManager_openvpn_profiles_rpm }}"
+    become: true
+

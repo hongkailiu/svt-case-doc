@@ -98,3 +98,7 @@ Test with Fedora 27:
 # dnf groupinstall -y "Fedora Workstation"
 # dnf groupinstall -y tigervnc-server
 ```
+
+## virtualization
+
+https://docs.fedoraproject.org/en-US/quick-docs/getting-started-with-virtualization/

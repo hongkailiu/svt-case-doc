@@ -102,3 +102,30 @@ Test with Fedora 27:
 ## virtualization
 
 https://docs.fedoraproject.org/en-US/quick-docs/getting-started-with-virtualization/
+
+```
+$ dnf groupinfo virtualization
+Fedora Modular 29 - x86_64                                              122 kB/s | 1.5 MB     00:12    
+Fedora Modular 29 - x86_64 - Updates                                    524 kB/s | 2.0 MB     00:03    
+Fedora 29 - x86_64 - Updates                                            142 kB/s |  21 MB     02:33    
+Fedora 29 - x86_64                                                      5.2 MB/s |  62 MB     00:11    
+google-chrome                                                           1.5 kB/s | 3.4 kB     00:02    
+Visual Studio Code                                                      479 kB/s | 2.0 MB     00:04    
+
+Group: Virtualization
+ Description: These packages provide a graphical virtualization environment.
+ Mandatory Packages:
+   virt-install
+ Default Packages:
+   libvirt-daemon-config-network
+   libvirt-daemon-kvm
+   qemu-kvm
+   virt-manager
+   virt-viewer
+ Optional Packages:
+   guestfs-browser
+   libguestfs-tools
+   python3-libguestfs
+   virt-top
+
+```

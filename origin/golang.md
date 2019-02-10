@@ -97,3 +97,28 @@ See [how to write doc for golang](https://blog.golang.org/godoc-documenting-go-c
 ## Good practice
 
 * https://github.com/golang/go/wiki/CodeReviewComments
+
+
+## [migrating-from-glide-to-dep](https://golang.github.io/dep/docs/migrating.html)
+
+Install `dep`:
+
+```
+$ curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+$ dep version
+dep:
+ version     : v0.5.0
+ build date  : 2018-07-26
+ git hash    : 224a564
+ go version  : go1.10.3
+ go compiler : gc
+ platform    : linux/amd64
+ features    : ImportDuringSolve=false
+
+```
+
+Generate dep files: NOT work for my test-go repo (does not return over several hours). Had to remove all go file, `dep init`, and add it back one by one.
+
+```
+$ dep init
+```

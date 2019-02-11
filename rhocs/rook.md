@@ -422,6 +422,7 @@ ERROR: S3 error: 403 (InvalidAccessKeyId)
 ```
 
 Blocked by [rook/issues/2627](https://github.com/rook/rook/issues/2627). Redo on 20190211, it seems working (NO idea of what happened last week).
+_Hit the issue (403) again later this afternoon. Very strange._
 
 ```
 # s3cmd mb --no-ssl --host=${AWS_ENDPOINT} --host-bucket=  s3://rookbucket

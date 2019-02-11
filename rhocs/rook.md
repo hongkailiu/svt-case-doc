@@ -179,6 +179,49 @@ job.batch/rook-ceph-osd-prepare-f1c4be1d30ad9612f6cee9e157bc18c0   1         1  
 
 ```
 
+Configure ceph to [use Additional device](https://rook.io/docs/rook/v0.9/ceph-cluster-crd.html):
+
+```
+### Tested with 3 storage nodes with
+### lsblk
+...
+nvme2n1     259:1    0 1000G  0 disk 
+
+###
+# vi cluster.yaml
+spec:
+  storage:
+  ...
+    devices:             # specific devices to use for storage can be specified for each node
+      - name: "nvme2n1"
+...
+
+### after creating cluster and verify if the device is used on the storage nodes:
+# lsblk | grep nvme2n1 -A1
+nvme2n1                                                                                              259:1    0 1000G  0 disk 
+└─ceph--12669933--fe96--4442--b2ef--9e1a2d269fdb-osd--data--46ce65a7--7a8d--4daf--b57e--a11a52637380 253:0    0 1000G  0 lvm  
+
+### check the status by tool-box
+# oc rsh -n rook-ceph rook-ceph-tools-98f57449f-msgdk
+sh-4.2# ceph status
+  cluster:
+    id:     3899fd99-a392-4825-8b51-937564603084
+    health: HEALTH_OK
+ 
+  services:
+    mon: 3 daemons, quorum a,c,b
+    mgr: a(active)
+    osd: 3 osds: 3 up, 3 in
+ 
+  data:
+    pools:   1 pools, 100 pgs
+    objects: 0  objects, 0 B
+    usage:   3.0 GiB used, 2.9 TiB / 2.9 TiB avail
+    pgs:     100 active+clean
+
+
+```
+
 Troubleshooting:
 
 ```
@@ -230,49 +273,6 @@ sh-4.2# ceph status
  
   io:
     client:   1.2 KiB/s rd, 2 op/s rd, 0 op/s wr
-
-
-```
-
-Configure ceph to [use Additional device](https://rook.io/docs/rook/v0.9/ceph-cluster-crd.html):
-
-```
-### Tested with 3 storage nodes with
-### lsblk
-...
-nvme2n1     259:1    0 1000G  0 disk 
-
-###
-# vi cluster.yaml
-spec:
-  storage:
-  ...
-    devices:             # specific devices to use for storage can be specified for each node
-      - name: "nvme2n1"
-...
-
-### after creating cluster and verify if the device is used on the storage nodes:
-# lsblk | grep nvme2n1 -A1
-nvme2n1                                                                                              259:1    0 1000G  0 disk 
-└─ceph--12669933--fe96--4442--b2ef--9e1a2d269fdb-osd--data--46ce65a7--7a8d--4daf--b57e--a11a52637380 253:0    0 1000G  0 lvm  
-
-### check the status by tool-box
-# oc rsh -n rook-ceph rook-ceph-tools-98f57449f-msgdk
-sh-4.2# ceph status
-  cluster:
-    id:     3899fd99-a392-4825-8b51-937564603084
-    health: HEALTH_OK
- 
-  services:
-    mon: 3 daemons, quorum a,c,b
-    mgr: a(active)
-    osd: 3 osds: 3 up, 3 in
- 
-  data:
-    pools:   1 pools, 100 pgs
-    objects: 0  objects, 0 B
-    usage:   3.0 GiB used, 2.9 TiB / 2.9 TiB avail
-    pgs:     100 active+clean
 
 
 ```

@@ -342,6 +342,8 @@ pvc-86a321db-2975-11e9-9235-025ec4c47606   1Gi        RWX            Delete     
 
 ```
 
+How to use the external provisioner in another namespace?
+
 ## [Block Storage](https://rook.io/docs/rook/v0.9/ceph-block.html)
 ```
 # kubectl create -f storageclass.yaml
@@ -483,6 +485,42 @@ $ s3cmd ls --no-ssl --host=${AWS_HOST}
 2019-02-11 15:22  s3://rookbucket1
 2019-02-11 15:41  s3://rookbucket2
 ```
+
+Question: It seems that one ceph cluster supports to provide only one storage solution of shared-fs, object or block storage.
+We have several conflicting cases:
+
+* block and object: object 403.
+* object and fs: 
+
+```
+# oc logs cephfs-provisioner-7cf79878bd-2nxgk
+...
+E0211 17:44:35.884379       1 cephfs-provisioner.go:158] failed to provision share "kubernetes-dynamic-pvc-b26da0ef-2e24-11e9-ba98-0a58ac170008" for "kubernetes-dynamic-user-b26da125-2e24-11e9-ba98-0a58ac170008", err: exit status 1, output: Traceback (most recent call last):
+  File "/lib64/python2.7/site.py", line 556, in <module>
+    main()
+  File "/lib64/python2.7/site.py", line 538, in main
+    known_paths = addusersitepackages(known_paths)
+  File "/lib64/python2.7/site.py", line 266, in addusersitepackages
+    user_site = getusersitepackages()
+  File "/lib64/python2.7/site.py", line 241, in getusersitepackages
+    user_base = getuserbase() # this will also set USER_BASE
+  File "/lib64/python2.7/site.py", line 231, in getuserbase
+    USER_BASE = get_config_var('userbase')
+  File "/lib64/python2.7/sysconfig.py", line 516, in get_config_var
+    return get_config_vars().get(name)
+  File "/lib64/python2.7/sysconfig.py", line 473, in get_config_vars
+    _CONFIG_VARS['userbase'] = _getuserbase()
+  File "/lib64/python2.7/sysconfig.py", line 187, in _getuserbase
+    return env_base if env_base else joinuser("~", ".local")
+  File "/lib64/python2.7/sysconfig.py", line 173, in joinuser
+    return os.path.expanduser(os.path.join(*args))
+  File "/lib64/python2.7/posixpath.py", line 269, in expanduser
+    userhome = pwd.getpwuid(os.getuid()).pw_dir
+KeyError: 'getpwuid(): uid not found: 1000320000'
+
+```
+
+However, Travis Nielson told me (20190211) that "Yes, block, object, and file can all be supported by the same rook-ceph cluster".
 
 ## Useful commands on ceph
 TODO

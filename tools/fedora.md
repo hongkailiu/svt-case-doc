@@ -122,3 +122,11 @@ Group: Virtualization
    virt-top
 
 ```
+
+## gnome-tweak-tool
+
+```
+### https://www.dedoimedo.com/computers/fedora-29-perfect-after-install.html
+$ sudo dnf install gnome-tweak-tool
+
+```

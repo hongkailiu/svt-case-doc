@@ -419,7 +419,70 @@ ERROR: S3 error: 403 (InvalidAccessKeyId)
 
 ```
 
-Blocked by [rook/issues/2627](https://github.com/rook/rook/issues/2627).
+Blocked by [rook/issues/2627](https://github.com/rook/rook/issues/2627). Redo on 20190211, it seems working (NO idea of what happened last week).
+
+```
+# s3cmd mb --no-ssl --host=${AWS_ENDPOINT} --host-bucket=  s3://rookbucket
+Bucket 's3://rookbucket/' created
+
+###
+# oc logs rook-ceph-rgw-my-store-7488dc696b-dxl8b
+...
+2019-02-11 14:25:08.532 7fae27a52700  1 ====== starting new request req=0x7fae27a49850 =====
+2019-02-11 14:25:08.533 7fae27a52700  1 ====== req done req=0x7fae27a49850 op status=0 http_status=404 ======
+2019-02-11 14:25:08.533 7fae27a52700  1 civetweb: 0x55b7135be000: 172.20.0.1 - - [11/Feb/2019:14:25:08 +0000] "GET /rookbucket/?location HTTP/1.1" 404 428 - -
+2019-02-11 14:25:08.535 7fae27a52700  1 ====== starting new request req=0x7fae27a49850 =====
+2019-02-11 14:25:08.543 7fae27a52700  1 ====== req done req=0x7fae27a49850 op status=0 http_status=200 ======
+2019-02-11 14:25:08.543 7fae27a52700  1 civetweb: 0x55b7135be000: 172.20.0.1 - - [11/Feb/2019:14:25:08 +0000] "PUT /rookbucket/ HTTP/1.1" 200 143 - -
+
+# s3cmd ls --no-ssl --host=${AWS_HOST}.svc.cluster.local:8080 
+2019-02-11 14:25  s3://rookbucket
+
+# oc rsh rook-ceph-tools-98f57449f-8dlw9 
+sh-4.2# radosgw-admin user list
+[
+    "my-user"
+]
+
+### seems other user commands NOT working yet
+sh-4.2# radosgw-admin user info my-user
+could not fetch user info: no user info saved
+sh-4.2# radosgw-admin user rm my-user
+could not remove user: unable to parse parameters, unable to perform operations on the anonymous user
+
+# echo "Hello Rook" > /tmp/rookObj
+# s3cmd put /tmp/rookObj --no-ssl --host=${AWS_HOST}.svc.cluster.local:8080 --host-bucket=  s3://rookbucket
+upload: '/tmp/rookObj' -> 's3://rookbucket/rookObj'  [1 of 1]
+ 11 of 11   100% in    0s   242.38 B/s  done
+# s3cmd get s3://rookbucket/rookObj /tmp/rookObj-download --no-ssl --host=${AWS_HOST}.svc.cluster.local:8080 --host-bucket=
+download: 's3://rookbucket/rookObj' -> '/tmp/rookObj-download'  [1 of 1]
+ 11 of 11   100% in    0s   266.81 B/s  done
+root@ip-172-31-10-252: ~/go/src/github.com/rook/rook/cluster/examples/kubernetes/ceph # cat /tmp/rookObj-download
+Hello Rook
+
+```
+
+Access External to the Cluster:
+
+```
+### The following steps are different from the ones described at https://rook.io/docs/rook/v0.9/ceph-object.html
+### because we have a working subdomain for apps
+# oc expose svc rook-ceph-rgw-my-store
+route.route.openshift.io/rook-ceph-rgw-my-store exposed
+# oc get route
+NAME                     HOST/PORT                                                   PATH      SERVICES                 PORT      TERMINATION   WILDCARD
+rook-ceph-rgw-my-store   rook-ceph-rgw-my-store-rook-ceph.apps.54.213.79.55.xip.io             rook-ceph-rgw-my-store   http                    None
+
+### tested with a server out of the OCP cluster network
+$ export AWS_HOST=rook-ceph-rgw-my-store-rook-ceph.apps.54.213.79.55.xip.io
+$ export AWS_ACCESS_KEY_ID=PNU15E8Z7H92HYN3K7Y4
+$ export AWS_SECRET_ACCESS_KEY=IYfLy7vLEC3P1D5PpZpSMViHFRON5aBLOcjP6VnD
+
+$ s3cmd ls --no-ssl --host=${AWS_HOST} 
+2019-02-11 14:25  s3://rookbucket
+2019-02-11 15:22  s3://rookbucket1
+2019-02-11 15:41  s3://rookbucket2
+```
 
 ## Useful commands on ceph
 TODO

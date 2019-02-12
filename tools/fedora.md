@@ -130,3 +130,9 @@ Group: Virtualization
 $ sudo dnf install gnome-tweak-tool
 
 ```
+
+## filezilla (ftp gui)
+
+```
+$ sudo dnf install filezilla
+```

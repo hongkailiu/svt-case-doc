@@ -136,3 +136,20 @@ $ sudo dnf install gnome-tweak-tool
 ```
 $ sudo dnf install filezilla
 ```
+
+## tilix (cool terminal application)
+
+```
+$ sudo dnf install tilix
+```
+
+## foxit (pdf viewer)
+
+```
+### https://gist.github.com/gabrielferreirapro/fbec6742d8507bd5cbd953105b626542
+$ cd foxitreader/
+$ rm lib/libssl.so.10
+$ rm lib/libcrypto.so.10
+$ ln -s /lib64/libssl.so.10 lib/libssl.so.10
+$ ln -s /lib64/libcrypto.so.10 lib/libcrypto.so.10
+```

@@ -26,7 +26,7 @@ export ANSIBLE_HOST_KEY_CHECKING=False
 
 rm -rfv ./openshift-ansible
 git clone https://github.com/openshift/openshift-ansible.git
-git -C ./openshift-ansible checkout release-3.11
+git -C ./openshift-ansible checkout release-3.10
 ### remove this line
 #git -C ./openshift-ansible checkout openshift-ansible-3.11.44-1
 git -C ./openshift-ansible log --oneline -1

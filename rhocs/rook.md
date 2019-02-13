@@ -253,7 +253,7 @@ rook-ceph-mds-myfs-b-6db4f4c74b-kqc5q   1/1       Running   0          57s
 NAME                              READY     STATUS    RESTARTS   AGE
 rook-ceph-tools-98f57449f-7cz77   1/1       Running   0          2m
 
-# oc rsh rook-ceph-tools-98f57449f-7cz77 
+# oc rsh -n rook-ceph rook-ceph-tools-98f57449f-7cz77 
 sh-4.2# ceph status
   cluster:
     id:     93ac9782-4def-4825-ace9-cbead4511362

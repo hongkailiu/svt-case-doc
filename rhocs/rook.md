@@ -17,28 +17,28 @@
 # oc create -f scc.yaml
 
 # vi operator.yaml
+### https://github.com/rook/rook/issues/2612
+        - name: FLEXVOLUME_DIR_PATH
+          value: "/etc/kubernetes/kubelet-plugins/volume/exec"
+...
         - name: ROOK_HOSTPATH_REQUIRES_PRIVILEGED
           value: "true"
 
 # oc create -f operator.yaml
-### https://github.com/rook/rook/issues/2612
 
 # oc get pod -n rook-ceph-system
-NAME                                 READY   STATUS                 RESTARTS   AGE
-rook-ceph-agent-6mvrd                0/1     CreateContainerError   0          31m
-rook-ceph-agent-lrl8t                0/1     CreateContainerError   0          31m
-rook-ceph-agent-x6b94                0/1     CreateContainerError   0          31m
-rook-ceph-operator-765b9f645-t68vz   1/1     Running                0          32m
-rook-discover-27fwl                  1/1     Running                0          31m
-rook-discover-88nsq                  1/1     Running                0          31m
-rook-discover-x9nnc                  1/1     Running                0          31m
-
+NAME                                  READY   STATUS    RESTARTS   AGE
+rook-ceph-agent-bgtrt                 1/1     Running   0          39s
+rook-ceph-agent-gcw8k                 1/1     Running   0          39s
+rook-ceph-agent-h6bvl                 1/1     Running   0          39s
+rook-ceph-operator-769d6854b9-tdtdv   1/1     Running   0          61s
+rook-discover-9t8s4                   1/1     Running   0          39s
+rook-discover-klgrm                   1/1     Running   0          39s
+rook-discover-s2spl                   1/1     Running   0          39s
 
 # oc create -f cluster.yaml
 
 ```
-
-Blocked by [issues/2612](https://github.com/rook/rook/issues/2612).
 
 Tested on OCP 3.11: 1 master, 1 infra, and 3 compute nodes
 

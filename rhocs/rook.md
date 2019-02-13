@@ -228,8 +228,9 @@ Troubleshooting:
 ### the operator seems to keep tracking of previous install, so recover the cluster
 # oc delete -f cluster.yaml
 # oc delete -f operator.yaml
-# oc get node --no-headers | awk '{print $1}' | while read line; do ssh -n "${line}" 'ls -al /var/lib/rook'; done
-# oc get node --no-headers | awk '{print $1}' | while read line; do ssh -n "${line}" 'rm -rf /var/lib/rook'; done
+# oc delete project rook-ceph rook-ceph-system --wait=false
+# oc get node --no-headers | awk '{print $1}' | while read line; do ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -n "core@${line}" 'ls -al /var/lib/rook'; done
+# oc get node --no-headers | awk '{print $1}' | while read line; do ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -n "core@${line}" 'sudo rm -vrf /var/lib/rook'; done
 
 ```
 
@@ -354,7 +355,7 @@ rook-ceph-block   ceph.rook.io/block   2m
 # oc new-project ttt
 # oc process -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/pvc_template.yaml -p PVC_NAME=claim1 -p STORAGE_CLASS_NAME=rook-ceph-block | oc create -f -
 persistentvolumeclaim/claim1 created
-root@ip-172-31-19-126: ~/go/src/github.com/rook/rook/cluster/examples/kubernetes/ceph # oc get pvc
+# oc get pvc
 NAME      STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS      AGE
 claim1    Bound     pvc-64d1ab33-2af0-11e9-bbcf-0201ad0bb47e   3Gi        RWO            rook-ceph-block   4s
 

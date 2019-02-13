@@ -53,6 +53,8 @@ scp -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null ~/.kube/config "fedora@$
 
 ssh -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null -n fedora@${PUBLIC_DNS_NAME} 'sudo dnf install -y origin-clients'
 # OR
+### the following oc binary hit https://github.com/openshift/origin/issues/21061
+### because the local oc is build for RHEL
 #ssh -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null -n fedora@${PUBLIC_DNS_NAME} 'mkdir -p ~/bin'
 #scp -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null ~/bin/oc fedora@${PUBLIC_DNS_NAME}:~/bin/oc
 

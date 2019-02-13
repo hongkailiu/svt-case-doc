@@ -569,6 +569,3 @@ sh-4.2# s3cmd ls --no-ssl --host=rook-ceph-rgw-my-store.rook-ceph.svc.cluster.lo
 ```
 
 Created [[FRE]issues/2648](https://github.com/rook/rook/issues/2648).
-
-## Useful commands on ceph
-TODO

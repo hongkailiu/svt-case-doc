@@ -522,7 +522,7 @@ However, Travis Nielson told me (20190211) that "Yes, block, object, and file ca
 
 Updated 20190213: On OCP 4.0, all three stoarge services work at the same time. First time to me.
 
-on OCP 4.0: Since we do not have network access on the jump node to svc `rook-ceph-rgw-my-store` and pod's (ip and port) `172.30.178.33:8080`, we need to access ceph object storage via the exposed svc via route:
+on OCP 4.0: Since we do not have network access on the jump node to svc `rook-ceph-rgw-my-store` or pod's (ip and port) `172.30.178.33:8080`, we need to access ceph object storage via the exposed svc via route:
 
 ```
 # oc expose svc rook-ceph-rgw-my-store
@@ -569,6 +569,8 @@ s3cmd version 2.0.2
 sh-4.2# s3cmd ls --no-ssl --host=rook-ceph-rgw-my-store.rook-ceph.svc.cluster.local:8080 --access_key=FGNP7GRM5RLL1Q8DY9VE --secret_key=e4MsRHChLJtJy5OfgCH18MO9gYoUZEXp8Ro6DrmP
 2019-02-13 17:28  s3://rookbucket
 ```
+
+Created [[FRE]issues/2648](https://github.com/rook/rook/issues/2648).
 
 ## Useful commands on ceph
 TODO

@@ -394,9 +394,6 @@ rook-ceph-rgw-my-store   ClusterIP   172.24.238.53   <none>        8080/TCP   59
 # s3cmd --version
 s3cmd version 2.0.2
 
-### could use this pod for s3cmd
-### oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/dc_mycentos.yaml
-
 export AWS_HOST=rook-ceph-rgw-my-store.rook-ceph
 export AWS_ENDPOINT=172.24.238.53:8080
 export AWS_ACCESS_KEY_ID=W4TLO9OBDHDAYB5DJDKP
@@ -522,6 +519,44 @@ KeyError: 'getpwuid(): uid not found: 1000320000'
 ```
 
 However, Travis Nielson told me (20190211) that "Yes, block, object, and file can all be supported by the same rook-ceph cluster".
+
+Updated 20190213: On OCP 4.0, all three stoarge services work at the same time. First time to me.
+
+on OCP 4.0: Since we do not network access to svc `` and ip ``, we need to access ceph object storage via the exposed svc via route:
+
+```
+# oc expose svc rook-ceph-rgw-my-store
+route.route.openshift.io/rook-ceph-rgw-my-store exposed
+# oc get routes.route.openshift.io 
+NAME                     HOST/PORT                                                                     PATH   SERVICES                 PORT   TERMINATION   WILDCARD
+rook-ceph-rgw-my-store   rook-ceph-rgw-my-store-rook-ceph.apps.hongkliu3.qe.devcluster.openshift.com          rook-ceph-rgw-my-store   http                 None
+
+# s3cmd mb --no-ssl --host=rook-ceph-rgw-my-store-rook-ceph.apps.hongkliu3.qe.devcluster.openshift.com --host-bucket=  s3://rookbucket
+Bucket 's3://rookbucket/' created
+
+# s3cmd ls --no-ssl --host=rook-ceph-rgw-my-store-rook-ceph.apps.hongkliu3.qe.devcluster.openshift.com
+2019-02-13 17:28  s3://rookbucket
+
+```
+
+OR, use `s3cmd` in a pod:
+
+```
+# oc new-project test
+# oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/dc_mycentos.yaml
+# oc get pod
+NAME              READY   STATUS      RESTARTS   AGE
+centos-1-95wl2    1/1     Running     0          15s
+centos-1-deploy   0/1     Completed   0          24s
+
+# oc rsh centos-1-95wl2
+sh-4.2$ s3cmd ls --no-ssl --host=rook-ceph-rgw-my-store-rook-ceph.apps.hongkliu3.qe.devcluster.openshift.com --access_key=FGNP7GRM5RLL1Q8DY9VE --secret_key=e4MsRHChLJtJy5OfgCH18MO9gYoUZEXp8Ro6DrmP
+2019-02-13 17:28  s3://rookbucket
+$ s3cmd ls --no-ssl --host=172.30.178.33:8080 --access_key=FGNP7GRM5RLL1Q8DY9VE --secret_key=e4MsRHChLJtJy5OfgCH18MO9gYoUZEXp8Ro6DrmP
+2019-02-13 17:28  s3://rookbucket
+$ s3cmd ls --no-ssl --host=rook-ceph-rgw-my-store.rook-ceph.svc.cluster.local:8080 --access_key=FGNP7GRM5RLL1Q8DY9VE --secret_key=e4MsRHChLJtJy5OfgCH18MO9gYoUZEXp8Ro6DrmP
+2019-02-13 17:28  s3://rookbucket
+```
 
 ## Useful commands on ceph
 TODO

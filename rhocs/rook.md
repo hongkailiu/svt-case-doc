@@ -558,5 +558,17 @@ $ s3cmd ls --no-ssl --host=rook-ceph-rgw-my-store.rook-ceph.svc.cluster.local:80
 2019-02-13 17:28  s3://rookbucket
 ```
 
+OR install `s3cmd in the tool-box pod`:
+
+```
+# oc project rook-ceph
+# oc rsh rook-ceph-tools-576bd57b66-xr8h8 
+sh-4.2# yum install -y s3cmd
+sh-4.2# s3cmd --version
+s3cmd version 2.0.2
+sh-4.2# s3cmd ls --no-ssl --host=rook-ceph-rgw-my-store.rook-ceph.svc.cluster.local:8080 --access_key=FGNP7GRM5RLL1Q8DY9VE --secret_key=e4MsRHChLJtJy5OfgCH18MO9gYoUZEXp8Ro6DrmP
+2019-02-13 17:28  s3://rookbucket
+```
+
 ## Useful commands on ceph
 TODO

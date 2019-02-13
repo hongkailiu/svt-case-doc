@@ -343,7 +343,7 @@ pvc-86a321db-2975-11e9-9235-025ec4c47606   1Gi        RWX            Delete     
 
 ```
 
-How to use the external provisioner in another namespace?
+How to use the external provisioner in another namespace? Created [bz1676953](https://bugzilla.redhat.com/show_bug.cgi?id=1676953).
 
 ## [Block Storage](https://rook.io/docs/rook/v0.9/ceph-block.html)
 ```
@@ -358,7 +358,6 @@ persistentvolumeclaim/claim1 created
 # oc get pvc
 NAME      STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS      AGE
 claim1    Bound     pvc-64d1ab33-2af0-11e9-bbcf-0201ad0bb47e   3Gi        RWO            rook-ceph-block   4s
-
 
 ```
 

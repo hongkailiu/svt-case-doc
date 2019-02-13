@@ -539,7 +539,7 @@ Bucket 's3://rookbucket/' created
 
 ```
 
-OR, use `s3cmd` in a pod:
+OR, use `s3cmd` in a pod: In this case, we can use route, svc, and pod's IP.
 
 ```
 # oc new-project test

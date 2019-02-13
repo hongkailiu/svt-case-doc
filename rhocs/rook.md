@@ -444,11 +444,9 @@ sh-4.2# radosgw-admin user list
     "my-user"
 ]
 
-### seems other user commands NOT working yet
-sh-4.2# radosgw-admin user info my-user
-could not fetch user info: no user info saved
-sh-4.2# radosgw-admin user rm my-user
-could not remove user: unable to parse parameters, unable to perform operations on the anonymous user
+### Many thanks to Travis Nielsen
+### http://docs.ceph.com/docs/mimic/radosgw/admin/#get-user-info
+sh-4.2# radosgw-admin user info --uid=my-user
 
 # echo "Hello Rook" > /tmp/rookObj
 # s3cmd put /tmp/rookObj --no-ssl --host=${AWS_HOST}.svc.cluster.local:8080 --host-bucket=  s3://rookbucket

@@ -193,7 +193,7 @@ spec:
   storage:
   ...
     devices:             # specific devices to use for storage can be specified for each node
-      - name: "nvme2n1"
+      - name: "nvme2n1"  # nvme1n1 on coreos nodes
 ...
 
 ### after creating cluster and verify if the device is used on the storage nodes:
@@ -222,12 +222,16 @@ sh-4.2# ceph status
 
 ```
 
+How2 add addtional device to OCP 4.0 instances: [20190130: gluster: step 2: update on 20190214](../ocp_4.0/next_gen_installer.md)
+
 Troubleshooting:
 
 ```
 ### the operator seems to keep tracking of previous install, so recover the cluster
 # oc delete -f cluster.yaml
 # oc delete -f operator.yaml
+# oc project rook-ceph
+# oc adm policy remove-scc-from-user anyuid -z cephfs-provisioner
 # oc delete project rook-ceph rook-ceph-system --wait=false
 # oc get node --no-headers | awk '{print $1}' | while read line; do ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -n "core@${line}" 'ls -al /var/lib/rook'; done
 # oc get node --no-headers | awk '{print $1}' | while read line; do ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -n "core@${line}" 'sudo rm -vrf /var/lib/rook'; done
@@ -237,6 +241,20 @@ Troubleshooting:
 ## [Shared File System](https://rook.io/docs/rook/v0.9/ceph-filesystem.html)
 
 ```
+# git diff filesystem.yaml
+...
+   metadataPool:
+     replicated:
+       # Increase the replication size if you have more than one osd
+-      size: 1
++      size: 3
+   # The list of data pool specs
+   dataPools:
+     - failureDomain: osd
+       replicated:
+-        size: 1
++        size: 3
+...
 ###
 # oc create -f filesystem.yaml
 # oc -n rook-ceph get pod -l app=rook-ceph-mds
@@ -256,31 +274,16 @@ rook-ceph-tools-98f57449f-7cz77   1/1       Running   0          2m
 
 # oc rsh -n rook-ceph rook-ceph-tools-98f57449f-7cz77 
 sh-4.2# ceph status
-  cluster:
-    id:     93ac9782-4def-4825-ace9-cbead4511362
-    health: HEALTH_OK
- 
-  services:
-    mon: 3 daemons, quorum c,b,a
-    mgr: a(active)
-    mds: myfs-1/1/1 up  {0=myfs-b=up:active}, 1 up:standby-replay
-    osd: 3 osds: 3 up, 3 in
- 
-  data:
-    pools:   2 pools, 200 pgs
-    objects: 22  objects, 2.2 KiB
-    usage:   20 GiB used, 280 GiB / 300 GiB avail
-    pgs:     200 active+clean
- 
-  io:
-    client:   1.2 KiB/s rd, 2 op/s rd, 0 op/s wr
-
+sh-4.2# ceph osd status
+sh-4.2# ceph df
+sh-4.2# rados df
 
 ```
 
 ## [External Provisioner](https://mojo.redhat.com/docs/DOC-1189365)
 
 ```
+# oc project rook-ceph
 # oc rsh rook-ceph-tools-98f57449f-7cz77 bash -c 'ceph auth get-key client.admin' > /tmp/secret
 # oc create secret generic ceph-secret-admin --from-file=/tmp/secret
 # cd
@@ -347,6 +350,15 @@ How to use the external provisioner in another namespace? Created [bz1676953](ht
 
 ## [Block Storage](https://rook.io/docs/rook/v0.9/ceph-block.html)
 ```
+# git diff storageclass.yaml 
+...
+   namespace: rook-ceph
+ spec:
+   replicated:
+-    size: 1
++    size: 3
+...
+
 # kubectl create -f storageclass.yaml
 # oc get sc rook-ceph-block
 NAME              PROVISIONER          AGE
@@ -364,12 +376,35 @@ claim1    Bound     pvc-64d1ab33-2af0-11e9-bbcf-0201ad0bb47e   3Gi        RWO   
 ## [Object Storage](https://rook.io/docs/rook/v0.9/ceph-object.html)
 
 ```
+# oc project rook-ceph
 ### https://rook.io/docs/rook/v0.9/openshift.html
 # git diff object.yaml
+...
+     failureDomain: host
+     replicated:
+       # Increase the replication size if you have more than one osd
+-      size: 1
++      size: 3 
+   # The pool spec used to create the data pool
+   dataPool:
+     failureDomain: osd
+-    replicated:
+-      size: 1
++    #replicated:
++    #  size: 1
+     # If you have at least three osds, erasure coding can be specified
+-    # erasureCoded:
+-    #   dataChunks: 2
+-    #   codingChunks: 1
++    erasureCoded:
++      dataChunks: 2
++      codingChunks: 1
+   # The gaeteway service configuration
 ...
      # The port that RGW pods will listen on (http)
 -    port: 80
 +    port: 8080
+
 ...
 
 # kubectl create -f object.yaml

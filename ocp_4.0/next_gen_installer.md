@@ -708,9 +708,46 @@ xvda    202:0    0   32G  0 disk
 └─xvda2 202:2    0 31.7G  0 part /sysroot
 xvdf    202:80   0 1000G  0 disk 
 
+```
 
+update on 20190214:
 
 ```
+# oc project openshift-machine-api
+# oc edit machinesets.machine.openshift.io hongkliu1-worker-us-east-2c
+# oc get machinesets.machine.openshift.io hongkliu1-worker-us-east-2c
+NAME                          DESIRED   CURRENT   READY   AVAILABLE   AGE
+hongkliu1-worker-us-east-2c   3         3         3       3           163m
+
+# oc get machines.machine.openshift.io | grep worker | grep us-east-2c | awk '{print $1}' | while read i; do oc get machines.machine.openshift.io $i -o json | jq -r .status.nodeRef.name; done
+ip-10-0-162-10.us-east-2.compute.internal
+ip-10-0-161-240.us-east-2.compute.internal
+ip-10-0-172-218.us-east-2.compute.internal
+
+# oc get machines.machine.openshift.io | grep worker | grep us-east-2c | awk '{print $1}' | while read i; do oc get machines.machine.openshift.io $i -o json | jq -r .status.providerStatus.instanceId; done
+i-0fc17ec93874ef75f
+i-0bf23c0d37a42ad0c
+i-0e1bec085eaa54c55
+
+# for i in {1..3}; do aws ec2 create-volume --size 1000 --region us-east-2 --availability-zone us-east-2c --volume-type gp2 --tag-specifications="[{\"ResourceType\":\"volume\",\"Tags\":[{\"Key\":\"Name\",\"Value\":\"qe-hongkliu-gluster-${i}\"}]}]" | jq -r .VolumeId; done
+vol-03307f3f4b946f63d
+vol-08038932a6c46724f
+vol-006c3cae73e078760
+
+# aws ec2 attach-volume --volume-id vol-03307f3f4b946f63d  --instance-id i-0fc17ec93874ef75f --device /dev/sdf
+# aws ec2 attach-volume --volume-id vol-08038932a6c46724f  --instance-id i-0bf23c0d37a42ad0c --device /dev/sdf
+# aws ec2 attach-volume --volume-id vol-006c3cae73e078760  --instance-id i-0e1bec085eaa54c55 --device /dev/sdf
+
+$ ssh core@ip-10-0-18-219.us-east-2.compute.internal
+$ lsblk 
+NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+nvme0n1     259:0    0  100G  0 disk 
+├─nvme0n1p1 259:1    0  300M  0 part /boot
+└─nvme0n1p2 259:2    0 99.7G  0 part /sysroot
+nvme1n1     259:3    0 1000G  0 disk 
+
+```
+
 3. get a jump node on in the same VPC. The script [my_install_post.sh](../scripts/my_install_post.sh) can help.
 
 ```

@@ -38,5 +38,8 @@ do
   echo "device: ${device}"
 done
 
+echo "wait 60 secs for devices availability ..."
+sleep 60
+
 echo "attaching devices to instances ..."
 for i in {0..2}; do aws ec2 attach-volume --volume-id ${DEVICES[i]}  --instance-id ${INSTANCES[i]} --device /dev/sdf; done

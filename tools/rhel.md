@@ -319,6 +319,14 @@ netfilter, iptables, firewalld
 * other tools like top: [Monitoring: top vs atop vs htop vs iftop vs iotop vs glances](https://www.youtube.com/watch?v=KE1fqZRX9mg)
 
 
+## git: more recent version from wandisco
+
+```
+### https://stackoverflow.com/questions/21820715/how-to-install-latest-version-of-git-on-centos-7-x-6-x
+# yum install http://opensource.wandisco.com/centos/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm
+# yum install git
+```
+
 ## [Virtual Machine Manager](https://virt-manager.org/)
 
 * [libvirt](https://libvirt.org/) and [virsh](https://libvirt.org/virshcmdref.html)

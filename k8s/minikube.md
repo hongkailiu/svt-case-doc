@@ -2,7 +2,7 @@
 
 ## [installation](https://kubernetes.io/docs/tasks/tools/install-minikube/)
 
-Test with Fedora 29:
+Test with Fedora 29 instance on EC2:
 
 ### [no VM support](https://github.com/kubernetes/minikube#linux-continuous-integration-without-vm-support)
 

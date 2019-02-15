@@ -1,7 +1,7 @@
 #!/bin/bash
 
-### curl -LO https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/scripts/my_installer_post.sh
-### bash ./my_installer_post.sh
+### curl -LO https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/scripts/my_installer_ceph_attach_device.sh
+### bash ./my_installer_ceph_attach_device.sh
 
 set -o errexit
 set -o nounset

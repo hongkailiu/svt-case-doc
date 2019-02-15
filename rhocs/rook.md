@@ -222,7 +222,7 @@ sh-4.2# ceph status
 
 ```
 
-How2 add addtional device to OCP 4.0 instances: [20190130: gluster: step 2: update on 20190214](../ocp_4.0/next_gen_installer.md)
+How to add addtional device to OCP 4.0 instances: [20190130: gluster: step 2: update on 20190214](../ocp_4.0/next_gen_installer.md#20190130-gluster)
 
 Troubleshooting:
 
@@ -604,3 +604,15 @@ sh-4.2# s3cmd ls --no-ssl --host=rook-ceph-rgw-my-store.rook-ceph.svc.cluster.lo
 ```
 
 Created [[FRE]issues/2648](https://github.com/rook/rook/issues/2648).
+
+
+## Basic perf tests
+
+Created PVCs
+
+```
+### stuck on 34 PVC
+# export sc_name=rook-ceph-block
+# for i in {1..300}; do oc process -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/pvc_template.yaml -p PVC_NAME=claim${i} -p STORAGE_CLASS_NAME=${sc_name} -p PVC_SIZE=1Gi | oc create -f -; done
+
+```

@@ -22,5 +22,6 @@ $ cd ~/bin/
 $ ln -s ../k8s/kubectl kubectl
 $ which kubectl
 ~/bin/kubectl
+
 ```
 

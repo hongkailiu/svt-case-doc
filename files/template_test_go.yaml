@@ -29,7 +29,7 @@ objects:
     generation: 1
     name: web
   spec:
-    replicas: "${{REPLICAS}}"
+    replicas: ${REPLICAS}
     selector:
       name: web
     strategy:

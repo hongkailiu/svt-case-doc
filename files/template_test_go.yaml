@@ -147,7 +147,7 @@ parameters:
   name: session_key
   required: false
   value: session_key
-- name: REPLICAS,
-  description: "number of replicas",
-  value: 1,
+- name: REPLICAS
+  description: "number of replicas"
+  value: 1
   required: false

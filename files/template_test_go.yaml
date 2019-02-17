@@ -29,7 +29,7 @@ objects:
     generation: 1
     name: web
   spec:
-    replicas: ${REPLICAS}
+    replicas: "${{REPLICAS}}"
     selector:
       name: web
     strategy:
@@ -149,5 +149,6 @@ parameters:
   value: session_key
 - name: REPLICAS
   description: "number of replicas"
-  value: 1
+  value: "1"
   required: false
+

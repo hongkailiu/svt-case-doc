@@ -153,3 +153,26 @@ $ rm lib/libcrypto.so.10
 $ ln -s /lib64/libssl.so.10 lib/libssl.so.10
 $ ln -s /lib64/libcrypto.so.10 lib/libcrypto.so.10
 ```
+## postman
+
+```
+### https://blog.scottlowe.org/2017/11/21/installing-postman-fedora-27/
+$ curl -L https://dl.pstmn.io/download/latest/linux64 -o postman-linux-x64.tar.gz
+$ tar xzvf postman-linux-x64.tar.gz
+$ rm postman-linux-x64.tar.gz
+$ ln -s  ~/tool/Postman/Postman ~/bin/postman
+
+$ vi ~/.local/share/applications/postman.desktop
+[Desktop Entry]
+Name=Postman
+GenericName=API Client
+X-GNOME-FullName=Postman API Client
+Comment=Make and view REST API calls and responses
+Keywords=api;
+Exec=~/tool/Postman/postman
+Terminal=false
+Type=Application
+Icon=~/tool/Postman/app/resources/app/assets/icon.png
+Categories=Development;Utilities;
+
+```

@@ -102,6 +102,9 @@ objects:
       name: web
       weight: 100
     wildcardPolicy: None
+    tls:
+      termination: edge
+      insecureEdgeTerminationPolicy: None
 parameters:
 - description: Image
   displayName: Image

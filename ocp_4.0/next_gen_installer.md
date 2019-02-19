@@ -774,6 +774,28 @@ fatal: [ip-10-0-170-140.us-east-2.compute.internal]: FAILED! => {"attempts": 3, 
 
 ```
 
+### 20190219: 4.0.0-0.ci-2019-02-19-055341
+
+```
+compute:
+- name: worker
+  platform: 
+    aws:
+      type: m5.4xlarge
+      rootVolume:
+        size: 100
+        type: gp2
+  replicas: 6
+controlPlane:
+  name: master
+  platform: 
+    aws:
+      type: m5.xlarge
+      rootVolume:
+        size: 100
+        type: gp2
+  replicas: 3
+```
 
 ## troubleshooting
 

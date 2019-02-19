@@ -1,0 +1,17 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+  creationTimestamp: 2019-02-18T14:16:17Z
+  labels:
+    cluster.storage.openshift.io/owner-name: cluster-config-v1
+    cluster.storage.openshift.io/owner-namespace: kube-system
+  name: gp2b
+  resourceVersion: "9640"
+  selfLink: /apis/storage.k8s.io/v1/storageclasses/gp2
+  uid: c1904b3f-3387-11e9-9c73-0ac06c3388a2
+parameters:
+  type: gp2
+provisioner: kubernetes.io/aws-ebs
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer

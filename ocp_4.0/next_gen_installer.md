@@ -797,6 +797,13 @@ controlPlane:
   replicas: 3
 ```
 
+UI loops on `Oh no! Something went wrong.` after login the web console. Workaround
+
+```
+$ oc scale --replicas=0 -n openshift-console deployment.apps/console
+$ oc scale --replicas=1 -n openshift-console deployment.apps/console
+```
+
 ## troubleshooting
 
 * Mike's tips

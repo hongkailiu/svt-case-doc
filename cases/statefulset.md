@@ -105,10 +105,21 @@ Change according to real number of created projects:
 
 ## OCP 4.0: 20190125
 
-For OCP 4.0 and m5 instances:
+For OCP 4.0 and `m5.4xlarge` instances:
 Suppose we have n zones in the region of the cluster. Then create m X n workers.
 
 Region `us-east-2` has 3 zones. Then create 6 workers (2 in each zone).
 
 It should support 25 (max_volume) X 6 / 2 = 75 statefulsets.
 
+Fix the zone issue ([1670241](https://bugzilla.redhat.com/show_bug.cgi?id=1670241)) of volumes:
+
+```
+# oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/sc_gp2b.yaml
+# git diff content/statefulset-pv-template.json
+...
+-              "storageClassName": "gp2"
++              "storageClassName": "gp2b"
+...
+
+```

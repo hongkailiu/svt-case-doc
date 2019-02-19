@@ -270,3 +270,15 @@ $ cat /etc/hosts
 $ kubectl api-resources --namespaced=true
 
 ```
+
+## oc debug 
+
+```
+$ oc version
+oc v4.0.0-0.177.0
+kubernetes v1.12.4+6a9f178753
+features: Basic-Auth GSSAPI Kerberos SPNEGO
+...
+$ oc debug node/ip-10-0-133-100.us-east-2.compute.internal -- chroot /host journalctl -u kubelet.service -f 
+
+```

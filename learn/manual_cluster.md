@@ -9,6 +9,10 @@ Jenkins job: [SVT_Run_AWS_Image_provisioner_after_Puddle_Detection](https://open
 
 Check the new version ([Firefox setup](https://engineering.redhat.com/trac/Libra/wiki/Libra%20Repository)): [https://mirror.openshift.com/enterprise/all/3.6/latest/RH7-RHAOS-3.6/x86_64/os](https://mirror.openshift.com/enterprise/all/3.6/latest/RH7-RHAOS-3.6/x86_64/os).
 
+Docker authentication file used by k8s:
+* on 3.X: `/var/lib/origin/.docker/config.json`
+* on 4: `/var/lib/kubelet/config.json` 
+
 ## Starting from AMI
 
 ### Launch instances

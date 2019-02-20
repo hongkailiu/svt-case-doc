@@ -176,6 +176,17 @@ job.batch/rook-ceph-osd-prepare-f1c4be1d30ad9612f6cee9e157bc18c0   1         1  
                 values:
                 - storage-node
 
+# oc get deploy rook-ceph-osd-1 -o yaml | grep storage -B 9
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: role
+                operator: In
+                values:
+                - storage-node
 
 ```
 
@@ -616,3 +627,6 @@ Created PVCs
 # for i in {1..300}; do oc process -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/pvc_template.yaml -p PVC_NAME=claim${i} -p STORAGE_CLASS_NAME=${sc_name} -p PVC_SIZE=1Gi | oc create -f -; done
 
 ```
+
+Created [2667](https://github.com/rook/rook/issues/2667).
+

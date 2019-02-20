@@ -630,3 +630,14 @@ Created PVCs
 
 Created [2667](https://github.com/rook/rook/issues/2667).
 
+```
+### Verified with rook master branch and 3.11 cluster: 300, and 600 block PVCs work fine: both creating and deleting.
+# yum list installed | grep openshift
+atomic-openshift.x86_64         3.11.69-1.git.0.7478b86.el7
+
+~/go/src/github.com/rook/rook/cluster/examples/kubernetes/ceph # git branch 
+* master
+
+# git log --oneline -1
+0207f95 Merge pull request #2652 from jtlayton/wip-nfs-scale
+```

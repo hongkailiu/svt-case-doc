@@ -1,5 +1,9 @@
 # gpg
 
+Doc:
+
+* [gpg howto](https://www.gnupg.org/documentation/howtos.html)
+
 Tested with Fodora 28
 
 ```
@@ -88,3 +92,27 @@ $ gpg2 --export --armor hongkailiu@users.noreply.github.com
 ```
 
 More reading: [gpg tutorials](https://futureboy.us/pgp.html#PublicKeyCrypto), [how-to-encrypt-and-decrypt](https://linuxconfig.org/how-to-encrypt-and-decrypt-individual-files-with-gpg)
+
+20190220: Fedora 29
+
+[encryption/decryption](https://hashrocket.com/blog/posts/encryption-with-gpg-a-story-really-a-tutorial)
+
+```
+$ gpg --version
+gpg (GnuPG) 1.4.23
+...
+
+$ gpg --gen-key
+
+$ gpg --list-keys
+/home/hongkliu/.gnupg/pubring.gpg
+---------------------------------
+pub   2048R/AA38B636 2019-02-20
+uid                  Hongkai Liu <hongkailiu@users.noreply.github.com>
+sub   2048R/5CA3EEBC 2019-02-20
+
+$ gpg --list-secret-keys
+
+```
+
+TODO

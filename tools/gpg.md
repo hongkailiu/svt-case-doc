@@ -126,4 +126,7 @@ $ gpg --export-secret-keys -a hongkailiu@users.noreply.github.com > hongkailiu.g
 ### decryption
 gpg --output <output.txt> <encrypted.file>
 
+### import key
+$ gpg --import ./gpg.pub
+
 ```

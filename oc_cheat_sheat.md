@@ -280,5 +280,7 @@ kubernetes v1.12.4+6a9f178753
 features: Basic-Auth GSSAPI Kerberos SPNEGO
 ...
 $ oc debug node/ip-10-0-133-100.us-east-2.compute.internal -- chroot /host journalctl -u kubelet.service -f 
+$ oc get node --no-headers | awk '{print $1}' |  while read i; do oc debug node/$i -- chroot /host ls -al .; done
+
 
 ```

@@ -11,6 +11,13 @@ readonly CLUSTER_NAME=hongkliu1
 readonly AWS_ZONE=us-east-2c
 readonly AWS_REGION=us-east-2
 
+### # bash ./my_installer_ceph_attach_device.sh
+### make sure 3 nodes for storage 
+### oc get machinesets.machine.openshift.io ${CLUSTER_NAME}-worker-${AWS_ZONE}
+### NAME                          DESIRED   CURRENT   READY   AVAILABLE   AGE
+### hongkliu2-worker-us-east-2c   3         3         3       3           84m
+
+
 readonly NODES=( $(oc get machines.machine.openshift.io -n openshift-machine-api | grep worker | grep ${AWS_ZONE} | awk '{print $1}' | while read i; do oc get machines.machine.openshift.io -n openshift-machine-api $i -o json | jq -r .status.nodeRef.name; done) )
 ### readonly NODES=("one" "two" "three")
 
@@ -19,11 +26,7 @@ if [[ ${#NODES[@]} -ne 3 ]]; then
   exit 1
 fi
 
-for node in "${NODES[@]}"
-do
-  echo "node: ${node}"
-  oc label node ${node} role=storage-node --overwrite
-done
+for node in "${NODES[@]}"; do echo "node: ${node}"; oc label node ${node} role=storage-node --overwrite; done
 
 readonly TMP_DIR=/tmp/${CLUSTER_NAME}
 

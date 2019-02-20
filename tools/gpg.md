@@ -93,7 +93,7 @@ $ gpg2 --export --armor hongkailiu@users.noreply.github.com
 
 More reading: [gpg tutorials](https://futureboy.us/pgp.html#PublicKeyCrypto), [how-to-encrypt-and-decrypt](https://linuxconfig.org/how-to-encrypt-and-decrypt-individual-files-with-gpg)
 
-20190220: Fedora 29
+## 20190220: Fedora 29
 
 [encryption/decryption](https://hashrocket.com/blog/posts/encryption-with-gpg-a-story-really-a-tutorial)
 
@@ -104,6 +104,8 @@ gpg (GnuPG) 1.4.23
 
 $ gpg --gen-key
 
+$ gpg --gen-revoke --armor --output=RevocationCertificate.asc hongkailiu@users.noreply.github.com
+
 $ gpg --list-keys
 /home/hongkliu/.gnupg/pubring.gpg
 ---------------------------------
@@ -112,6 +114,16 @@ uid                  Hongkai Liu <hongkailiu@users.noreply.github.com>
 sub   2048R/5CA3EEBC 2019-02-20
 
 $ gpg --list-secret-keys
+
+### export public key
+$ gpg --export -a hongkailiu@users.noreply.github.com > hongkailiu.github.pub
+### export private key
+$ gpg --export-secret-keys -a hongkailiu@users.noreply.github.com > hongkailiu.github.pri
+
+### encrpytion (with public key)
+
+### decryption
+gpg --output <output.txt> <encrypted.file>
 
 ```
 

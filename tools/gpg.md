@@ -127,5 +127,3 @@ $ gpg --export-secret-keys -a hongkailiu@users.noreply.github.com > hongkailiu.g
 gpg --output <output.txt> <encrypted.file>
 
 ```
-
-TODO

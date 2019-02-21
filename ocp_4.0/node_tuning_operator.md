@@ -404,3 +404,119 @@ Or implement the above logic without the framework.
 
 System case:
 Check how long it takes to pass 1 change onto monster cluster.
+
+## custom profiles
+
+Change `tuned.openshift.io/v1` to `tuned.openshift.io/v1alpha1`
+depending whether you have a deployment with [pull/41](https://github.com/openshift/cluster-node-tuning-operator/pull/41) merged or not.
+
+```
+# oc get tuned default -o json | jq -r .apiVersion
+tuned.openshift.io/v1alpha1
+```
+
+Test steps:
+
+```
+$ $ oc get node
+NAME                                         STATUS    ROLES     AGE       VERSION
+ip-10-0-130-163.us-east-2.compute.internal   Ready     master    8h        v1.12.4+6a9f178753
+ip-10-0-136-210.us-east-2.compute.internal   Ready     worker    8h        v1.12.4+6a9f178753
+ip-10-0-144-147.us-east-2.compute.internal   Ready     worker    8h        v1.12.4+6a9f178753
+ip-10-0-156-224.us-east-2.compute.internal   Ready     master    8h        v1.12.4+6a9f178753
+ip-10-0-165-241.us-east-2.compute.internal   Ready     worker    8h        v1.12.4+6a9f178753
+ip-10-0-167-195.us-east-2.compute.internal   Ready     master    8h        v1.12.4+6a9f178753
+
+$ oc project
+Using project "openshift-cluster-node-tuning-operator" on server "https://api.jmencak.perf-testing.devcluster.openshift.com:6443".
+
+$ oc create -f - <<EOF
+###apiVersion: tuned.openshift.io/v1
+apiVersion: tuned.openshift.io/v1alpha1
+kind: Tuned
+metadata:
+  name: router
+  namespace: openshift-cluster-node-tuning-operator
+spec:
+  profile:
+  - data: |
+      [main]
+      summary=A custom OpenShift profile for the router
+      include=openshift-control-plane
+
+      [sysctl]
+      net.ipv4.ip_local_port_range="1000 65535"
+      net.ipv4.tcp_tw_reuse=1
+
+    name: openshift-router
+
+  recommend:
+  - match:
+    - label: app
+      value: "router"
+      type: pod
+    priority: 5
+    profile: openshift-router
+EOF
+tuned.tuned.openshift.io/router created
+
+$ oc get tuned
+NAME      AGE
+default   6h10m
+router    28s
+
+$ oc get cm/tuned-profiles -o yaml|grep router
+    openshift-router: |
+      summary=A custom OpenShift profile for the router
+    name: router
+
+$ oc get cm/tuned-recommend -o yaml|grep router
+    [openshift-router,0]
+    /var/lib/tuned/ocp-pod-labels.cfg=.*\bapp=router\n
+    name: router
+
+$ oc get pods --all-namespaces --show-labels -o wide |grep router
+openshift-ingress                            router-default-77c9ddb9cf-47nz7                                                1/1     Running     0          7h25m   10.131.0.4     ip-10-0-165-241.us-east-2.compute.internal   <none>           app=router,pod-template-hash=77c9ddb9cf,router=router-default
+openshift-ingress                            router-default-77c9ddb9cf-crf69                                                1/1     Running     0          7h25m   10.128.2.3     ip-10-0-136-210.us-east-2.compute.internal   <none>           app=router,pod-template-hash=77c9ddb9cf,router=router-default
+
+
+### check on the router nodes:  ip-10-0-165-241.us-east-2.compute.internal and ip-10-0-136-210.us-east-2.compute.internal
+### use oc debug node/ip-10-0-165-241.us-east-2.compute.internal when you do not have the jump node
+### currently, oc-debug-node is blocked by https://bugzilla.redhat.com/show_bug.cgi?id=1679625
+$ ssh core@ip-10-0-165-241.us-east-2.compute.internal
+$ sysctl net.ipv4.ip_local_port_range
+net.ipv4.ip_local_port_range = 1000	65535
+$ sysctl net.ipv4.tcp_tw_reuse
+net.ipv4.tcp_tw_reuse = 1
+
+
+# Check nodes which do NOT have the router
+$ ssh core@ip-10-0-144-147.us-east-2.compute.internal
+$ sysctl net.ipv4.ip_local_port_range
+net.ipv4.ip_local_port_range = 32768	60999
+[core@ip-10-0-144-147 ~]$ sysctl net.ipv4.tcp_tw_reuse
+net.ipv4.tcp_tw_reuse = 0
+
+$ oc get pods -o wide
+NAME                                            READY   STATUS    RESTARTS   AGE   IP             NODE                                         NOMINATED NODE
+cluster-node-tuning-operator-86bff68bb7-j7t5t   1/1     Running   0          8h    10.129.0.19    ip-10-0-167-195.us-east-2.compute.internal   <none>
+tuned-7t5v8                                     1/1     Running   0          8h    10.0.136.210   ip-10-0-136-210.us-east-2.compute.internal   <none>
+tuned-cnhs6                                     1/1     Running   0          8h    10.0.167.195   ip-10-0-167-195.us-east-2.compute.internal   <none>
+tuned-dm4f5                                     1/1     Running   0          8h    10.0.130.163   ip-10-0-130-163.us-east-2.compute.internal   <none>
+tuned-nfl4l                                     1/1     Running   0          8h    10.0.165.241   ip-10-0-165-241.us-east-2.compute.internal   <none>
+tuned-r7rsk                                     1/1     Running   0          8h    10.0.156.224   ip-10-0-156-224.us-east-2.compute.internal   <none>
+tuned-wggkl                                     1/1     Running   0          8h    10.0.144.147   ip-10-0-144-147.us-east-2.compute.internal   <none>
+
+### tuned pods on router nodes
+$ oc logs tuned-7t5v8 | grep profile | tail -n1
+2019-02-21 21:09:47,421 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-router' applied
+
+### tuned pods on NON-router nodes
+$ oc logs tuned-wggkl | grep profile | tail -n1
+2019-02-21 21:10:30,296 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-node' applied
+
+### 
+$ oc logs tuned-cnhs6 | grep profile | tail -n1
+2019-02-21 21:11:10,271 INFO     tuned.daemon.daemon: static tuning from profile 'openshift-control-plane' applied
+
+```

@@ -281,5 +281,6 @@ features: Basic-Auth GSSAPI Kerberos SPNEGO
 ...
 $ oc debug node/ip-10-0-133-100.us-east-2.compute.internal -- chroot /host journalctl -u kubelet.service -f 
 $ oc get node --no-headers | awk '{print $1}' |  while read i; do oc debug node/$i -- chroot /host ls -al .; done
+$ oc get node --no-headers | awk '{print $1}' | while read i; do echo "node: $i"; oc debug node/$i -- curl -s http://169.254.169.254/latest/meta-data/local-hostname; done
 
 ```

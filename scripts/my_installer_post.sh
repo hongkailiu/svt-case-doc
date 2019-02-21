@@ -23,13 +23,15 @@ set -o pipefail
 ####################################################################################
 ### CHANGE those vars
 readonly KERBEROS_ID='hongkliu'
+readonly CLUSTER_NAME='hongkliu1'
 readonly PRIVATE_KEY="${HOME}/.ssh/libra.pem"
 
 echo "creating cluster info ..."
 readonly MASTER_PRIVATE_IP=$(oc get node | grep master | head -n 1 | awk '{print $1}')
 echo "MASTER_PRIVATE_IP: ${MASTER_PRIVATE_IP}"
 
-readonly SUBNET_ID=$(aws ec2 describe-instances --output json --filters "Name=private-dns-name,Values=${MASTER_PRIVATE_IP}"  | jq -r '.Reservations[].Instances[].SubnetId')
+#readonly SUBNET_ID=$(aws ec2 describe-instances --output json --filters "Name=private-dns-name,Values=${MASTER_PRIVATE_IP}"  | jq -r '.Reservations[].Instances[].SubnetId')
+readonly SUBNET_ID=$(aws ec2 describe-subnets --filters "Name=tag:kubernetes.io/cluster/${CLUSTER_NAME},Values=owned" "Name=cidrBlock,Values=10.0.0.0/20" | jq -r '.Subnets[].SubnetId' | head -n 1)
 echo "SUBNET_ID: ${SUBNET_ID}"
 
 readonly SECURITY_GROUP_ID=$(aws ec2 describe-instances --output json --filters "Name=private-dns-name,Values=${MASTER_PRIVATE_IP}"  | jq -r '.Reservations[].Instances[].SecurityGroups[].GroupId')
@@ -38,7 +40,7 @@ echo "SECURITY_GROUP_ID: ${SECURITY_GROUP_ID}"
 echo "creating a jump node ..."
 readonly INSTANCE_ID=$(aws ec2 run-instances --image-id ami-0f7e779f5a384f9fc --security-group-ids "${SECURITY_GROUP_ID}" --count 1    --associate-public-ip-address \
       --instance-type m5.xlarge --subnet "${SUBNET_ID}"  --key-name libra  --query 'Instances[*].InstanceId'  \
-      --tag-specifications="[{\"ResourceType\":\"instance\",\"Tags\":[{\"Key\":\"Name\",\"Value\":\"qe-${KERBEROS_ID}-ocp-jn\"}]}]" | grep "i-" | tr -d '"' | tr -d " ")
+      --tag-specifications="[{\"ResourceType\":\"instance\",\"Tags\":[{\"Key\":\"Name\",\"Value\":\"qe-${KERBEROS_ID}-${CLUSTER_NAME}-ocp-jn\"}]}]" | grep "i-" | tr -d '"' | tr -d " ")
 echo "INSTANCE_ID: ${INSTANCE_ID}" 
 
 echo "sleep 20 secs, waiting for the host is ready"

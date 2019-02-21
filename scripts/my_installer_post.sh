@@ -1,9 +1,5 @@
 #!/bin/bash
 
-### NO LONGER WORKING: 4.0.0-0.nightly-2019-02-15-034921
-### the jump can still be created with a public dns however it is NOT accessible from outside of the cluster network.
-### VPC must have restrictions on the access
-
 ### create a jump node inside cluster VPC
 ### with the same security group and subnet
 ### the jump node uses `ami-0f7e779f5a384f9fc` (clean fedora 29) which is in US East (Ohio), ie, us-east-2

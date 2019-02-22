@@ -27,7 +27,8 @@ readonly MASTER_PRIVATE_IP=$(oc get node | grep master | head -n 1 | awk '{print
 echo "MASTER_PRIVATE_IP: ${MASTER_PRIVATE_IP}"
 
 #readonly SUBNET_ID=$(aws ec2 describe-instances --output json --filters "Name=private-dns-name,Values=${MASTER_PRIVATE_IP}"  | jq -r '.Reservations[].Instances[].SubnetId')
-readonly SUBNET_ID=$(aws ec2 describe-subnets --output json --filters "Name=tag:kubernetes.io/cluster/${CLUSTER_NAME},Values=owned" "Name=cidrBlock,Values=10.0.0.0/20" | jq -r '.Subnets[].SubnetId' | head -n 1)
+#readonly SUBNET_ID=$(aws ec2 describe-subnets --output json --filters "Name=tag:kubernetes.io/cluster/${CLUSTER_NAME},Values=owned" "Name=cidrBlock,Values=10.0.0.0/20" | jq -r '.Subnets[].SubnetId' | head -n 1)
+readonly SUBNET_ID=$(aws ec2 describe-subnets --filters "Name=tag:kubernetes.io/cluster/${CLUSTER_NAME},Values=owned" | jq -r --arg key "${CLUSTER_NAME}-public" '.Subnets[] | select((.Tags[].Value | contains($key)) and (.Tags[].Value | endswith("a"))) | .SubnetId')
 echo "SUBNET_ID: ${SUBNET_ID}"
 
 readonly SECURITY_GROUP_ID=$(aws ec2 describe-instances --output json --filters "Name=private-dns-name,Values=${MASTER_PRIVATE_IP}"  | jq -r '.Reservations[].Instances[].SecurityGroups[].GroupId')

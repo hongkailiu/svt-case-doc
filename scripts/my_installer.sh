@@ -34,11 +34,16 @@ mkdir ${INSTALL_FOLDER}
 echo "INSTALL_FOLDER: ${INSTALL_FOLDER}"
 
 readonly BUILD_VERSION=$1
-echo "${BUILD_VERSION}" >> "${INSTALL_FOLDER}/version.txt"
 readonly IMAGE=$(oc adm release info --pullspecs registry.svc.ci.openshift.org/ocp/release:${BUILD_VERSION} | grep installer | awk '{print $2}')
-readonly ID=$(docker create ${IMAGE})
-docker cp ${ID}:/usr/bin/openshift-install "./${INSTALL_FOLDER}/"
-docker rm ${ID}
+### the following command will overwrite ./openshift-install
+oc image extract ${IMAGE} --file  /usr/bin/openshift-install
+mv openshift-install "${INSTALL_FOLDER}/"
+chmod +x "${INSTALL_FOLDER}/openshift-install"
+echo "${BUILD_VERSION}" >> "${INSTALL_FOLDER}/version.txt"
+
+#readonly ID=$(docker create ${IMAGE})
+#docker cp ${ID}:/usr/bin/openshift-install "./${INSTALL_FOLDER}/"
+#docker rm ${ID}
 echo "using the installer bin from IMAGE: ${IMAGE}"
 echo "installer version: $(./${INSTALL_FOLDER}/openshift-install version)"
 

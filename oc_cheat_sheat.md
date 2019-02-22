@@ -284,3 +284,11 @@ $ oc get node --no-headers | awk '{print $1}' |  while read i; do oc debug node/
 $ oc get node --no-headers | awk '{print $1}' | while read i; do echo "node: $i"; oc debug node/$i -- curl -s http://169.254.169.254/latest/meta-data/local-hostname; done
 
 ```
+
+## oc image
+
+```
+$ oc image extract quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:5ccc80b91aad3a03440d784a09f21ea89d7007a73b9f01210d6c5925340b2650 --path /usr/bin/openshift-install:./abc/
+$ oc image extract quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:5ccc80b91aad3a03440d784a09f21ea89d7007a73b9f01210d6c5925340b2650 --file  /usr/bin/openshift-install
+
+```

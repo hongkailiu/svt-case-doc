@@ -29,6 +29,8 @@ history info
 $ code --version
 1.27.1
 
+$ sudo dnf update code
+
 ```
 
 ## Go plugin

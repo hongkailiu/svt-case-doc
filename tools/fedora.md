@@ -176,3 +176,21 @@ Icon=~/tool/Postman/app/resources/app/assets/icon.png
 Categories=Development;Utilities;
 
 ```
+
+## black screen after suspend
+
+[bz1645678](https://bugzilla.redhat.com/show_bug.cgi?id=1645678): `Ctrl+Alt+F2` and then `Ctrl+Alt+F1`.
+
+
+## Useful command
+
+```
+### check kernel version
+$ uname -r
+4.18.16-300.fc29.x86_64
+
+### check which window manager is running
+$ env | grep -i gdmsession
+GDMSESSION=gnome-classic
+
+```

@@ -182,6 +182,13 @@ Categories=Development;Utilities;
 [bz1645678](https://bugzilla.redhat.com/show_bug.cgi?id=1645678): `Ctrl+Alt+F2` and then `Ctrl+Alt+F1`.
 
 
+## bluejeans
+
+```
+###https://www.bluejeans.com/downloads#plugindesktop
+$ sudo yum install https://swdl.bluejeans.com/desktop/linux/1.37/1.37.22/bluejeans-1.37.22.x86_64.rpm
+```
+
 ## Useful command
 
 ```

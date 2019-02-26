@@ -54,3 +54,7 @@ Thanks to Jiri
 
 * [cluster-samples-operator](https://github.com/openshift/cluster-samples-operator)
 * [https://github.com/operator-framework/operator-sdk-samples](https://github.com/operator-framework/operator-sdk-samples)
+
+## operator-hub
+
+[community-operators](https://github.com/operator-framework/community-operators)

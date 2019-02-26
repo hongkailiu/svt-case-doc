@@ -52,4 +52,10 @@ $ source p2env/bin/activate
 $ python -V
 Python 2.7.15
 
+$ virtualenv --python=/usr/bin/python3 p3env
+$ source p3env/bin/activate
+$ python -V
+Python 3.7.0
+
+
 ```

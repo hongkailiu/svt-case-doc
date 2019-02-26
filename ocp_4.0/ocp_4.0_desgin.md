@@ -31,7 +31,17 @@ Thanks to Jiri
 
 * Cluster Version Operator (CVO): 
 
-    * [The Cluster Version Operator](https://github.com/openshift/cluster-version-operator/), an instance of which runs in every cluster, is in charge of performing updates to the cluster. 
+    * [The Cluster Version Operator](https://github.com/openshift/cluster-version-operator/), an instance of which runs in every cluster, is in charge of performing updates to the cluster.
+
+    ```
+    $ oc get pod -n openshift-cluster-version
+    NAME                                        READY   STATUS    RESTARTS   AGE
+    cluster-version-operator-6fdf976c58-b2h7s   1/1     Running   0          38m
+    $ oc get clusterversion version 
+    NAME      VERSION                             AVAILABLE   PROGRESSING   SINCE   STATUS
+    version   4.0.0-0.nightly-2019-02-24-045124   True        False         14m     Cluster version is 4.0.0-0.nightly-2019-02-24-045124
+
+    ```
 
     * The operator that downloads and keeps all components on the cluster up to date (sets the cluster to a specific version). It delegates most details to second level operators (one for Kubernetes control plane, one for networking, etc) in order to reduce the amount of possible failures.
 
@@ -39,3 +49,8 @@ Thanks to Jiri
     # oc adm upgrade -h
 
     ```
+
+## samples-operator
+
+* [cluster-samples-operator](https://github.com/openshift/cluster-samples-operator)
+* [https://github.com/operator-framework/operator-sdk-samples](https://github.com/operator-framework/operator-sdk-samples)

@@ -111,7 +111,7 @@ Before commit to the repo, [test first](https://github.com/operator-framework/co
 $ source p3env/bin/activate
 $ pip3 install operator-courier
 $ BUNDLE_DIR=${GOPATH}/src/github.com/hongkailiu/operators/svt-app-operator/deploy/BUNDLE_DIR
-$ ll $BUNDLE_DIR
+$ ll "$BUNDLE_DIR"
 total 24
 -rw-rw-r--. 1 hongkliu hongkliu   629 Feb 25 14:35 svt-app-operator.crd.yaml
 -rw-rw-r--. 1 hongkliu hongkliu    95 Feb 26 01:17 svt-app-operator.package.yaml
@@ -132,8 +132,102 @@ EXAMPLE_NAMESPACE=hongkailiu
 EXAMPLE_REPOSITORY=svt-app-operator
 EXAMPLE_RELEASE=0.0.2
 
-$ operator-courier push $BUNDLE_DIR $EXAMPLE_NAMESPACE $EXAMPLE_REPOSITORY $EXAMPLE_RELEASE $AUTH_TOKEN
+$ operator-courier push "$BUNDLE_DIR" "$EXAMPLE_NAMESPACE" "$EXAMPLE_REPOSITORY" "$EXAMPLE_RELEASE" "$AUTH_TOKEN"
 
 ```
 
-Blocked by [operator-sdk-samples/issues/57](https://github.com/operator-framework/operator-sdk-samples/issues/57).
+Blocked by [operator-sdk-samples/issues/57](https://github.com/operator-framework/operator-sdk-samples/issues/57). 
+
+20190227: Unblocked now.
+
+```
+$ cd ${GOPATH}/src/github.com/hongkailiu/operators/svt-app-operator
+$ oc project openshift-marketplace
+$ oc get OperatorSource
+NAME                  TYPE          ENDPOINT              REGISTRY              DISPLAYNAME           PUBLISHER   STATUS      MESSAGE                                       AGE
+certified-operators   appregistry   https://quay.io/cnr   certified-operators   Certified Operators   Red Hat     Succeeded   The object has been successfully reconciled   172m
+community-operators   appregistry   https://quay.io/cnr   community-operators   Community Operators   Red Hat     Succeeded   The object has been successfully reconciled   172m
+redhat-operators      appregistry   https://quay.io/cnr   redhat-operators      Red Hat Operators     Red Hat     Succeeded   The object has been successfully reconciled   172m
+
+$ oc create -f deploy/test/community.operatorsource.cr.yaml 
+operatorsource.marketplace.redhat.com/my-operators created
+
+$ oc get OperatorSource my-operators
+NAME           TYPE          ENDPOINT              REGISTRY     DISPLAYNAME           PUBLISHER   STATUS      MESSAGE                                       AGE
+my-operators   appregistry   https://quay.io/cnr   hongkailiu   Community Operators   Red Hat     Succeeded   The object has been successfully reconciled   55s
+
+```
+
+After some minutes, refresh console UI. Operator `svt-app-operator` shows up:
+
+![](../images/svt-app-operator.png)
+
+We can also check by
+
+```
+$ kubectl get opsrc my-operators -o=custom-columns=NAME:.metadata.name,PACKAGES:.status.packages -n openshift-marketplace
+NAME           PACKAGES
+my-operators   svt-app-operator
+
+###Note that CatalogSourceConfig is created already automatically
+# oc get CatalogSourceConfig my-operators
+NAME           TARGETNAMESPACE         PACKAGES           STATUS      DISPLAYNAME           PUBLISHER   MESSAGE                                       AGE
+my-operators   openshift-marketplace   svt-app-operator   Succeeded   Community Operators   Red Hat     The object has been successfully reconciled   115m
+
+### this pod will download the release info from app registry
+# oc get pod my-operators-849b77b965-jxblq
+NAME                            READY   STATUS    RESTARTS   AGE
+my-operators-849b77b965-jxblq   1/1     Running   0          2m31s
+
+# oc logs my-operators-849b77b965-jxblq | grep download
+time="2019-02-27T17:33:45Z" level=info msg="downloading repository: hongkailiu/svt-app-operator:0.0.2 from https://quay.io/cnr" port=50051 type=appregistry
+time="2019-02-27T17:33:47Z" level=info msg="download complete - 1 repositories have been downloaded" port=50051 type=appregistry
+
+```
+
+Release a new version:
+
+```
+EXAMPLE_RELEASE=0.0.3
+$ operator-courier push "$BUNDLE_DIR" "$EXAMPLE_NAMESPACE" "$EXAMPLE_REPOSITORY" "$EXAMPLE_RELEASE" "$AUTH_TOKEN"
+
+###if the new release is not picked up
+$ oc delete pod my-operators-849b77b965-jxblq
+###this will download the release again
+```
+
+
+We can install the operator on the UI. Or via oc cli:
+
+```
+$ ???
+
+```
+
+Blocked again:
+
+Need to understand those first.
+
+```
+Alexander Greene [19 minutes ago]
+The `installModes` behave somewhat differently than you've described.  
+When deploying your operator to a namespace OLM will look for an `OperatorGroup` in the namespace and see which `installMode` it matches. 
+If the `installMode` is supported by your operator, OLM  will add an annotation to your csv with a string that lists which namespaces 
+to watch seperated by commas. Your operator should look for this annotation and assign it to an environment variable. 
+The operator then needs to be configured to watch those namespaces for CRs. (edited)
+
+
+Alexander Greene [15 minutes ago]
+OLM will deploy the operator if the `installMode` type of the `operatorGroup` in the `namespace`  is supported. 
+The `installMode` type is identified by OLM based on the `targetNamespaces` field in the `operatorGroup` resource
+
+https://docs.google.com/document/d/10SJ_k7efVMnNxv49AT-jTdvnKF_O0R1CFdT_-KOW1Qg/edit#heading=h.efjm54igbbni
+
+
+Alec Merdler
+https://github.com/operator-framework/operator-lifecycle-manager/pull/721
+
+
+Kevin Rizza   [42 minutes ago]
+@hongkliu the operator source creates a source from which data is obtained from quay. the subscription creation workflow is what adds the csv to the namespace
+```

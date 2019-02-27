@@ -1,5 +1,7 @@
 # Operator
 
+Revisted of [this topic: operator_framework for OCP 4.0](../ocp_4.0/ocp_4.0_operator_framework.md).
+
 * [operator-framework](https://github.com/operator-framework)
 * [introducing-operator-framework](https://www.redhat.com/en/blog/introducing-operator-framework-building-apps-kubernetes?sc_cid=701f2000000tucqAAA&src=fridayfive4email)
 * [Introduce OpenShift to Operators](https://thenewstack.io/coreos-says-red-hat-will-help-introduce-openshift-to-operators/)

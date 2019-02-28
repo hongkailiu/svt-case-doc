@@ -133,6 +133,7 @@ EXAMPLE_REPOSITORY=svt-app-operator
 EXAMPLE_RELEASE=0.0.2
 
 $ operator-courier push "$BUNDLE_DIR" "$EXAMPLE_NAMESPACE" "$EXAMPLE_REPOSITORY" "$EXAMPLE_RELEASE" "$AUTH_TOKEN"
+### then check https://quay.io/application/hongkailiu/svt-app-operator?tab=releases
 
 ```
 
@@ -199,14 +200,169 @@ $ oc delete pod my-operators-849b77b965-jxblq
 
 We can install the operator on the UI. Or via oc cli:
 
-```
-$ ???
+UI method:
+
+* Select `svt-app-operator` on `Operator Hub` then click `Install`.
+* Choose a namespace eg, `bbb` that you created for testing.
 
 ```
+### those resources are created automatically
+# oc get subscription -n bbb
+NAME               PACKAGE            SOURCE                 CHANNEL
+svt-app-operator   svt-app-operator   installed-custom-bbb   alpha
+# oc get installPlan
+NAME            CSV                       SOURCE   APPROVAL    APPROVED
+install-g4r7f   svt-app-operator.v0.0.8            Automatic   true
+# oc get csv -n bbb
+NAME                      DISPLAY           VERSION   REPLACES   PHASE
+svt-app-operator.v0.0.8   SVT Application   0.0.8                Succeeded
+# oc get operatorGroup -n bbb
+NAME        AGE
+bbb-qg468   14m
+# oc get CatalogSource
+NAME                   NAME               TYPE   PUBLISHER   AGE
+installed-custom-bbb   Custom Operators   grpc   Custom      22m
+# oc get deploy -n bbb
+NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+svt-app-operator   1/1     1            1           13m
+# oc get pod -n bbb
+NAME                                READY   STATUS    RESTARTS   AGE
+svt-app-operator-7bfb9c6997-cgrbm   1/1     Running   0          13m
+# oc get pod -n bbb
+NAME                                READY   STATUS    RESTARTS   AGE
+svt-app-operator-7bfb9c6997-cgrbm   1/1     Running   0          13m
 
-Blocked again:
+###Also notice an `CatalogSourceConfig` is created in `openshift-marketplace`
+###https://github.com/operator-framework/operator-marketplace#using-the-marketplace-operator
+# oc get CatalogSourceConfig installed-custom-bbb -n openshift-marketplace
+NAME                   TARGETNAMESPACE   PACKAGES           STATUS      DISPLAYNAME        PUBLISHER   MESSAGE                                       AGE
+installed-custom-bbb   bbb               svt-app-operator   Succeeded   Custom Operators   Custom      The object has been successfully reconciled   92m
 
-Need to understand those first.
+
+### now we can deploy our cr and check if it works properly
+# oc create -f deploy/crds/app_v1alpha1_svt_cr.yaml 
+# oc get svt
+NAME   AGE
+svt    62s
+# oc get svt svt -o yaml
+apiVersion: app.test.com/v1alpha1
+kind: SVT
+metadata:
+  creationTimestamp: 2019-02-28T15:02:45Z
+  generation: 1
+  name: svt
+  namespace: bbb
+  resourceVersion: "97289"
+  selfLink: /apis/app.test.com/v1alpha1/namespaces/bbb/svts/svt
+  uid: e791ce37-3b69-11e9-9057-0a7d73a12284
+spec:
+  size: 3
+status:
+  nodes:
+  - svt-5ccf466b8c-q7sqm
+  - svt-5ccf466b8c-rwws2
+  - svt-5ccf466b8c-tvdfg
+
+# oc get pod
+NAME                                READY   STATUS    RESTARTS   AGE
+svt-5ccf466b8c-q7sqm                1/1     Running   0          8m33s
+svt-5ccf466b8c-rwws2                1/1     Running   0          8m33s
+svt-5ccf466b8c-tvdfg                1/1     Running   0          8m33s
+svt-app-operator-7bfb9c6997-cgrbm   1/1     Running   0          25m
+
+
+```
+
+oc cli method:
+
+```
+### https://github.com/operator-framework/operator-sdk-samples/issues/57#issuecomment-467562101
+# oc get clusterversion
+NAME      VERSION                             AVAILABLE   PROGRESSING   SINCE   STATUS
+version   4.0.0-0.nightly-2019-02-27-213933   True        False         3h4m    Cluster version is 4.0.0-0.nightly-2019-02-27-213933
+
+# oc new-project ccc
+# cat ~/operatorGroup.yaml 
+apiVersion: operators.coreos.com/v1alpha2
+kind: OperatorGroup
+metadata:
+  annotations:
+    olm.providedAPIs: SVT.v1alpha1.app.test.com
+  generation: 2
+  name: myog
+spec:
+  selector: {}
+  targetNamespaces:
+  - ccc
+
+# oc create -f ~/operatorGroup.yaml
+
+# cat ~/catalogSource.yaml
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+  labels:
+    csc-owner-name: installed-custom-ccc
+    csc-owner-namespace: openshift-marketplace
+  name: installed-custom-ccc
+spec:
+  address: 172.30.195.68:50051
+  displayName: Custom Operators
+  icon:
+    base64data: ""
+    mediatype: ""
+  publisher: Custom
+  sourceType: grpc
+
+# oc create -f ~/catalogSource.yaml
+
+# cat ~/subscription.yaml
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: svt-app-operator
+spec:
+  channel: alpha
+  installPlanApproval: Automatic
+  name: svt-app-operator
+  source: installed-custom-ccc
+  sourceNamespace: ccc
+  startingCSV: svt-app-operator.v0.0.8
+
+# oc create -f ~/subscription.yaml
+
+### csv got created automatically
+# oc get csv
+NAME                      DISPLAY           VERSION   REPLACES   PHASE
+svt-app-operator.v0.0.8   SVT Application   0.0.8                Succeeded
+# oc get pod
+NAME                                READY   STATUS    RESTARTS   AGE
+svt-app-operator-56c5b995c8-fvcsh   1/1     Running   0          63s
+
+###Not sure about `CatalogSourceConfig` in `openshift-marketplace` comparing to the UI method.
+
+### We can start to delpy our crd and check as before
+# oc create -f deploy/crds/app_v1alpha1_svt_cr.yaml 
+...
+
+```
+
+When you are satisfied with the tests, join the compunity:
+
+```
+$ go get -d github.com/operator-framework/community-operators
+$ cd ${GOPATH}/src/github.com/operator-framework/community-operators/community-operators/
+$ mkdir -p svt-app-operator
+$ cd svt-app-operator/
+$ BUNDLE_DIR=${GOPATH}/src/github.com/hongkailiu/operators/svt-app-operator/deploy/BUNDLE_DIR
+$ cp "$BUNDLE_DIR/*" .
+### https://github.com/operator-framework/community-operators/pull/138
+
+```
+
+There are other concepts about `operatorGroup` and ``
+
+Thanks for the operator team for those information:
 
 ```
 Alexander Greene [19 minutes ago]

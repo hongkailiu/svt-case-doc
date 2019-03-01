@@ -7,6 +7,7 @@ This page documents the revisit on OCP 4.0 of operator framework after [operator
 svt-app-operator:
 
 ```
+### https://github.com/operator-framework/operator-sdk
 ### https://github.com/operator-framework/operator-sdk/blob/master/doc/user-guide.md#2-run-locally-outside-the-cluster
 ### debugging operator locallay
 # operator-sdk --version

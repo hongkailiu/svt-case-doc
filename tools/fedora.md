@@ -59,6 +59,8 @@ Choose the one with _HVM-standard-0_ whose ami id is _ami-7c25e604_.
 
 ## [oc cli: auto-completion](https://bierkowski.com/openshift-cli-morsels-enable-oc-shell-completion/)
 
+On F29: `origin-3.11.1-1.fc29.src.rpm` installs `/etc/bash_completion.d/oc`. So no manual steps required.
+
 ```sh
 $ sudo dnf install bash-completion
 $ oc completion bash > oc_completion.sh
@@ -70,6 +72,19 @@ for [centos](https://medium.com/@ismailyenigul/how-to-enable-openshift-oc-bash-a
 ```
 # yum -y install bash-completion
 # oc completion bash > /etc/bash_completion.d/oc
+```
+
+If no root access:
+
+```
+###https://serverfault.com/questions/506612/standard-place-for-user-defined-bash-completion-d-scripts
+$ mkdir ~/.bash_completion.d
+$ oc completion bash > ~/.bash_completion.d/oc
+$ vi ~/.bash_completion
+for bcfile in ~/.bash_completion.d/* ; do
+  . $bcfile
+done
+
 ```
 
 ## fedora <-> win7

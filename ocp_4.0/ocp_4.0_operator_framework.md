@@ -394,8 +394,13 @@ Kevin Rizza   [42 minutes ago]
 ## [e2e test](https://github.com/operator-framework/operator-sdk/blob/master/doc/test-framework/writing-e2e-tests.md)
 
 ```
+# kubectl create namespace operator-test
 # cd ~/go/src/github.com/hongkailiu/operators/svt-app-operator
 # operator-sdk test local ./test/e2e --namespace operator-test --go-test-flags "-v"
+
+### with another terminal to watch changes during the e2e tests:
+# oc get pod -n operator-test -w
+# watch -n 10 "oc get svt -n operator-test example-svt -o yaml"
 
 ```
 

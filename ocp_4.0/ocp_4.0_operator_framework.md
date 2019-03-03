@@ -390,3 +390,14 @@ https://github.com/operator-framework/operator-lifecycle-manager/pull/721
 Kevin Rizza   [42 minutes ago]
 @hongkliu the operator source creates a source from which data is obtained from quay. the subscription creation workflow is what adds the csv to the namespace
 ```
+
+## [e2e test](https://github.com/operator-framework/operator-sdk/blob/master/doc/test-framework/writing-e2e-tests.md)
+
+```
+# cd ~/go/src/github.com/hongkailiu/operators/svt-app-operator
+# operator-sdk test local ./test/e2e --namespace operator-test --go-test-flags "-v"
+
+```
+
+[e2e on travis-ci](https://blog.travis-ci.com/2017-10-26-running-kubernetes-on-travis-ci-with-minikube)
+

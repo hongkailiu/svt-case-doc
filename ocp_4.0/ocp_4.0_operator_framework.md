@@ -13,13 +13,15 @@ svt-app-operator:
 # operator-sdk --version
 operator-sdk version v0.5.0+git
 
-# kubectl create -f deploy/crds/app_v1alpha1_svt_crd.yaml 
+# go get -d github.com/hongkailiu/operators/svt-app-operator
+# cd ~/go/src/github.com/hongkailiu/operators/svt-app-operator
+# oc new-project abc
+
+$ kubectl create -f deploy/crds/app_v1alpha1_svt_crd.yaml 
 $ kubectl create -f deploy/service_account.yaml
 $ kubectl create -f deploy/role.yaml
 $ kubectl create -f deploy/role_binding.yaml
 
-# cd ~/go/src/github.com/hongkailiu/operators/svt-app-operator
-# oc project abc
 # export OPERATOR_NAME=svt-app-operator
 # operator-sdk up local --namespace=abc
 

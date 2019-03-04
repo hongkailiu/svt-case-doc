@@ -409,5 +409,5 @@ Kevin Rizza   [42 minutes ago]
 
 TODOs
 
-* Test operator up upgrade
+* Test operator upgrade
 * pbench-operator?

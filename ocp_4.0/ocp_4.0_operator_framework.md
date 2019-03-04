@@ -360,6 +360,7 @@ $ cd svt-app-operator/
 $ BUNDLE_DIR=${GOPATH}/src/github.com/hongkailiu/operators/svt-app-operator/deploy/BUNDLE_DIR
 $ cp "$BUNDLE_DIR/*" .
 ### https://github.com/operator-framework/community-operators/pull/138
+### PR got merged. We can see the operator on OCP console. YEAH!
 
 ```
 

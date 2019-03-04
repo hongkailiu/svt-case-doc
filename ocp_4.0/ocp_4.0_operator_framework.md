@@ -406,3 +406,7 @@ Kevin Rizza   [42 minutes ago]
 
 [e2e on travis-ci](https://blog.travis-ci.com/2017-10-26-running-kubernetes-on-travis-ci-with-minikube)
 
+TODOs
+
+* Test operator up upgrade
+* pbench-operator?

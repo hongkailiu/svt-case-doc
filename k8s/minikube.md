@@ -171,7 +171,9 @@ Name:	my-service.ttt.svc.cluster.local
 Address: 10.102.4.59
 
 ### FOUND the reason: this is a very special case.
+### pod visit its own service: even for this case, it works on OCP
 ### https://github.com/kubernetes/kubernetes/issues/19930#issuecomment-214954320
+
 ### use another pod it will work
 $ kubectl run hello-minikube --image=k8s.gcr.io/echoserver:1.4
 $ kubectl exec -i -t hello-minikube-7bcd54b57c-fznlw -- bash

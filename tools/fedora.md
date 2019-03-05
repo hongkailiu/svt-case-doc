@@ -215,4 +215,14 @@ $ uname -r
 $ env | grep -i gdmsession
 GDMSESSION=gnome-classic
 
+### speedtest cli: https://askubuntu.com/questions/104755/how-to-check-internet-speed-via-terminal
+$ pip install speedtest-cli
+$ speedtest-cli --version
+2.0.2
+$ speedtest-cli --simple 
+Ping: 13.826 ms
+Download: 792.22 Mbit/s
+Upload: 518.96 Mbit/s
+
+
 ```

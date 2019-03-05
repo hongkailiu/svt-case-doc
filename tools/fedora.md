@@ -177,6 +177,7 @@ $ tar xzvf postman-linux-x64.tar.gz
 $ rm postman-linux-x64.tar.gz
 $ ln -s  ~/tool/Postman/Postman ~/bin/postman
 
+###not working anymore
 $ vi ~/.local/share/applications/postman.desktop
 [Desktop Entry]
 Name=Postman

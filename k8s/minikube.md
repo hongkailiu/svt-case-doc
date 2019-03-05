@@ -47,6 +47,14 @@ Not working with docker from fedora:
 
 ```
 Feb 15 21:21:31 ip-172-31-9-245.us-west-2.compute.internal kubelet[11281]: F0215 21:21:31.383044   11281 server.go:261] failed to run Kubelet: failed to create kubelet: misconfiguration: kubelet cgroup driver: >
+
+###Solution: https://github.com/kubernetes/minikube/issues/2381
+$ sudo minikube start --vm-driver=none --extra-config=kubelet.cgroup-driver=systemd
+
+### then got those:
+❌  Problems detected in "k8s_kube-apiserver":
+    error: unable to load server certificate: open /var/lib/minikube/certs/apiserver.crt: permission denied
+
 ```
 
 ```

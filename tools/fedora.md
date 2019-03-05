@@ -216,6 +216,15 @@ $ uname -r
 $ env | grep -i gdmsession
 GDMSESSION=gnome-classic
 
+### check if wayland is running
+$ loginctl
+SESSION  UID USER     SEAT  TTY 
+      2 1000 hongkliu seat0 tty2
+
+$ loginctl show-session 2 -p Type
+Type=wayland
+
+
 ### speedtest cli: https://askubuntu.com/questions/104755/how-to-check-internet-speed-via-terminal
 $ pip install speedtest-cli
 $ speedtest-cli --version

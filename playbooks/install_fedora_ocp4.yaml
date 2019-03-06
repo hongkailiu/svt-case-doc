@@ -2,20 +2,25 @@
 ---
 - hosts: all
   vars:
-    ###https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#how-do-i-handle-python-not-having-a-python-interpreter-at-usr-bin-python-on-a-remote-machine
-    ###
     ansible_python_interpreter: /usr/bin/python3
-    ###ansible_become_pass: 111
+    ansible_user: liu
+    ###ansible_ssh_private_key_file: /home/hongkliu/.ssh/id_rsa_perf
+    ansible_become_pass: 1
     kerberos_id: hongkliu
     ###
+    libra_pem_key_file: /home/hongkliu/.ssh/libra.pem
     install_oc_rpm: false
     install_oc_tar: true
-  vars_files:
-    - external_vars.yaml
+    overwrite_aws_config: false
+    overwrite_key: false
+    aws_access_key_id: aaa
+    aws_secret_access_key: bbb
   tasks:
   - name: print hostname
     debug:
       msg: "hostname: {{ inventory_hostname }}"
+    tags:
+    - core
 
   - name: dnf pkgs
     dnf:
@@ -33,6 +38,8 @@
         - jq
         - tmux
     become: true
+    tags:
+    - core
 
   - name: dnf origin-clients
     dnf:
@@ -43,6 +50,8 @@
       - origin-clients
     when: install_oc_rpm
     become: true
+    tags:
+    - core
 
   - name: install oc cli via tar
     block:
@@ -56,13 +65,17 @@
         dest: "~/bin"
         remote_src: yes
       loop:
-      - https://mirror.openshift.com/pub/openshift-v3/clients/4.0.0-0.119.0/linux/oc.tar.gz
+      - https://mirror.openshift.com/pub/openshift-v3/clients/4.0.17/linux/oc.tar.gz
     when: install_oc_tar
+    tags:
+    - core
 
   - name: create aws configuration folder
     file:
       path: ~/.aws
       state: directory
+    tags:
+    - core
 
   - name: configure aws files
     template:
@@ -70,25 +83,22 @@
       dest: "~/.aws/{{ item | basename | regex_replace('\\.j2','') }}"
     with_fileglob:
       - templates/ocp4/aws/*.j2
-
-  - name: create secrets folder
-    file:
-      path: ~/.secrets
-      state: directory
-
-  - name: download openshift_pull_secret.json
-    get_url:
-      url: https://gist.githubusercontent.com/justaugustus/2ed1d6117ff7eea30321639b75f766af/raw/dd79b5baade329a6421fd3629d4a4e71695c7846/installer-pull-secret.json
-      dest: "~/.secrets/openshift_pull_secret.json"
+    when: overwrite_aws_config
+    tags:
+    - core
 
   - name: copy the libra.pem file
     copy:
       src: "{{ libra_pem_key_file }}"
       dest: "~/.ssh/libra.pem"
       mode: 0600
+    tags:
+    - core
 
   - name: generate libra pub key
     shell: ssh-keygen -y -f ~/.ssh/libra.pem > ~/.ssh/libra.pub
+    tags:
+    - core
 
   - name: add go env vars into ~/.bash_profile
     blockinfile:
@@ -110,4 +120,8 @@
     with_fileglob:
     - templates/ocp4/tmp/*.j2
 
-
+  - name: Download my_installer.sh
+    get_url:
+      url: https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/scripts/my_installer.sh
+      dest: "~/bin"
+      mode: 0755

@@ -161,6 +161,14 @@ They are now defined by a configMap used by api-server, eg, `/etc/kubernetes/sta
 
 Set: Unknow. [issues/1020](https://github.com/openshift/installer/issues/1020)
 
+
+### install-config
+[Go doc on InstallConfig](https://godoc.org/github.com/openshift/installer/pkg/types#InstallConfig)
+
+### MachineConfig and KubeletConfig
+[MachineConfig](https://github.com/openshift/machine-config-operator/blob/master/pkg/apis/machineconfiguration.openshift.io/v1/types.go)
+refers [KubeletConfig](https://github.com/kubernetes/kubelet/blob/master/config/v1beta1/types.go).
+
 ### KUBE_MAX_PD_VOLS for master controller
 
 Get: Unknow.

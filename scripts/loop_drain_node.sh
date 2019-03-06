@@ -52,9 +52,9 @@ function wait_until_all_pods_are_ready {
   done
 }
 
-readonly COMPUTE_NODE_NUMBER=$(oc get node | awk '{print $3}' | grep compute | wc -l)
+readonly COMPUTE_NODE_NUMBER=$(oc get node -l aaa=bbb | awk '{print $3}' | grep worker | wc -l)
 if [[ "${COMPUTE_NODE_NUMBER}" -ne "2" ]]; then
-  echo "not 2 compute nodes, exiting ..."
+  echo "not 2 worker nodes, exiting ..."
   exit 1
 fi
 
@@ -72,9 +72,9 @@ fi
 for i in $(seq 1 ${ITERATION});
 do
   echo "iteration: $i"
-  oc adm manage-node ${NODE_2} --schedulable=true
+  oc adm uncordon ${NODE_2}
   echo "draining node1: ${NODE_1}"
-  oc adm drain ${NODE_1} --ignore-daemonsets
+  oc adm drain ${NODE_1} --ignore-daemonsets --pod-selector='test=fio'
   MY_TIME=-1
   wait_until_all_pods_are_ready ${POD_NUMBER} fio 1200 10
   if (( ${MY_TIME} == -1 )); then
@@ -88,9 +88,9 @@ do
   echo "lsblk on node2 ..."
   ssh -n "${NODE_2}" 'lsblk'
   echo "flipping ..."
-  oc adm manage-node ${NODE_1} --schedulable=true
+  oc adm uncordon ${NODE_1}
   echo "draining node1: ${NODE_2}"
-  oc adm drain ${NODE_2} --ignore-daemonsets
+  oc adm drain ${NODE_2} --ignore-daemonsets --pod-selector='test=fio'
   MY_TIME=-1
   wait_until_all_pods_are_ready ${POD_NUMBER} fio 1200 10
   if (( ${MY_TIME} == -1 )); then

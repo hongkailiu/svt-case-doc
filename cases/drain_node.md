@@ -61,6 +61,8 @@ Disable one of the computing node <code>node2</code>.
 
 ```sh
 # oc adm manage-node $node2_name --schedulable=false
+### OCP 4.0
+# oc adm cordon ${NODE_2}
 ```
 
 Create pods with PVCs. 1 project, 249 templates:
@@ -85,6 +87,8 @@ Enable the disabled computing node <code>node2</code>.
 
 ```sh
 # oc adm manage-node $node2_name --schedulable=true
+### OCP 4.0
+# oc adm uncordon ${NODE_2}
 ```
 
 Drain node <code>node1</code>.

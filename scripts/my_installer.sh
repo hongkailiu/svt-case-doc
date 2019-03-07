@@ -33,13 +33,13 @@ INSTALL_FOLDER=$(date '+%Y%m%d_%H%M%S')
 mkdir ${INSTALL_FOLDER}
 echo "INSTALL_FOLDER: ${INSTALL_FOLDER}"
 
-readonly BUILD_VERSION=$1
-readonly IMAGE=$(oc adm release info --pullspecs registry.svc.ci.openshift.org/ocp/release:${BUILD_VERSION} | grep installer | awk '{print $2}')
+readonly BUILD_TAG=$1
+readonly IMAGE=$(oc adm release info --image-for=installer "registry.svc.ci.openshift.org/ocp/release:${BUILD_TAG}")
 ### the following command will overwrite ./openshift-install
 oc image extract ${IMAGE} --file  /usr/bin/openshift-install
 mv openshift-install "${INSTALL_FOLDER}/"
 chmod +x "${INSTALL_FOLDER}/openshift-install"
-echo "${BUILD_VERSION}" >> "${INSTALL_FOLDER}/version.txt"
+echo "${BUILD_TAG}" >> "${INSTALL_FOLDER}/version.txt"
 
 #readonly ID=$(docker create ${IMAGE})
 #docker cp ${ID}:/usr/bin/openshift-install "./${INSTALL_FOLDER}/"
@@ -48,8 +48,8 @@ echo "using the installer bin from IMAGE: ${IMAGE}"
 echo "installer version: $(./${INSTALL_FOLDER}/openshift-install version)"
 
 echo "Continue installation with the following commands:"
-echo "export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:${BUILD_VERSION}"
-echo "export _OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:${BUILD_VERSION}"
+echo "export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:${BUILD_TAG}"
+echo "export _OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:${BUILD_TAG}"
 echo "./${INSTALL_FOLDER}/openshift-install create install-config --dir=./${INSTALL_FOLDER}"
 echo "vi ./${INSTALL_FOLDER}/install-config.yaml"
 echo "./${INSTALL_FOLDER}/openshift-install create cluster --dir=./${INSTALL_FOLDER}"

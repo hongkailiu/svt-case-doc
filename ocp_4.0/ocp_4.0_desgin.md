@@ -17,7 +17,7 @@ Thanks to Jiri and Siva Reddy
     * How do we test an operator as part of an install in a PR CI job?
     * How do I try out the release process for local iteration?
 * [Cincinnati in OpenShift](https://docs.google.com/document/d/1TMV_1qNMmobhFfV0iVY67Bv9c-9woUWtxDRk4vb5m-U/edit#heading=h.du4f4lkqahc8)
-* [How to upgrade the cluster through CVO](How to upgrade the cluster through CVO)
+* [How to upgrade the cluster through CVO](https://docs.google.com/document/d/1CfsJ3wSOtHZybKFV2CF-7t3tZiEsFFjP5bCztkXb94U/edit)
 
 ## Terminology
 

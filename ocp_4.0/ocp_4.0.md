@@ -148,6 +148,59 @@ Qs:
 
 ## Configuration
 
+### pull secret update for an existing cluster
+
+[google group discussion](https://groups.google.com/forum/?utm_medium=email&utm_source=footer#!msg/openshift-4-dev-preview/s0jEZpiEiYQ/9qghngFZAgAJ).
+
+```
+# oc get is -n openshift php -o yaml | grep error -A2 | head -n 3
+      message: 'Internal error occurred: Get https://registry.redhat.io/v2/openshift3/php-55-rhel7/manifests/latest:
+        unauthorized: Please login to the Red Hat Registry using your Customer Portal
+        credentials. Further instructions can be found here: https://access.redhat.com/articles/3399531'
+
+# oc get is -n openshift php -o yaml | grep redhat.io | head -n 1
+      name: registry.redhat.io/openshift3/php-55-rhel7:latest
+
+### suppose you have a valid login for "registry.redhat.io" ... this command should work
+# docker pull registry.redhat.io/openshift3/php-55-rhel7:latest
+
+### back up the current secret
+# oc get secrets -n kube-system coreos-pull-secret -o yaml > ~/coreos-pull-secret.yaml
+# oc get secrets -n kube-system coreos-pull-secret -o json | jq -r '.data.".dockerconfigjson"' | base64 --decode
+
+### single quotes
+# echo '<add_auth_for_registry.redhat.io>' | base64 -w 0
+
+### update the secret
+# oc edit secrets -n kube-system coreos-pull-secret
+
+### import php again
+# oc import-image -n openshift php
+
+### checking
+# oc get is -n openshift php -o yaml | grep ImportSuccess
+### php istag should show up now
+# oc get istag -n openshift | grep php
+
+### this does not guarantee that all quick-start templates work.
+### redis works
+# oc import-image -n openshift redis
+# oc new-app --template=redis-ephemeral
+
+### cakephp does not
+oc new-app --template=cakephp-mysql-example
+# oc get dc cakephp-mysql-example
+NAME                    REVISION   DESIRED   CURRENT   TRIGGERED BY
+cakephp-mysql-example   0          1         0         config,image(cakephp-mysql-example:latest)
+### need to know which "is" generates "istag" cakephp-mysql-example:latest
+
+```
+
+```
+Mike Fiedler [4:40 PM]
+also registry.connect.redhat.com which looks like alias for registry.redhat.io
+```
+
 ### default node selector
 
 Get:

@@ -188,13 +188,16 @@ Qs:
 # oc new-app --template=redis-ephemeral
 
 ### cakephp does not
-oc new-app --template=cakephp-mysql-example
+# oc new-app --template=cakephp-mysql-example
 # oc get dc cakephp-mysql-example
 NAME                    REVISION   DESIRED   CURRENT   TRIGGERED BY
 cakephp-mysql-example   0          1         0         config,image(cakephp-mysql-example:latest)
 ### need to know which "is" generates "istag" cakephp-mysql-example:latest
 
 ```
+
+Update 20190309: when the pull secret include auth for "registry.redhat.io", template cakephp-mysql-example works too.
+This is the reason: [understand cakephp-mysql-example template](../learn/image_stream.md#TODO).
 
 ```
 Mike Fiedler [4:40 PM]

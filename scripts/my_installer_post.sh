@@ -40,7 +40,7 @@ echo "RANDOM_ID: ${RANDOM_ID}"
 SUBNET_ID="$(aws ec2 describe-subnets --output json --filters "Name=tag:kubernetes.io/cluster/${CLUSTER_NAME}-${RANDOM_ID},Values=owned" | jq -r --arg key "${CLUSTER_NAME}-${RANDOM_ID}-public" '.Subnets[] | select((.Tags[].Value | contains($key)) and (.Tags[].Value | endswith("a"))) | .SubnetId')" || bye 'failed to resolve SUBNET_ID\n'
 echo "SUBNET_ID: ${SUBNET_ID}"
 
-VCP_ID="$(aws ec2 describe-vpcs --filters "Name=tag:kubernetes.io/cluster/${CLUSTER_NAME}-${RANDOM_ID},Values=owned" | jq -r .Vpcs[0].VpcId)" || bye 'failed to resolve VCP_ID\n'
+VCP_ID="$(aws ec2 describe-vpcs --output json --filters "Name=tag:kubernetes.io/cluster/${CLUSTER_NAME}-${RANDOM_ID},Values=owned" | jq -r .Vpcs[0].VpcId)" || bye 'failed to resolve VCP_ID\n'
 echo "VCP_ID: ${VCP_ID}"
 
 echo "creating a sg ..."

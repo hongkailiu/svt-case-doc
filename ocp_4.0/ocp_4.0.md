@@ -197,7 +197,7 @@ cakephp-mysql-example   0          1         0         config,image(cakephp-mysq
 ```
 
 Update 20190309: when the pull secret include auth for "registry.redhat.io", template cakephp-mysql-example works too.
-This is the reason: [understand cakephp-mysql-example template](../learn/image_stream.md#TODO).
+This is the reason: [understand cakephp-mysql-example template](../learn/image_stream.md##understand-cakephp-mysql-example-template).
 
 ```
 Mike Fiedler [4:40 PM]

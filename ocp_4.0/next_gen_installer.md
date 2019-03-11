@@ -804,6 +804,16 @@ $ oc scale --replicas=0 -n openshift-console deployment.apps/console
 $ oc scale --replicas=1 -n openshift-console deployment.apps/console
 ```
 
+### 20190311: all workers in one az
+
+```
+- name: worker
+  platform:
+    aws:
+      zones:
+        - us-east-2a
+```
+
 ## troubleshooting
 
 * Mike's tips

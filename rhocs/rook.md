@@ -641,3 +641,29 @@ atomic-openshift.x86_64         3.11.69-1.git.0.7478b86.el7
 # git log --oneline -1
 0207f95 Merge pull request #2652 from jtlayton/wip-nfs-scale
 ```
+
+TODO
+
+* How to check the space available with ceph command? Did not see with the known commmands, eg,
+
+```
+# oc rsh -n rook-ceph rook-ceph-tools-5bc8b8f97-26lhb
+sh-4.2# ceph df                                                                      
+GLOBAL:
+    SIZE        AVAIL       RAW USED     %RAW USED 
+    3.2 TiB     3.2 TiB       25 GiB          0.77 
+POOLS:
+    NAME                           ID     USED        %USED     MAX AVAIL     OBJECTS 
+    replicapool                    1         19 B         0       959 GiB           2 
+    my-store.rgw.control           2          0 B         0       959 GiB           8 
+    my-store.rgw.meta              3        822 B         0       959 GiB           5 
+    my-store.rgw.log               4         92 B         0       959 GiB         179 
+    my-store.rgw.buckets.index     5          0 B         0       959 GiB           1 
+    .rgw.root                      6      3.6 KiB         0       959 GiB          16 
+    my-store.rgw.buckets.data      7          0 B         0       1.9 TiB           0 
+    myfs-metadata                  8       35 KiB         0       959 GiB          23 
+    myfs-data0                     9          0 B         0       959 GiB           0 
+
+```
+
+The number does not add up. Need to dig into this.

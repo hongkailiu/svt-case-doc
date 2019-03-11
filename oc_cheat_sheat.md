@@ -283,6 +283,8 @@ $ oc debug node/ip-10-0-133-100.us-east-2.compute.internal -- chroot /host journ
 $ oc get node --no-headers | awk '{print $1}' |  while read i; do oc debug node/$i -- chroot /host ls -al .; done
 $ oc get node --no-headers | awk '{print $1}' | while read i; do echo "node: $i"; oc debug node/$i -- curl -s http://169.254.169.254/latest/meta-data/local-hostname; done
 
+$ oc get node -l role=storage-node | awk '{print $1}' | while read i; do oc debug node/$i -- lsblk; done
+
 ```
 
 ## oc image

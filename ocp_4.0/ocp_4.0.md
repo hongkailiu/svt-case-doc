@@ -273,7 +273,7 @@ $ oc get pod --all-namespaces -o wide | grep "\-build" | awk '{print $8}' | wc -
 
 ### AllowAll IDP for oauthconfig
 
-[mojo.page](https://mojo.redhat.com/docs/DOC-1186975) and [discussion@mailing-list](http://post-office.corp.redhat.com/archives/aos-qe/2019-January/msg00110.html)
+[mojo.page](https://mojo.redhat.com/docs/DOC-1186975), [discussion@mailing-list](http://post-office.corp.redhat.com/archives/aos-qe/2019-January/msg00110.html) and [sallyom's gist](https://gist.github.com/sallyom/f77e0ee1d64e62b9d87d44b9ec6570a0)
 
 ```
 ### by default

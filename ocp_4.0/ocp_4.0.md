@@ -275,6 +275,57 @@ $ oc get pod --all-namespaces -o wide | grep "\-build" | awk '{print $8}' | wc -
 
 [mojo.page](https://mojo.redhat.com/docs/DOC-1186975) and [discussion@mailing-list](http://post-office.corp.redhat.com/archives/aos-qe/2019-January/msg00110.html)
 
+```
+### by default
+$ oc login --insecure-skip-tls-verify=true https://api.hongkliu1.qe.devcluster.openshift.com:6443  -u kubeadmin
+
+```
+
+* `identityProviders: type: HTPasswd`: [steps](https://docs.openshift.com/container-platform/4.0/authentication/identity_providers/configuring-htpasswd-identity-provider.html#identity-provider-creating-htpasswd-file-configuring-htpasswd-identity-provider)
+
+```
+### cli or this online tool: http://www.htaccesstools.com/htpasswd-generator/
+# htpasswd -c -b ./redhat.htpasswd redhat <secret>
+Adding password for user redhat
+
+# oc create secret generic htpass-secret --from-file=htpasswd=./redhat.htpasswd -n openshift-config
+secret/htpass-secret created
+
+### backup the currrent OAuth
+# oc get oauth cluster -o yaml > ~/oauth_cluster.yaml
+
+# configure HTPasswd IDP
+oc apply -f - <<EOF
+apiVersion: config.openshift.io/v1
+kind: OAuth
+metadata:
+  name: cluster
+spec:
+  identityProviders:
+  - name: htpassidp
+    challenge: true
+    login: true
+    mappingMethod: claim
+    type: HTPasswd
+    htpasswd:
+      fileData:
+        name: htpass-secret
+EOF
+
+### Optional. Make user "redhat" an admin (same as before)
+# oc adm policy add-cluster-role-to-user cluster-admin redhat
+
+```
+
+```
+### cli
+$ oc login --insecure-skip-tls-verify=true https://api.hongkliu1.qe.devcluster.openshift.com:6443  -u redhat
+
+### console works too.
+
+```
+
+
 
 
 ## Components: where are the <openshift|kube>-pods?

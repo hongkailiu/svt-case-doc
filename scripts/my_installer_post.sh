@@ -32,7 +32,8 @@ echo "creating cluster info ..."
 MASTER_PRIVATE_IP="$(oc get node | grep master | head -n 1 | awk '{print $1}')" || bye 'failed to resolve MASTER_PRIVATE_IP\n'
 echo "MASTER_PRIVATE_IP: ${MASTER_PRIVATE_IP}"
 
-RANDOM_ID="$(oc describe node $(oc get node --no-headers | head -n 1 | awk '{print $1}') | grep "${CLUSTER_NAME}" | awk '{print $3}' | awk -F'/' '{print $2}' |  awk -F'-' '{print $(NF-2)}')" || bye 'failed to resolve RANDOM_ID\n'
+#RANDOM_ID="$(oc describe node $(oc get node --no-headers | head -n 1 | awk '{print $1}') | grep "${CLUSTER_NAME}" | awk '{print $3}' | awk -F'/' '{print $2}' |  awk -F'-' '{print $(NF-2)}')" || bye 'failed to resolve RANDOM_ID\n'
+RANDOM_ID="$(oc describe node $(oc get node --no-headers | grep worker | head -n 1 | awk '{print $1}') | grep "${CLUSTER_NAME}" | awk '{print $3}' | awk -F'/' '{print $2}' |  awk -F'-' '{print $(NF-5)}')" || bye 'failed to resolve RANDOM_ID\n'
 echo "RANDOM_ID: ${RANDOM_ID}"
 
 #readonly SUBNET_ID=$(aws ec2 describe-instances --output json --filters "Name=private-dns-name,Values=${MASTER_PRIVATE_IP}"  | jq -r '.Reservations[].Instances[].SubnetId')

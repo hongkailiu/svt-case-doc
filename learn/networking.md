@@ -114,6 +114,41 @@ sdn       10        10        10        10           10          <none>         
 
 ```
 
+## [Service](https://kubernetes.io/docs/concepts/services-networking/service/)
+
+```
+### https://kubernetes.io/docs/concepts/services-networking/service/#nodeport
+$ oc new-project ttt
+$ oc create -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/pod_test.yaml
+$ oc apply -f - <<EOF
+kind: Service
+apiVersion: v1
+metadata:
+  name: web
+spec:
+  type: NodePort
+  selector:
+    app: web
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+EOF
+
+$ oc get svc
+NAME      TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+web       NodePort   172.30.185.172   <none>        8080:30574/TCP   5s
+
+### on host of node
+[core@ip-10-0-132-100 ~]$ curl ip-10-0-132-100.us-east-2.compute.internal:30574
+{"version":"0.0.19","ips":["127.0.0.1","::1","10.128.2.14","fe80::94a7:dcff:fec7:c29d"],"now":"2019-03-12T18:41:00.896999948Z"}
+
+```
+
+## [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+
+
+
 ## Service DNS
 
 See [networking@k8s](https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#services)

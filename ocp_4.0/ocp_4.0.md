@@ -294,8 +294,8 @@ secret/htpass-secret created
 ### backup the currrent OAuth
 # oc get oauth cluster -o yaml > ~/oauth_cluster.yaml
 
-# configure HTPasswd IDP
-oc apply -f - <<EOF
+### configure HTPasswd IDP
+# oc apply -f - <<EOF
 apiVersion: config.openshift.io/v1
 kind: OAuth
 metadata:

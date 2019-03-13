@@ -834,7 +834,7 @@ https://api.openshift.com/api/upgrades_info/v1/graph
 # oc get clusterversion version -o json | jq -r '.status.availableUpdates'
 null
 
-oc patch clusterversion/version --patch '{"spec":{"upstream":"https://openshift-release.svc.ci.openshift.org/graph"}}' --type=merge
+# oc patch clusterversion/version --patch '{"spec":{"upstream":"https://openshift-release.svc.ci.openshift.org/graph"}}' --type=merge
 
 # oc get clusterversion version -o json | jq -r '.status.availableUpdates'
 [

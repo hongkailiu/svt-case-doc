@@ -40,3 +40,5 @@ https://marketplace.visualstudio.com/items?itemName=ms-vscode.Go
 https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker#overview
 
 Need to reinstall after `vscode` upgrade.
+
+`ctrl + p`, then `ext install streetsidesoftware.code-spell-checker`.

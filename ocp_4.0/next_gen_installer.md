@@ -814,6 +814,100 @@ $ oc scale --replicas=1 -n openshift-console deployment.apps/console
         - us-east-2a
 ```
 
+### 20190313: cluster upgrade
+
+```
+# oc get clusterversion
+NAME      VERSION                        AVAILABLE   PROGRESSING   SINCE   STATUS
+version   4.0.0-0.ci-2019-03-11-054346   True        False         2m31s   Cluster version is 4.0.0-0.ci-2019-03-11-054346
+
+# oc get clusterversion version -o json | jq -r '.spec.upstream'
+https://api.openshift.com/api/upgrades_info/v1/graph
+
+### this service is online already. Not sure why it is not working
+### my quess is that it will check the updates availble of the current version `4.0.0-0.ci-2019-03-11-054346`
+### maybe I need to use the playload below
+# curl -s -H "Accept: application/json" https://api.openshift.com/api/upgrades_info/v1/graph | jq -r '.nodes[] | .version + " " + .payload' | head -n 1
+4.0.0-5 quay.io/openshift-release-dev/ocp-release:4.0.0-5
+...
+
+# oc get clusterversion version -o json | jq -r '.status.availableUpdates'
+null
+
+oc patch clusterversion/version --patch '{"spec":{"upstream":"https://openshift-release.svc.ci.openshift.org/graph"}}' --type=merge
+
+# oc get clusterversion version -o json | jq -r '.status.availableUpdates'
+[
+  {
+    "image": "registry.svc.ci.openshift.org/ocp/release:4.0.0-0.ci-2019-03-11-063655",
+    "version": "4.0.0-0.ci-2019-03-11-063655"
+  },
+  {
+    "image": "registry.svc.ci.openshift.org/ocp/release:4.0.0-0.ci-2019-03-11-070013",
+    "version": "4.0.0-0.ci-2019-03-11-070013"
+  },
+  {
+    "image": "registry.svc.ci.openshift.org/ocp/release:4.0.0-0.ci-2019-03-11-063655",
+    "version": "4.0.0-0.ci-2019-03-11-063655"
+  },
+  {
+    "image": "registry.svc.ci.openshift.org/ocp/release:4.0.0-0.ci-2019-03-11-070013",
+    "version": "4.0.0-0.ci-2019-03-11-070013"
+  }
+]
+
+```
+
+check on the UI, will find the same updates available: `Administration -> Cluster Settings -> Overview`.
+
+[Note: we only show the two most recent targets from your current build, and we do not yet filter those that failed verification.](https://docs.google.com/document/d/1NFwN0wLouAJvISEJWzuSZw80l6vmzInnfT4WJvTQzAM/edit#)
+
+From what I see :
+
+![](../images/ocp4_upgrade.png)
+
+* each of those two have shown up TWICE. BUG?
+* why not also show up the latest one the current cluster can upgrade to?
+
+Perform upgrade:
+
+```
+# oc adm upgrade --to-image=registry.svc.ci.openshift.org/ocp/release:4.0.0-0.ci-2019-03-11-063655
+Updating to release image registry.svc.ci.openshift.org/ocp/release:4.0.0-0.ci-2019-03-11-063655
+
+### UI shows: UPDATE STATUS: Updating
+### desired version has been changed too
+# oc get clusterversion version -o json | jq .status.desired.version
+"4.0.0-0.ci-2019-03-11-063655"
+
+### get update process
+# oc get clusterversion
+NAME      VERSION                        AVAILABLE   PROGRESSING   SINCE   STATUS
+version   4.0.0-0.ci-2019-03-11-063655   True        True          3m59s   Working towards 4.0.0-0.ci-2019-03-11-063655: 9% complete
+
+```
+
+`Console/Cli` is down for sometime: OCP upgrade still requires DOWNTIME?
+
+Blocked: lost my cluster. No console and cli is very slow.
+
+```
+# oc get clusterversion version
+NAME      VERSION                        AVAILABLE   PROGRESSING   SINCE   STATUS
+version   4.0.0-0.ci-2019-03-11-063655   True        True          31m     Working towards 4.0.0-0.ci-2019-03-11-063655: 29% complete
+
+# oc status
+Error from server (ServiceUnavailable): the server is currently unable to handle the request (get routes.route.openshift.io)
+Error from server (ServiceUnavailable): the server is currently unable to handle the request (get buildconfigs.build.openshift.io)
+Error from server (ServiceUnavailable): the server is currently unable to handle the request (get imagestreams.image.openshift.io)
+Error from server (Timeout): the server was unable to return a response in the time allotted, but may still be processing the request (get builds.build.openshift.io)
+
+# oc get clusterversion version
+NAME      VERSION                        AVAILABLE   PROGRESSING   SINCE   STATUS
+version   4.0.0-0.ci-2019-03-11-063655   True        True          46m     Unable to apply 4.0.0-0.ci-2019-03-11-063655: the cluster operator machine-config has not yet successfully rolled out
+
+```
+
 ## troubleshooting
 
 * Mike's tips

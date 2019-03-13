@@ -15,7 +15,7 @@
 
 * [Red Hat CoreOS release](https://releases-redhat-coreos.cloud.paas.upshift.redhat.com/)
 * [aos-puddles: 4.0](http://download.eng.bos.redhat.com/rcm-guest/puddles/RHAOS/AtomicOpenShift/4.0/)
-* [Images: Release Status: 4.0.0-0.nightly](https://openshift-release.svc.ci.openshift.org/)
+* [Images: Release Status: 4.0.0-0.nightly: OCP](https://openshift-release.svc.ci.openshift.org/) and [Images: Release Status: 4.0.0-0.nightly: Origin](https://origin-release.svc.ci.openshift.org/)
 
 ### pick up the right build
 

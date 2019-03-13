@@ -364,7 +364,7 @@ $ cp "$BUNDLE_DIR/*" .
 
 ```
 
-There are other concepts about `operatorGroup` and its relation to `installModes` in `csv`.
+There are other concepts about `operatorGroup` and they are related to `installModes` in `csv`.
 
 Thanks for the operator team for those information:
 

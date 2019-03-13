@@ -146,6 +146,17 @@ Qs:
 
 * if the default one is `registry.svc.ci.openshift.org/openshift/origin-release:v4.0`
 
+#### Update on 20190313:
+
+```
+### seem this does not require auth info
+$ skopeo inspect docker://quay.io/openshift-release-dev/ocp-release:4.0.0-0.6 | jq -r .RepoTags[] | sort -V
+4.0.0-0
+4.0.0-0.1
+...
+
+```
+
 ## Configuration
 
 ### pull secret update for an existing cluster

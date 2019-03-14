@@ -50,8 +50,8 @@ objects:
       spec:
         containers:
         - image: ${IMAGE}
-          command: ["/http"]
-          args: ["start", "-v"]
+          command: ["/testctl"]
+          args: ["http", "start", "-v"]
           env:
           - name: GIN_MODE
             value: release
@@ -116,7 +116,7 @@ parameters:
   displayName: Image
   name: IMAGE
   required: false
-  value: quay.io/hongkailiu/test-go:http-0.0.10
+  value: quay.io/hongkailiu/test-go:testctl-0.0.1-aa3bf59a
 - description: gh_client_id
   displayName: gh_client_id
   name: gh_client_id

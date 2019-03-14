@@ -67,6 +67,16 @@ objects:
             value: ${gg_redirect_url}
           - name: session_key
             value: ${session_key}
+          - name: db_host
+            value: ${db_host}
+          - name: db_port
+            value: ${db_port}
+          - name: db_user
+            value: ${db_user}
+          - name: db_name
+            value: ${db_name}
+          - name: db_password
+            value: ${db_password}
           imagePullPolicy: IfNotPresent
           name: web
           resources:
@@ -147,6 +157,31 @@ parameters:
   name: session_key
   required: false
   value: session_key
+- description: db_host
+  displayName: db_host
+  name: db_host
+  required: false
+  value: db_host
+- description: db_port
+  displayName: db_port
+  name: db_port
+  required: false
+  value: db_port
+- description: db_user
+  displayName: db_user
+  name: db_user
+  required: false
+  value: db_user
+- description: db_name
+  displayName: db_name
+  name: db_name
+  required: false
+  value: db_name
+- description: db_password
+  displayName: db_password
+  name: db_password
+  required: false
+  value: db_password
 - name: REPLICAS
   description: "number of replicas"
   value: "1"

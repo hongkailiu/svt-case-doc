@@ -1,4 +1,5 @@
 ### not working: permission issue
+### https://severalnines.com/blog/using-kubernetes-deploy-postgresql
 ---
 apiVersion: template.openshift.io/v1
 kind: Template

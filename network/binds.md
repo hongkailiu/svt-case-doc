@@ -97,4 +97,11 @@ $ nslookup bbb.apps.master.lab.hongkliu.com 192.168.122.133
 
 $ dig @192.168.122.133 google.com
 
+$ dig @8.8.8.8 www.hliu.ca ANY +noall +answer
+
+; <<>> DiG 9.11.4-P2-RedHat-9.11.4-10.P2.fc29 <<>> @8.8.8.8 www.hliu.ca ANY +noall +answer
+; (1 server found)
+;; global options: +cmd
+www.hliu.ca.		3599	IN	CNAME	hongkailiu.github.io.
+
 ```

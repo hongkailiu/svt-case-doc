@@ -1,0 +1,81 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: my-test-status-template
+  annotations:
+    template.openshift.io/bindable: "false"
+objects:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    creationTimestamp: null
+    name: status
+  spec:
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      name: status
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: status
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        name: status
+    template:
+      metadata:
+        labels:
+          name: status
+      spec:
+        containers:
+        - image: ${IMAGE}
+          command: ["/testctl"]
+          args: ["http", "status", "-v"]
+          env:
+          - name: target_url
+            value: "${target_url}"
+          imagePullPolicy: IfNotPresent
+          name: status
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "125m"
+            limits:
+              memory: "128Mi"
+              cpu: "250m"
+- apiVersion: v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: null
+    name: status
+  spec:
+    port:
+      targetPort: 8080
+    to:
+      kind: Service
+      name: status
+      weight: 100
+    wildcardPolicy: None
+parameters:
+- description: Image
+  displayName: Image
+  name: IMAGE
+  required: false
+  value: quay.io/hongkailiu/test-go:testctl-3-71e8cd9c
+- description: target_url
+  displayName: target_url
+  name: target_url
+  required: false
+  value: "https://web-hongkliu-run.b542.starter-us-east-2a.openshiftapps.com/"
+

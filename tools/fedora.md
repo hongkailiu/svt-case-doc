@@ -193,6 +193,91 @@ Categories=Development;Utilities;
 
 ```
 
+## firewalld
+
+Tested on F29 server VM:
+
+```
+# firewall-cmd --get-default-zone
+FedoraServer
+
+# firewall-cmd --get-active-zones 
+FedoraServer
+  interfaces: ens3
+
+# sudo firewall-cmd --list-all
+FedoraServer (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: ens3
+  sources: 
+  services: ssh dhcpv6-client cockpit
+  ports: 
+  protocols: 
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+
+### https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-using-firewalld-on-centos-7
+# firewall-cmd --permanent --add-port=8080/tcp --zone=FedoraServer
+
+# firewall-cmd --reload
+### OR
+# systemctl restart firewalld.service
+
+# firewall-cmd --list-all
+FedoraServer (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: ens3
+  sources: 
+  services: ssh dhcpv6-client cockpit http
+  ports: 8080/tcp
+  protocols: 
+  masquerade: no
+  forward-ports: 
+  source-ports: 
+  icmp-blocks: 
+  rich rules: 
+
+```
+
+## nginx
+
+```
+$ sudo dnf install nginx
+$ sudo systemctl start nginx.service
+### open http service as above if wirewalld is enabled
+
+### user public_html folder: https://www.server-world.info/en/note?os=CentOS_7&p=nginx&f=3
+# vi /etc/nginx/default.d/user_site.conf 
+location ~ ^/~(.+?)(/.*)?$ {
+    alias /home/$1/public_html$2;
+    index  index.html index.htm;
+    autoindex on;
+}
+
+# systemctl restart nginx.service
+
+$ chmod 711 /home/liu/
+$ mkdir ~/public_html
+$ chmod 755 ~/public_html
+$ vi ~/public_html/index.html
+<html>
+<body>
+<div style="width: 100%; font-size: 40px; font-weight: bold; text-align: center;">
+Nginx UserDir Test Page
+</div>
+</body>
+</html>
+
+$ curl -s -o /dev/null -w "%{http_code}" localhost/~liu/
+200
+
+```
+
 ## black screen after suspend
 
 [bz1645678](https://bugzilla.redhat.com/show_bug.cgi?id=1645678): `Ctrl+Alt+F2` and then `Ctrl+Alt+F1`.

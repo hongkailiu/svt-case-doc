@@ -294,3 +294,9 @@ $ oc image extract quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:5ccc80b
 $ oc image extract quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:5ccc80b91aad3a03440d784a09f21ea89d7007a73b9f01210d6c5925340b2650 --file  /usr/bin/openshift-install
 
 ```
+
+## testctl ocpsanity
+
+```
+# podman run --rm -it -v "/root/.kube/config:/root/.kube/config:ro,z" quay.io/hongkailiu/test-go:testctl-0.0.3-71e8cd9c /testctl ocpsanity
+```

@@ -31,7 +31,7 @@ do
   echo "instance: ${instance}"
 done
 
-readonly DEVICES=( $(for i in {1..3}; do aws ec2 create-volume --size 1000 --region ${AWS_REGION} --availability-zone ${AWS_ZONE} --volume-type gp2 --tag-specifications="[{\"ResourceType\":\"volume\",\"Tags\":[{\"Key\":\"Name\",\"Value\":\"qe-${CLUSTER_NAME}-ceph-${i}\"}]}]" | jq -r .VolumeId; done) )
+readonly DEVICES=( $(for i in {1..3}; do aws ec2 create-volume --output json --size 1000 --region ${AWS_REGION} --availability-zone ${AWS_ZONE} --volume-type gp2 --tag-specifications="[{\"ResourceType\":\"volume\",\"Tags\":[{\"Key\":\"Name\",\"Value\":\"qe-${CLUSTER_NAME}-ceph-${i}\"}]}]" | jq -r .VolumeId; done) )
 
 for device in "${DEVICES[@]}"
 do

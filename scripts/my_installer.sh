@@ -12,6 +12,10 @@
 ### docker pull quay.io/openshift-release-dev/ocp-v4.0-art-dev:v4.0.0-0.131.0.0-ose-installer
 ### docker pull registry.svc.ci.openshift.org/ocp/release:4.0.0-0.nightly-2019-01-29-025207
 
+### if file found: ${HOME}/install-config.yaml
+### then it will be used for installation
+### else copy/paste the commands from the output to proceed the installation
+
 ### Do NOT `oc logout` on the jump node which will expire the token
 ### @pruan: DO NOT PASTE the pull scecret dirtly from try.openshift.com
 
@@ -47,9 +51,22 @@ echo "${BUILD_TAG}" >> "${INSTALL_FOLDER}/version.txt"
 echo "using the installer bin from IMAGE: ${IMAGE}"
 echo "installer version: $(./${INSTALL_FOLDER}/openshift-install version)"
 
-echo "Continue installation with the following commands:"
-echo "export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:${BUILD_TAG}"
-echo "export _OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:${BUILD_TAG}"
-echo "./${INSTALL_FOLDER}/openshift-install create install-config --dir=./${INSTALL_FOLDER}"
-echo "vi ./${INSTALL_FOLDER}/install-config.yaml"
-echo "./${INSTALL_FOLDER}/openshift-install create cluster --dir=./${INSTALL_FOLDER}"
+readonly INSTALL_CONFIG="${HOME}/install-config.yaml"
+
+if [[ ! -f "${INSTALL_CONFIG}" ]]; then
+  echo "File not found: ${INSTALL_CONFIG}"
+  echo "Continue installation with the following commands:"
+  echo "export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:${BUILD_TAG}"
+  echo "export _OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:${BUILD_TAG}"
+  echo "./${INSTALL_FOLDER}/openshift-install create install-config --dir=./${INSTALL_FOLDER}"
+  echo "vi ./${INSTALL_FOLDER}/install-config.yaml"
+  echo "./${INSTALL_FOLDER}/openshift-install create cluster --dir=./${INSTALL_FOLDER}"
+  exit 0
+else
+  echo "found: ${INSTALL_CONFIG}, using it for installation ..."
+  cp -v "${INSTALL_CONFIG}" ./"${INSTALL_FOLDER}"/
+  export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:${BUILD_TAG}
+  export _OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=registry.svc.ci.openshift.org/ocp/release:${BUILD_TAG}
+  ./${INSTALL_FOLDER}/openshift-install create cluster --dir=./${INSTALL_FOLDER}
+fi
+

@@ -2,6 +2,8 @@
 
 ## Does my current pkg contain the fix of the bz? OCP4+
 
+Thanks to Xingxing for the commands.
+
 [1684547#c11](https://bugzilla.redhat.com/show_bug.cgi?id=1684547#c11) says that the fixing PRs are [origin/pull/22322](https://github.com/openshift/origin/pull/22322) and
 [installer/pull/1421](https://github.com/openshift/installer/pull/1421).
 

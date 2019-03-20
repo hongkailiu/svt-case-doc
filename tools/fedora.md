@@ -288,6 +288,13 @@ $ curl -s -o /dev/null -w "%{http_code}" localhost/~liu/
 ```
 ###https://www.bluejeans.com/downloads#plugindesktop
 $ sudo yum install https://swdl.bluejeans.com/desktop/linux/1.37/1.37.22/bluejeans-1.37.22.x86_64.rpm
+
+###https://www.if-not-true-then-false.com/2010/install-adobe-flash-player-10-on-fedora-centos-red-hat-rhel/
+### prime event needs flash
+$ sudo rpm -ivh http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm
+$ sudo rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-adobe-linux
+$ sudo dnf install flash-plugin alsa-plugins-pulseaudio libcurl
+
 ```
 
 ## Useful command

@@ -9,10 +9,11 @@ Thanks to Xingxing for the commands.
 
 Component mapping in OCP:
 
-| image     | repo in payload | repo in upstream |
-|-----------|-----------------|------------------|
-| hyperkube | ose             | origin           |
-| installer | installer       | installer        |
+| image          | repo in payload | repo in upstream |
+|----------------|-----------------|------------------|
+| hyperkube      | ose             | origin           |
+| installer      | installer       |                  |
+| docker-builder | builder         |                  |
 
 The latest nightly build: `4.0.0-0.nightly-2019-03-19-004004`. Check the commits in the payload.
 

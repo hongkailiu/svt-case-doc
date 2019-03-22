@@ -80,4 +80,4 @@ node-csr-iRVgclnf4l9Qn8crorHqpR1RApVvgkTXPYw-9GbKtBM   16m       system:bootstra
 
 Some [checking on openshift](https://bugzilla.redhat.com/show_bug.cgi?id=1688820): bugs on certs can go nasty. ^_^
 
-TODO: openssl learning.
+Continue with [../tools/openssl.md](../tools/openssl.md).

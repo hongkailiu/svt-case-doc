@@ -297,6 +297,15 @@ $ sudo dnf install flash-plugin alsa-plugins-pulseaudio libcurl
 
 ```
 
+## podman
+
+```
+### https://github.com/containers/libpod/issues/1801
+$ podman ...
+... delete libpod local files to resolve
+$ sudo rm -rf $HOME/.local/share/containers
+```
+
 ## Useful command
 
 ```

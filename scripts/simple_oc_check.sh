@@ -15,9 +15,9 @@ set -o pipefail
 
 while true
 do
-	echo "===$(date --iso-8601=seconds)==="
+  echo "===$(date --iso-8601=seconds)==="
   oc get pod -n testproject
   oc get bc --all-namespaces
   oc start-build -n testproject cakephp-ex
-	sleep 10
+  sleep 10
 done

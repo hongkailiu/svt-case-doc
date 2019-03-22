@@ -77,3 +77,7 @@ NAME                                                   AGE       REQUESTOR      
 csr-w9gnj                                              16m       system:node:master        Approved,Issued
 node-csr-iRVgclnf4l9Qn8crorHqpR1RApVvgkTXPYw-9GbKtBM   16m       system:bootstrap:96771a   Approved,Issued
 ```
+
+Some [checking on openshift](https://bugzilla.redhat.com/show_bug.cgi?id=1688820): bugs on certs can go nasty. ^_^
+
+TODO: openssl learning.

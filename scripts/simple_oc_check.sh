@@ -9,7 +9,7 @@
 ### curl -O https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/scripts/simple_oc_check.sh
 ### $ bash -x ./simple_oc_check.sh 2>&1 | tee -a test.log
 
-set -o errexit
+#set -o errexit
 set -o nounset
 set -o pipefail
 

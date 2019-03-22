@@ -19,5 +19,5 @@ do
   oc get pod -n testproject
   oc get bc --all-namespaces
   oc start-build -n testproject cakephp-ex
-  sleep 10
+  sleep 6
 done

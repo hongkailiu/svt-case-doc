@@ -300,3 +300,15 @@ $ oc image extract quay.io/openshift-release-dev/ocp-v4.0-art-dev@sha256:5ccc80b
 ```
 # podman run --rm -it -v "/root/.kube/config:/root/.kube/config:ro,z" quay.io/hongkailiu/test-go:testctl-0.0.3-71e8cd9c /testctl ocpsanity
 ```
+
+## change namespace with kubectl
+
+```
+### view current context
+$ kubectl config current-context
+
+$ namespace=testproject
+$ kubectl create ns "${namespace}"
+$ kubectl config set-context $(kubectl config current-context) --namespace "$namespace"
+
+```

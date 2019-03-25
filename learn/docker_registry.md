@@ -169,7 +169,7 @@ Created [issues/175](https://github.com/openshift/cluster-image-registry-operato
 
 PVC will be supported by the operator, Cool. We do not need this trick anymore.
 
-Updated 20190325:
+### Updated 20190325
 
 [DEVEXP-203](https://jira.coreos.com/browse/DEVEXP-203) and [OCP-22653](https://polarion.engineering.redhat.com/polarion/#/project/OSE/workitem?id=OCP-22653).
 

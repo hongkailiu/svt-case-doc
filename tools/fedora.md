@@ -306,6 +306,14 @@ $ podman ...
 $ sudo rm -rf $HOME/.local/share/containers
 ```
 
+## spideroak
+
+```
+### https://spideroak.support/hc/en-us/articles/115001929846-Encryptr-Getting-Started
+$ sudo dnf install https://spideroak.com/dist/encryptr/signed/linux/rpm/encryptr-2.0.0-1.x86_64.rpm
+
+```
+
 ## Useful command
 
 ```

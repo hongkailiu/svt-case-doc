@@ -168,3 +168,17 @@ lost+found
 Created [issues/175](https://github.com/openshift/cluster-image-registry-operator/issues/175).
 
 PVC will be supported by the operator, Cool. We do not need this trick anymore.
+
+Updated 20190325:
+
+[DEVEXP-203](https://jira.coreos.com/browse/DEVEXP-203) and [OCP-22653](https://polarion.engineering.redhat.com/polarion/#/project/OSE/workitem?id=OCP-22653).
+
+Also
+* asked about _ReadWriteMany_ in the above story.
+  ```
+  Alex Gladkov:
+  It can be ReadWriteOnce, but only if replicas == 1. But basically yes, registry needs ReadWriteMany.
+  ```
+* asked _travisn_ about _RWX_ via slack rook.
+
+

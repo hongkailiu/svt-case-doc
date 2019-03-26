@@ -918,3 +918,7 @@ version   4.0.0-0.ci-2019-03-11-063655   True        True          46m     Unabl
 * [troubleshooting.doc@github](https://github.com/openshift/installer/blob/master/docs/user/troubleshooting.md)
 
 * Clean up (thanks to Siva): If you lost your install dir, you want to clean up your installed cluster, you could follow  [solutions/3826921](https://access.redhat.com/solutions/3826921), which is covered in [OCP-22168](https://polarion.engineering.redhat.com/polarion/#/project/OSE/workitem?id=OCP-22168).
+
+## UPI
+
+[4.1 UPI status tracking](https://docs.google.com/document/d/14QrnfxfrS4Hx1JyN2IAEJkr2jav3-bxIfPG5t6mmdlA/edit)

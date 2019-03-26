@@ -667,3 +667,9 @@ POOLS:
 ```
 
 The number does not add up. Need to dig into this.
+
+## ceph-csi
+
+* [deployment](https://github.com/ceph/ceph-csi/blob/csi-v1.0/docs/deploy-cephfs.md#deployment-with-kubernetes)
+
+blocked by _Requires Kubernetes 1.13_. Created [ceph-csi/issues/287](https://github.com/ceph/ceph-csi/issues/287) for detailed docs and Qs.

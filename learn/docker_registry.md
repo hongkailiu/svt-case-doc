@@ -189,6 +189,8 @@ Also
 
 ### Use gp2
 
+[OCP-22653](https://polarion.engineering.redhat.com/polarion/#/project/OSE/workitem?id=OCP-22653)
+
 ```
 $ kubectl api-resources --namespaced=false | grep imageregistry
 configs                                           imageregistry.operator.openshift.io   false        Config

@@ -181,7 +181,10 @@ Also
 
 * asked _travisn_ about _RWX_ via slack rook.
 
-  > Shyam   [1 minute ago]
+  > travisn:
+  ceph-block does not support RWX while ceph-fs does.
+
+  > Shyam:
   @hongkliu as long as `provisionVolume` is true as in https://github.com/ceph/ceph-csi/blob/csi-v1.0/examples/cephfs/storageclass.yaml#L19 it should work for dynamic provisioning. The storage class mentioned in the example should work as is (as long as secret.yaml contains the admin credentials  https://github.com/ceph/ceph-csi/blob/csi-v1.0/examples/cephfs/storageclass.yaml#L19 )
 
 

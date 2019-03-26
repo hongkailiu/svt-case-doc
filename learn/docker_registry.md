@@ -187,4 +187,102 @@ Also
   > Shyam:
   @hongkliu as long as `provisionVolume` is true as in https://github.com/ceph/ceph-csi/blob/csi-v1.0/examples/cephfs/storageclass.yaml#L19 it should work for dynamic provisioning. The storage class mentioned in the example should work as is (as long as secret.yaml contains the admin credentials  https://github.com/ceph/ceph-csi/blob/csi-v1.0/examples/cephfs/storageclass.yaml#L19 )
 
+### Use gp2
 
+```
+$ kubectl api-resources --namespaced=false | grep imageregistry
+configs                                           imageregistry.operator.openshift.io   false        Config
+$ oc get configs.imageregistry.operator.openshift.io
+NAME      AGE
+cluster   108m
+
+$ oc get configs.imageregistry.operator.openshift.io cluster -o json | jq -r .spec.storage
+{
+  "s3": {
+    "bucket": "image-registry-us-east-2-32fa2a6702954c25b262136f56c52984-3468",
+    "encrypt": true,
+    "region": "us-east-2"
+  }
+}
+
+### push a build
+$ oc new-project testproject
+$ oc new-app https://github.com/sclorg/cakephp-ex
+
+### check on aws s3 console if it contains the contents
+### https://s3.console.aws.amazon.com/s3/buckets/image-registry-us-east-2-32fa2a6702954c25b262136f56c52984-3468/?region=us-east-2&tab=overview
+
+### NOT using this: oc patch configs.imageregistry.operator.openshift.io cluster -p '{"spec":{"storage":{"pvc":{"claim":""}}}}' --type='merge'
+$ oc edit configs.imageregistry.operator.openshift.io cluster
+  storage:                                                                                                       
+    pvc:                                                                                                         
+      claim: ""
+
+$ oc get configs.imageregistry.operator.openshift.io cluster -o json | jq -r .spec.storage
+{
+  "pvc": {
+    "claim": "image-registry-storage"
+  }
+}
+
+$ oc get deploy image-registry 
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+image-registry   1/1     1            1           129m
+
+$ oc get pvc -n openshift-image-registry
+NAME                     STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+image-registry-storage   Pending                                      gp2            7m22s
+$ oc describe pvc -n openshift-image-registry image-registry-storage
+Name:          image-registry-storage
+Namespace:     openshift-image-registry
+StorageClass:  gp2
+Status:        Pending
+Volume:        
+Labels:        <none>
+Annotations:   imageregistry.openshift.io: true
+               volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/aws-ebs
+Finalizers:    [kubernetes.io/pvc-protection]
+Capacity:      
+Access Modes:  
+Events:
+  Type       Reason                Age                     From                         Message
+  ----       ------                ----                    ----                         -------
+  Warning    ProvisioningFailed    7m39s (x2 over 7m40s)   persistentvolume-controller  Failed to provision volume with StorageClass "gp2": invalid AccessModes [ReadWriteMany]: only AccessModes [ReadWriteOnce] are supported
+  Normal     WaitForFirstConsumer  2m32s (x24 over 7m40s)  persistentvolume-controller  waiting for first consumer to be created before binding
+Mounted By:  image-registry-f76466-jjjtn
+
+```
+
+Not working. Workaround:
+
+```
+$ oc project openshift-image-registry
+$ oc get pvc image-registry-storage -o yaml > ~/pvc_reg.yaml
+### Replace `ReadWriteMany` with `ReadWriteOnce`
+$ vi ~/pvc_reg.yaml
+$ oc delete pvc image-registry-storage
+$ oc create -f ~/pvc_reg.yaml
+
+$ oc get pod -l docker-registry=default
+NAME                          READY   STATUS    RESTARTS   AGE
+image-registry-f76466-mxmtj   1/1     Running   0          41m
+
+$ oc set volume pod image-registry-f76466-mxmtj | grep pvc -A1
+  pvc/image-registry-storage (allocated 100GiB) as registry-storage
+    mounted at /registry
+
+$ oc exec image-registry-f76466-mxmtj -- ls /registry
+lost+found
+
+$ oc start-build -n testproject cakephp-ex
+$ oc exec image-registry-f76466-mxmtj -- ls /registry
+docker
+lost+found
+
+```
+
+### Use ceph-fs
+
+```
+### TODO
+```

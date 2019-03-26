@@ -314,6 +314,28 @@ $ sudo dnf install https://spideroak.com/dist/encryptr/signed/linux/rpm/encryptr
 
 ```
 
+## travis-cli
+
+```
+### https://github.com/travis-ci/travis.rb#installation
+$ sudo yum install ruby ruby-devel
+### https://bugs.launchpad.net/openstack-gate/+bug/1424582
+### https://stackoverflow.com/questions/34624428/g-error-usr-lib-rpm-redhat-redhat-hardened-cc1-no-such-file-or-directory
+$ sudo dnf install redhat-rpm-config
+$ ruby -v
+ruby 2.5.3p105 (2018-10-18 revision 65156) [x86_64-linux]
+$ gem install travis --no-rdoc --no-ri
+$ travis version
+Shell completion not installed. Would you like to install it now? |y| n
+1.8.9
+
+[liu@localhost test-go]$ travis encrypt "2210m:<token>" --add notifications.slack
+Detected repository as hongkailiu/test-go, is this correct? |yes|
+$ git ls-files -m
+.travis.yml
+
+```
+
 ## Useful command
 
 ```

@@ -910,7 +910,7 @@ version   4.0.0-0.ci-2019-03-11-063655   True        True          46m     Unabl
 
 ## 20190328: UPI
 
-* [4.1 UPI status tracking@gdoc](https://docs.google.com/document/d/14QrnfxfrS4Hx1JyN2IAEJkr2jav3-bxIfPG5t6mmdlA/edit#), [install_upi@training](https://github.com/openshift/installer/blob/master/docs/user/aws/install_upi.md), and [gpei's blog](https://gitlab.cee.redhat.com/openshift-qe/qe-40-blog/blob/master/gpei/The_Way_to_UPI_on_AWS.md).
+* [4.1 UPI status tracking@gdoc](https://docs.google.com/document/d/14QrnfxfrS4Hx1JyN2IAEJkr2jav3-bxIfPG5t6mmdlA/edit#), [install_upi@training](https://github.com/openshift/installer/blob/master/docs/user/aws/install_upi.md), [gpei's blog](https://gitlab.cee.redhat.com/openshift-qe/qe-40-blog/blob/master/gpei/The_Way_to_UPI_on_AWS.md), and [skordas's blog](https://docs.google.com/document/d/1fWZx9_vN1WBTHpjY_SGvW38yjlKyqOZrX04Niyn8RHQ/edit).
 
 AWS has `cloudformation` console for this monitoring the results.
 

@@ -908,6 +908,64 @@ version   4.0.0-0.ci-2019-03-11-063655   True        True          46m     Unabl
 
 ```
 
+## 20190328: UPI
+
+* [4.1 UPI status tracking@gdoc](https://docs.google.com/document/d/14QrnfxfrS4Hx1JyN2IAEJkr2jav3-bxIfPG5t6mmdlA/edit#), [install_upi@training](https://github.com/openshift/installer/blob/master/docs/user/aws/install_upi.md), and [gpei's blog](https://gitlab.cee.redhat.com/openshift-qe/qe-40-blog/blob/master/gpei/The_Way_to_UPI_on_AWS.md).
+
+AWS has `cloudformation` console for this monitoring the results.
+
+```
+$ mkdir upi
+$ cd upi
+### cp a recent installer binary
+$ cp ../20190328_120856/openshift-install .
+$ mkdir templates/
+$ git clone https://github.com/openshift/installer.git
+$ cp installer/upi/aws/cloudformation/* templates/
+
+$ export qe_id=hongkliu
+$ aws cloudformation create-stack --stack-name ${qe_id}-vpc --template-body file://./templates/01_vpc.yaml
+
+$ aws cloudformation describe-stacks --stack-name ${qe_id}-vpc
+$ aws cloudformation describe-stacks --stack-name ${qe_id}-vpc | jq -r .Stacks[].StackStatus
+CREATE_COMPLETE
+
+$ aws cloudformation describe-stacks --stack-name ${qe_id}-vpc  --output=text
+STACKS  2019-03-28T14:58:38.977Z        Template for Best Practice VPC with 1-3 AZs     False   False   arn:aws:cloudformation:us-east-2:301721915996:stack/hongkliu-vpc/f83c2d20-5169-11e9-a366-0ab3f1b1cb5a    hongkliu-vpc    CREATE_COMPLETE
+DRIFTINFORMATION        NOT_CHECKED
+OUTPUTS Subnet IDs of the private subnets       PrivateSubnetIds        subnet-014dfd30d58852aa7
+OUTPUTS Subnet IDs of the public subnets        PublicSubnetIds subnet-05235212c817fa171
+OUTPUTS ID of the newly created VPC     VpcId   vpc-017ec79c9eee0c683
+PARAMETERS      SubnetBits      12
+PARAMETERS      VpcCidr 10.0.0.0/16
+PARAMETERS      AvailabilityZoneCount   1
+
+### we can also check on AWS `cloudformation` console
+
+$ aws route53 list-hosted-zones | jq -r '.HostedZones[] | select(.Name=="qe.devcluster.openshift.com.") | .Id '
+/hostedzone/Z3B3KOVA3TRCWP
+
+### hyphen not allowed, cannot be too long either
+$ export cluster_name=hliu1
+### replace the params accordingly
+$ aws cloudformation create-stack --stack-name ${qe_id}-infra --template-body file://./templates/02_cluster_infra.yaml --parameters ParameterKey=ClusterName,ParameterValue=${cluster_name} ParameterKey=HostedZoneId,ParameterValue=Z3B3KOVA3TRCWP ParameterKey=HostedZoneName,ParameterValue=qe.devcluster.openshift.com ParameterKey=PublicSubnets,ParameterValue=subnet-05235212c817fa171 ParameterKey=PrivateSubnets,ParameterValue=subnet-014dfd30d58852aa7 ParameterKey=VpcId,ParameterValue=vpc-017ec79c9eee0c683 --capabilities CAPABILITY_NAMED_IAM
+
+$ aws cloudformation  describe-stacks --stack-name ${qe_id}-infra | jq -r .Stacks[].StackStatus
+ROLLBACK_COMPLETE
+
+### blocked: From UI: ... Reported in the gdoc: cannot do it when someone else (skordas ^_^) is doing it.
+InternalServiceTargetGroup already exists in stack arn:aws:cloudformation:us-east-2:301721915996:stack/skordastest-infra/e0743220-516c-11e9-81fb-0a71b7d84638
+
+```
+
+Clean up:
+
+```
+$ aws cloudformation delete-stack --stack-name ${qe_id}-vpc
+$ aws cloudformation delete-stack --stack-name ${qe_id}-infra
+
+```
+
 ## troubleshooting
 
 * Mike's tips

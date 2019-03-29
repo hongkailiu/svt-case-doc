@@ -336,6 +336,14 @@ $ git ls-files -m
 
 ```
 
+## postgresql
+
+```
+### https://developer.fedoraproject.org/tech/database/postgresql/about.html
+$ sudo dnf install postgresql postgresql-server # install client/server
+
+```
+
 ## Useful command
 
 ```

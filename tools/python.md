@@ -1,5 +1,16 @@
 # python
 
+## pip
+
+```
+### --user requires no root
+$ /usr/bin/python3 -m pip install -U pylint --user
+$ /usr/bin/python3 -m pip uninstall pylint
+$ /usr/bin/python3 -m pip uninstall isort
+$ ll ~/.local/bin/
+
+```
+
 ## virtualenv
 
 Set up `virtualenv` with python2 [when python 3 is the default python version](https://virtualenv.pypa.io/en/latest/reference/#virtualenv-command): Tested with Fedora 29.

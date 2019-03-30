@@ -344,6 +344,13 @@ $ sudo dnf install postgresql postgresql-server # install client/server
 
 ```
 
+## strace
+
+```
+### https://www.tecmint.com/strace-commands-for-troubleshooting-and-debugging-linux/
+$ TODO
+```
+
 ## Useful command
 
 ```

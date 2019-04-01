@@ -314,6 +314,12 @@ $ sudo dnf install https://spideroak.com/dist/encryptr/signed/linux/rpm/encryptr
 
 ```
 
+## bitwarden
+
+```
+# Use the AppImage: https://itsfoss.com/use-appimage-linux/
+```
+
 ## travis-cli
 
 ```

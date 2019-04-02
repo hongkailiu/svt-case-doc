@@ -816,6 +816,8 @@ $ oc scale --replicas=1 -n openshift-console deployment.apps/console
 
 ### 20190313: cluster upgrade
 
+[DOC-1195171](https://mojo.redhat.com/docs/DOC-1195171)
+
 ```
 # oc get clusterversion
 NAME      VERSION                        AVAILABLE   PROGRESSING   SINCE   STATUS

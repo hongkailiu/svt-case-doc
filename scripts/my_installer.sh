@@ -30,7 +30,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if [ "$#" -ne 1 ]; then
+if [[ "$#" -ne 1 ]]; then
     echo "Illegal number of parameters"
     exit 1
 fi

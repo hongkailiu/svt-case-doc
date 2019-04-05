@@ -49,14 +49,10 @@ echo "INSTALL_FOLDER: ${INSTALL_FOLDER}"
 echo "release_image: ${release_image}"
 echo "release_image: ${release_image}" >> "${INSTALL_FOLDER}/version.txt"
 
-installer_image=$(oc adm release info --image-for=installer "${release_image}")
-echo "INSTALLER_IMAGE: ${installer_image}" >> "${INSTALL_FOLDER}/version.txt"
-echo "using the installer bin from IMAGE: ${installer_image}"
-
-### the following command will overwrite ./openshift-install
-oc image extract ${installer_image} --file  /usr/bin/openshift-install
-mv openshift-install "${INSTALL_FOLDER}/"
-chmod +x "${INSTALL_FOLDER}/openshift-install"
+### if `Error: unknown flag: --tools`, then use this oc or newer:
+### $ curl -O https://openshift-release-artifacts.svc.ci.openshift.org/4.0.0-0.ci-2019-04-05-175430/openshift-client-linux-4.0.0-0.ci-2019-04-05-175430.tar.gz
+oc adm release extract --tools "${release_image}" --to="${INSTALL_FOLDER}"
+tar xzvf "${INSTALL_FOLDER}"/openshift-install*.tar.gz -C "${INSTALL_FOLDER}"/
 
 echo "installer version: $(./${INSTALL_FOLDER}/openshift-install version)"
 
@@ -65,8 +61,8 @@ readonly INSTALL_CONFIG="${HOME}/install-config.yaml"
 if [[ ! -f "${INSTALL_CONFIG}" ]]; then
   echo "File not found: ${INSTALL_CONFIG}"
   echo "Continue installation with the following commands:"
-  echo "export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=${release_image}"
-  echo "export _OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=${release_image}"
+  #echo "export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=${release_image}"
+  #echo "export _OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=${release_image}"
   echo "./${INSTALL_FOLDER}/openshift-install create install-config --dir=./${INSTALL_FOLDER}"
   echo "vi ./${INSTALL_FOLDER}/install-config.yaml"
   echo "./${INSTALL_FOLDER}/openshift-install create cluster --dir=./${INSTALL_FOLDER}"
@@ -74,8 +70,6 @@ if [[ ! -f "${INSTALL_CONFIG}" ]]; then
 else
   echo "found: ${INSTALL_CONFIG}, using it for installation ..."
   cp -v "${INSTALL_CONFIG}" ./"${INSTALL_FOLDER}"/
-  export OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=${release_image}
-  export _OPENSHIFT_INSTALL_RELEASE_IMAGE_OVERRIDE=${release_image}
   ./${INSTALL_FOLDER}/openshift-install create cluster --dir=./${INSTALL_FOLDER}
 fi
 

@@ -2,9 +2,9 @@
 
 It is basic tutorial how to install OpenShift 4.x on AWS User Provided Infrastructure (UPI)
 Based on:
-[Official documentation](https://github.com/openshift/installer/blob/master/docs/user/aws/install_upi.md)
-[CloudFormation templates](https://github.com/openshift/installer/tree/master/upi/aws/cloudformation)
-[OpenShift installer](https://github.com/openshift/installer/releases)
+* [Official documentation](https://github.com/openshift/installer/blob/master/docs/user/aws/install_upi.md)
+* [CloudFormation templates](https://github.com/openshift/installer/tree/master/upi/aws/cloudformation)
+* [OpenShift installer](https://github.com/openshift/installer/releases)
 
 Copy/paste commands in this order should install OpenShift on your AWS infrastructure.
 

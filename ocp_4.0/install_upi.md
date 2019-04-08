@@ -2,11 +2,9 @@
 
 It is basic tutorial how to install OpenShift 4.x on AWS User Provided Infrastructure (UPI)
 Based on:
-https://github.com/openshift/installer/blob/master/docs/user/aws/install_upi.md
-Used templates:
-https://github.com/openshift/installer/tree/master/upi/aws/cloudformation
-OpenShift installer:
-https://github.com/openshift/installer/releases
+[Official documentation](https://github.com/openshift/installer/blob/master/docs/user/aws/install_upi.md)
+[CloudFormation templates](https://github.com/openshift/installer/tree/master/upi/aws/cloudformation)
+[OpenShift installer](https://github.com/openshift/installer/releases)
 
 Copy/paste commands in this order should install OpenShift on your AWS infrastructure.
 
@@ -61,9 +59,9 @@ It should be in CREATE_COMPLETE state.
 
 * Get and store information to use in next steps
 
-PrivateSubnetIds
-PublicSubnetIds
-VpcId
+    * PrivateSubnetIds
+    * PublicSubnetIds
+    * VpcId
 
 ```bash
 export PRIVATE_SUBNET_IDS=$(aws cloudformation describe-stacks --stack-name $CLUSTER_NAME-vpc | grep PrivateSubnetIds | cut -f 4)
@@ -92,11 +90,11 @@ It should be in CREATE_COMPLETE state.
 
 * Get and store information to use in next steps
 
-ExternalApiTargetGroupArn
-InternalApiTargetGroupArn
-PrivateHostedZoneId
-RegisterNlbIpTargetsLambda
-InternalServiceTargetGroupArn
+    * ExternalApiTargetGroupArn
+    * InternalApiTargetGroupArn
+    * PrivateHostedZoneId
+    * RegisterNlbIpTargetsLambda
+    * InternalServiceTargetGroupArn
 
 ```bash
 export EXTERNAL_API_TARGET_GROUP_ARN=$(aws cloudformation describe-stacks --stack-name $CLUSTER_NAME-infra | grep ExternalApiTargetGroupArn | cut -f 4)
@@ -121,10 +119,10 @@ aws cloudformation describe-stacks --stack-name $CLUSTER_NAME-sg
 
 * Get and store information to use in next steps
 
-MasterSecurityGroupId
-MasterInstanceProfile
-WorkerSecurityGroupId
-WorkerInstanceProfile
+    * MasterSecurityGroupId
+    * MasterInstanceProfile
+    * WorkerSecurityGroupId
+    * WorkerInstanceProfile
 
 ```bash
 export MASTER_SECURITY_GROUP_ID=$(aws cloudformation describe-stacks --stack-name $CLUSTER_NAME-sg | grep MasterSecurityGroupId | cut -f 4)

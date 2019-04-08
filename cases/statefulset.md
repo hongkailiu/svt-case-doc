@@ -123,3 +123,5 @@ Fix the zone issue ([1670241](https://bugzilla.redhat.com/show_bug.cgi?id=167024
 ...
 
 ```
+
+Updated 20190408: `volumeBindingMode: WaitForFirstConsumer` is defined in the default `gp2`.

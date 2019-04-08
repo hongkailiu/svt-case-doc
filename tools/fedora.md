@@ -314,6 +314,12 @@ $ sudo dnf install https://spideroak.com/dist/encryptr/signed/linux/rpm/encryptr
 
 ```
 
+## bitwarden
+
+```
+# Use the AppImage: https://itsfoss.com/use-appimage-linux/
+```
+
 ## travis-cli
 
 ```
@@ -334,6 +340,21 @@ Detected repository as hongkailiu/test-go, is this correct? |yes|
 $ git ls-files -m
 .travis.yml
 
+```
+
+## postgresql
+
+```
+### https://developer.fedoraproject.org/tech/database/postgresql/about.html
+$ sudo dnf install postgresql postgresql-server # install client/server
+
+```
+
+## strace
+
+```
+### https://www.tecmint.com/strace-commands-for-troubleshooting-and-debugging-linux/
+$ TODO
 ```
 
 ## Useful command

@@ -68,19 +68,19 @@ echo "PUBLIC_DNS_NAME: ${PUBLIC_DNS_NAME}"
 ### ssh -i ~/.ssh/libra.pem -o UserKnownHostsFile=/dev/null -n fedora@ec2-18-224-51-162.us-east-2.compute.amazonaws.com 'sudo cp ~/.ssh/authorized_keys /root/.ssh/authorized_keys'
 
 ###
-ssh -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null -n "fedora@${PUBLIC_DNS_NAME}" 'mkdir -p ~/.kube'
-scp -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null ~/.kube/config "fedora@${PUBLIC_DNS_NAME}:~/.kube/config"
+ssh -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -n "fedora@${PUBLIC_DNS_NAME}" 'mkdir -p ~/.kube'
+scp -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no ~/.kube/config "fedora@${PUBLIC_DNS_NAME}:~/.kube/config"
 
 
-ssh -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null -n fedora@${PUBLIC_DNS_NAME} 'sudo dnf install -y origin-clients'
+ssh -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -n fedora@${PUBLIC_DNS_NAME} 'sudo dnf install -y origin-clients'
 # OR
 ### the following oc binary hit https://github.com/openshift/origin/issues/21061
 ### because the local oc is build for RHEL
 #ssh -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null -n fedora@${PUBLIC_DNS_NAME} 'mkdir -p ~/bin'
 #scp -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null ~/bin/oc fedora@${PUBLIC_DNS_NAME}:~/bin/oc
 
-scp -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null "${PRIVATE_KEY}" fedora@${PUBLIC_DNS_NAME}:~/.ssh/id_rsa
+scp -i "${PRIVATE_KEY}" -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no "${PRIVATE_KEY}" fedora@${PUBLIC_DNS_NAME}:~/.ssh/id_rsa
 
-echo "ssh to ${PUBLIC_DNS_NAME}: ssh -i ${PRIVATE_KEY} -o UserKnownHostsFile=/dev/null fedora@${PUBLIC_DNS_NAME}"
+echo "ssh to ${PUBLIC_DNS_NAME}: ssh -i ${PRIVATE_KEY} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no fedora@${PUBLIC_DNS_NAME}"
 echo "run: oc get node"
 echo "ssh core@<worker> should be working too on ${PUBLIC_DNS_NAME}"

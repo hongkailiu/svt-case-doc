@@ -19,7 +19,7 @@ running_build_node=ip-10-0-141-143.us-east-2.compute.internal
 standby_build_node=ip-10-0-149-124.us-east-2.compute.internal
 
 oc adm cordon ${standby_build_node}
-oc start-build -n testproject django-ex-1
+oc start-build -n testproject django-ex
 oc get pod -o wide -n testproject
 oc get build -n testproject
 oc adm uncordon ${standby_build_node}

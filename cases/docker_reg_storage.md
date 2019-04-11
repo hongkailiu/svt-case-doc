@@ -155,7 +155,17 @@ $ oc delete projects testproject
 
 ```
 
+Scale up the cluster to 10 workers (remember to setup `IO1` for the devices at the installation time):
 
+```
+$ oc project openshift-machine-api
+$ oc get machinesets.machine.openshift.io 
+NAME                                DESIRED   CURRENT   READY   AVAILABLE   AGE
+hongkliu1-l6lbx-worker-us-east-2a   3         3         3       3           119m
+hongkliu1-l6lbx-worker-us-east-2b   3         3         3       3           119m
+hongkliu1-l6lbx-worker-us-east-2c   4         4         4       4           119m
+
+```
 
 ### Ceph-fs
 TODO

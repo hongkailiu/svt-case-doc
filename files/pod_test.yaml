@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
   - name: test-go
-    image: quay.io/hongkailiu/test-go:testctl-0.0.3-71e8cd9c
+    image: quay.io/hongkailiu/test-go:testctl-0.0.6-83ce61e2
     command: ["/testctl"]
     args: ["http", "start", "-v"]
     env:

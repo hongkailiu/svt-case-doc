@@ -188,4 +188,74 @@ $ grep "Failed builds: " /tmp/build_test.log -A5
 2018-09-26 17:34:48,620 - build_test - MainThread - INFO - Average push time, all good builds: 57.7227926078
 2018-09-26 17:34:48,620 - build_test - MainThread - INFO - Minimum push time, all good builds: 5.0
 2018-09-26 17:34:48,620 - build_test - MainThread - INFO - Maximum push time, all good builds: 317.0
+
+### 20190411
+#250 (n=2)
+$ grep -i "Failed builds" /tmp/build_test.log -A 8
+2019-04-11 15:41:56,745 - build_test - MainThread - INFO - Failed builds: 0
+2019-04-11 15:41:56,745 - build_test - MainThread - INFO - Invalid builds: 0
+2019-04-11 15:41:56,745 - build_test - MainThread - INFO - Good builds included in stats: 500
+2019-04-11 15:41:56,745 - build_test - MainThread - INFO - Average build time, all good builds: 413
+2019-04-11 15:41:56,746 - build_test - MainThread - INFO - Minimum build time, all good builds: 142
+2019-04-11 15:41:56,746 - build_test - MainThread - INFO - Maximum build time, all good builds: 556
+2019-04-11 15:41:56,746 - build_test - MainThread - INFO - Average push time, all good builds: 3.538
+2019-04-11 15:41:56,746 - build_test - MainThread - INFO - Minimum push time, all good builds: 1.0
+2019-04-11 15:41:56,746 - build_test - MainThread - INFO - Maximum push time, all good builds: 14.0
+--
+2019-04-11 16:15:33,040 - build_test - MainThread - INFO - Failed builds: 0
+2019-04-11 16:15:33,040 - build_test - MainThread - INFO - Invalid builds: 0
+2019-04-11 16:15:33,040 - build_test - MainThread - INFO - Good builds included in stats: 500
+2019-04-11 16:15:33,040 - build_test - MainThread - INFO - Average build time, all good builds: 422
+2019-04-11 16:15:33,040 - build_test - MainThread - INFO - Minimum build time, all good builds: 96
+2019-04-11 16:15:33,040 - build_test - MainThread - INFO - Maximum build time, all good builds: 538
+2019-04-11 16:15:33,040 - build_test - MainThread - INFO - Average push time, all good builds: 3.438
+2019-04-11 16:15:33,040 - build_test - MainThread - INFO - Minimum push time, all good builds: 1.0
+2019-04-11 16:15:33,040 - build_test - MainThread - INFO - Maximum push time, all good builds: 10.0
+
+#500 (n=2)
+2019-04-11 17:37:15,853 - build_test - MainThread - INFO - Failed builds: 273
+2019-04-11 17:37:15,853 - build_test - MainThread - INFO - Invalid builds: 0
+2019-04-11 17:37:15,853 - build_test - MainThread - INFO - Good builds included in stats: 727
+2019-04-11 17:37:15,853 - build_test - MainThread - INFO - Average build time, all good builds: 1184
+2019-04-11 17:37:15,853 - build_test - MainThread - INFO - Minimum build time, all good builds: 286
+2019-04-11 17:37:15,854 - build_test - MainThread - INFO - Maximum build time, all good builds: 1591
+2019-04-11 17:37:15,854 - build_test - MainThread - INFO - Average push time, all good builds: 17.8431911967
+2019-04-11 17:37:15,854 - build_test - MainThread - INFO - Minimum push time, all good builds: 1.0
+2019-04-11 17:37:15,854 - build_test - MainThread - INFO - Maximum push time, all good builds: 90.0
+--
+2019-04-11 18:48:39,707 - build_test - MainThread - INFO - Failed builds: 53
+2019-04-11 18:48:39,707 - build_test - MainThread - INFO - Invalid builds: 0
+2019-04-11 18:48:39,707 - build_test - MainThread - INFO - Good builds included in stats: 947
+2019-04-11 18:48:39,707 - build_test - MainThread - INFO - Average build time, all good builds: 1302
+2019-04-11 18:48:39,707 - build_test - MainThread - INFO - Minimum build time, all good builds: 336
+2019-04-11 18:48:39,707 - build_test - MainThread - INFO - Maximum build time, all good builds: 1969
+2019-04-11 18:48:39,708 - build_test - MainThread - INFO - Average push time, all good builds: 13.3146779303
+2019-04-11 18:48:39,708 - build_test - MainThread - INFO - Minimum push time, all good builds: 2.0
+2019-04-11 18:48:39,708 - build_test - MainThread - INFO - Maximum push time, all good builds: 61.0
+
+### observations
+image-registry-7886498b66-zsqsh got recreated during the test
+### node-ca-8f8xt restarted
+node-ca-8f8xt                                      1/1       Running   1          
+### abnormal builds
+svt-nodejs-147     nodejs-mongodb-example-6   Source   Git@e59fe75   Failed (PushImageToRegistryFailed)   About an hour ago    21m34s
+svt-nodejs-137     nodejs-mongodb-example-6   Source   Git@e59fe75   Failed (OutOfMemoryKilled)           About an hour ago    21m44s
+svt-nodejs-30      nodejs-mongodb-example-7   Source   Git@e59fe75   Failed (GenericBuildFailed)          39 minutes ago      17m5s
+svt-nodejs-a-196   nodejs-mongodb-example-3   Source   Git@e59fe75   Error (BuildPodDeleted)              About an hour ago   33m54s
+### prometheus-adapter pod get recreated as well
+prometheus-adapter-6fcd6467d6-phkj4            0/1     ContainerCreating   0          8s
+### image-registry pod (and prometheus-k8s pods) also runs on worker node, competing resources with build pods.
+
+#500 (n=2) s3
+2019-04-11 20:09:59,640 - build_test - MainThread - INFO - Failed builds: 2
+2019-04-11 20:09:59,640 - build_test - MainThread - INFO - Invalid builds: 0
+2019-04-11 20:09:59,640 - build_test - MainThread - INFO - Good builds included in stats: 998
+2019-04-11 20:09:59,640 - build_test - MainThread - INFO - Average build time, all good builds: 1386
+2019-04-11 20:09:59,640 - build_test - MainThread - INFO - Minimum build time, all good builds: 299
+2019-04-11 20:09:59,640 - build_test - MainThread - INFO - Maximum build time, all good builds: 1850
+2019-04-11 20:09:59,640 - build_test - MainThread - INFO - Average push time, all good builds: 13.8296593186
+2019-04-11 20:09:59,640 - build_test - MainThread - INFO - Minimum push time, all good builds: 2.0
+2019-04-11 20:09:59,640 - build_test - MainThread - INFO - Maximum push time, all good builds: 94.0
+#500 (n=6) s3
+
 ```

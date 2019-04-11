@@ -195,6 +195,8 @@ Retrieve the [results](docker_reg_storage_result.md) from the log file:
 | 20180425 | 10          | nodejs | 250/500     | 2         | glusterfs (3.3.1-13); heketi (3.3.1-10) | 100                  | [172-31-2-125](http://pbench.perf.lab.eng.bos.redhat.com/results/EC2::ip-172-31-2-125/)                                | 3.10.0-0.28.0.git.0.66790cb.el7             |
 | 20180508 | 10          | nodejs | 500         | 6         | glusterfs (3.3.1-13); heketi (3.3.1-10) | 100; 99.8            | [172-31-39-154](http://pbench.perf.lab.eng.bos.redhat.com/results/EC2::ip-172-31-39-154/)                              | 3.10.0-0.32.0.git.0.2b17fd0.el7 (with crio) |
 | 20180926 | 10          | nodejs | 250/500/750 | 2X2/6/2x2 | glusterfs (3.4.0-7); heketi (3.4.0-9)   | 100;100/100/100;97.4 | [172-31-0-81](http://pbench.perf.lab.eng.bos.redhat.com/results/EC2::ip-172-31-0-81/conc_build_2_reg_gfs_rwx_results/) | 3.11.15-1.git.0.35c71dd.el7                 |
+| 20100411 | 10          | nodejs | 250/500     | 2X2/2x2   | gp2                                     | 100;100/72.7;94.7    | [saved files](http://file.rdu.redhat.com/~hongkliu/test_result/OCP-17359/20190411/)                                    | 4.0.0-0.nightly-2019-04-10-182914           |
+
 * Note 20171204 uses Vikas' modification on node-config.yaml.
 * 20180508: 750 (n=2): 96%; 1000 (n=2): 87.25%
 

@@ -72,6 +72,94 @@ Prepare the project with cluster-loader:
 # ../../ose3_perf/scripts/build_test.py -z -n 2 -a
 ```
 
+## OCP 4: PVC for registry storage
+
+### GP2
+Make sure only ONE replica for `image-registry` deployment. Otherwise, the PV needs `RWX`.
+
+```
+$ oc project openshift-image-registry
+$ oc get deploy image-registry -o json | jq -r .spec.replicas
+1
+```
+
+Create 1000G gp2 PVC:
+
+```
+$ oc process -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/pvc_template.yaml -p PVC_NAME=image-registry-storage -p PVC_MODE=ReadWriteOnce -p PVC_SIZE=1000Gi -p STORAGE_CLASS_NAME=gp2  | oc create -f -
+
+$ oc get pvc
+NAME                     STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+image-registry-storage   Pending                                      gp2            69s
+
+### it is pending because
+$ oc describe pvc image-registry-storage | grep WaitF
+  Normal     WaitForFirstConsumer  12s (x9 over 111s)  persistentvolume-controller  waiting for first consumer to be created before binding
+
+```
+
+Back current config (optional):
+
+```
+$ oc get configs.imageregistry.operator.openshift.io cluster -o yaml > ~/reg.config.yaml
+
+```
+
+Edit the config:
+
+```
+### https://github.com/openshift/cluster-image-registry-operator/blob/master-4.1/pkg/apis/imageregistry/v1/types.go
+$ oc edit configs.imageregistry.operator.openshift.io cluster
+  storage:
+    pvc:
+     claim: "image-registry-storage"
+
+$ oc get configs.imageregistry.operator.openshift.io cluster -o json | jq -r .spec.storage
+{
+  "pvc": {
+    "claim": "image-registry-storage"
+  }
+}
+
+### PVC should be `Bound` now
+$ oc get pvc
+NAME                     STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+image-registry-storage   Bound    pvc-87b5a9b5-5c63-11e9-a584-0627f288c2d4   1000Gi     RWO            gp2            16m
+
+### new image-registry pod is `Running`
+$ oc get pod -l docker-registry=default
+NAME                              READY   STATUS    RESTARTS   AGE
+image-registry-7886498b66-zsqsh   1/1     Running   0          2m58s
+### the pod is using the PVC
+$ oc set volume pod image-registry-7886498b66-zsqsh | grep pvc -A1
+  pvc/image-registry-storage (allocated 1000GiB) as registry-storage
+    mounted at /registry
+### no container images saved yet
+$ oc exec image-registry-7886498b66-zsqsh -- ls /registry
+lost+found
+
+### start a build
+$ oc new-project --skip-config-write
+$ oc new-app -n testproject https://github.com/sclorg/cakephp-ex
+### wait until the build pod is ``
+$ oc get pod -n testproject | grep build
+cakephp-ex-1-build    0/1     Completed           0          2m6s
+
+### check the volume again: `docker` folder is there
+$ oc exec image-registry-7886498b66-zsqsh -- ls /registry
+docker
+lost+found
+
+### clean up
+$ oc delete projects testproject
+
+```
+
+
+
+### Ceph-fs
+TODO
+
 ## Check results
 
 Watching the output of the above build script. Compare the succuss rate of builds and pbench data, eg, in case of gp2, [IOPS on the device xvdcz](http://perf-infra.ec2.breakage.org/pbench/results/ip-172-31-24-121/hk-conc-scale-a/tools-default/ip-172-31-57-74.us-west-2.compute.internal/iostat/disk.html), which is the one for docker registry.

@@ -62,7 +62,7 @@ Verify this by triggering a round of builds and then
 
 ## Concurrent builds
 
-[Start pbench](../learn/pbench.md#use-pbench-in-the-test)
+[Start pbench](../cases/pbench.md#use-pbench-in-the-test)
 
 Prepare the project with cluster-loader:
 

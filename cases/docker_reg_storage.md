@@ -62,7 +62,7 @@ Verify this by triggering a round of builds and then
 
 ## Concurrent builds
 
-[Start pbench](../cases/docker_reg_storage_result.md#use-pbench-in-the-test)
+[Start pbench](../cases/docker_reg_storage_result.md#build-and-push-time)
 
 Prepare the project with cluster-loader:
 

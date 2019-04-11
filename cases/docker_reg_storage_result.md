@@ -1,6 +1,6 @@
 # Results from Docker Registry Storage Tests
 
-# Push time
+# build and push time
 
 ```sh
 # grep "Failed builds: " /tmp/build_test.log -A5          

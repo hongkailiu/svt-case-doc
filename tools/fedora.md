@@ -138,6 +138,17 @@ Group: Virtualization
 
 ```
 
+## chrome
+
+```
+### https://www.if-not-true-then-false.com/2010/install-google-chrome-with-yum-on-fedora-red-hat-rhel/
+$ sudo dnf install fedora-workstation-repositories
+$ dnf config-manager --set-enabled google-chrome
+$ sudo dnf config-manager --set-enabled google-chrome
+$ sudo dnf install google-chrome-stable
+
+```
+
 ## gnome-tweak-tool
 
 ```

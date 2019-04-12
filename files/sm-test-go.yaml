@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: test-go
+  namespace: openshift-monitoring
+spec:
+  endpoints:
+  - interval: 30s
+    port: https
+    scheme: https
+    tlsConfig:
+      serverName: web-hongkliu-run.b542.starter-us-east-2a.openshiftapps.com
+  namespaceSelector: {}
+  selector:
+    matchLabels:

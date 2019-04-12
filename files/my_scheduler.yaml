@@ -2,6 +2,6 @@
 kind: "Scheduler"
 apiVersion: "config.openshift.io/v1"
 metadata:
-  name: "myScheduler"
+  name: "my-scheduler"
 spec:
   defaultNodeSelector: aaa=bbb

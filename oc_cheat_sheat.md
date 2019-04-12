@@ -312,3 +312,11 @@ $ kubectl create ns "${namespace}"
 $ kubectl config set-context $(kubectl config current-context) --namespace "$namespace"
 
 ```
+
+## openshift online
+
+```
+### login https://www.openshift.com/products/online/ ... https://console.starter-us-east-1.openshift.com/console/catalog
+### orphan? https://console.starter-us-east-2a.openshift.com/console/catalog
+
+```

@@ -257,5 +257,14 @@ prometheus-adapter-6fcd6467d6-phkj4            0/1     ContainerCreating   0    
 2019-04-11 20:09:59,640 - build_test - MainThread - INFO - Minimum push time, all good builds: 2.0
 2019-04-11 20:09:59,640 - build_test - MainThread - INFO - Maximum push time, all good builds: 94.0
 #500 (n=6) s3
+2019-04-11 23:45:43,820 - build_test - MainThread - INFO - Failed builds: 106                                  
+2019-04-11 23:45:43,820 - build_test - MainThread - INFO - Invalid builds: 2                                   
+2019-04-11 23:45:43,820 - build_test - MainThread - INFO - Good builds included in stats: 2892                 
+2019-04-11 23:45:43,820 - build_test - MainThread - INFO - Average build time, all good builds: 1508           
+2019-04-11 23:45:43,820 - build_test - MainThread - INFO - Minimum build time, all good builds: 182            
+2019-04-11 23:45:43,820 - build_test - MainThread - INFO - Maximum build time, all good builds: 2168           
+2019-04-11 23:45:43,820 - build_test - MainThread - INFO - Average push time, all good builds: 13.3813969571   
+2019-04-11 23:45:43,820 - build_test - MainThread - INFO - Minimum push time, all good builds: 3.0             
+2019-04-11 23:45:43,820 - build_test - MainThread - INFO - Maximum push time, all good builds: 82.0
 
 ```

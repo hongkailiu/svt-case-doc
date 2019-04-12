@@ -226,7 +226,7 @@ $ grep -irn "defaultNodeSelector" /etc/
 
 They are now defined by a configMap used by api-server, eg, `/etc/kubernetes/static-pod-resources/kube-apiserver-pod-1/configmaps/config/config.yaml` which has `"projectConfig":{"defaultNodeSelector":""},"...`.
 
-Set: Unknow. [issues/1020](https://github.com/openshift/installer/issues/1020)
+Set: Unknown. [issues/1020](https://github.com/openshift/installer/issues/1020), [bz1699460](https://bugzilla.redhat.com/show_bug.cgi?id=1699460)
 
 
 ### install-config

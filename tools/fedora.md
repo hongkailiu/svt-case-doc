@@ -56,6 +56,14 @@ IMAGES	x86_64	2017-10-18T07:38:18.000Z	Created from build Fedora-Cloud-Base-25-2
 
 Choose the one with _HVM-standard-0_ whose ami id is _ami-7c25e604_.
 
+## disable auto update
+
+```
+#$ systemctl disable dnf-makecache.service
+$ systemctl disable dnf-makecache.timer
+#$ systemctl disable packagekit.service
+#$ systemctl disable packagekit-offline-update.service
+```
 
 ## [oc cli: auto-completion](https://bierkowski.com/openshift-cli-morsels-enable-oc-shell-completion/)
 
@@ -135,6 +143,8 @@ Group: Virtualization
    libguestfs-tools
    python3-libguestfs
    virt-top
+
+$ sudo dnf install @virtualization
 
 ```
 

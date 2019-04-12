@@ -1,0 +1,7 @@
+#https://github.com/openshift/api/blob/master/config/v1/types_scheduling.go#L50
+kind: "Scheduler"
+apiVersion: "config.openshift.io/v1"
+metadata:
+  name: "myScheduler"
+spec:
+  defaultNodeSelector: aaa=bbb

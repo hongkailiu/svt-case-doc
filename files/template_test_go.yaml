@@ -126,7 +126,7 @@ parameters:
   displayName: Image
   name: IMAGE
   required: false
-  value: quay.io/hongkailiu/test-go:testctl-0.0.1-aa3bf59a
+  value: quay.io/hongkailiu/test-go:testctl-0.0.12
 - description: gh_client_id
   displayName: gh_client_id
   name: gh_client_id

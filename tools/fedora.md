@@ -63,6 +63,10 @@ Choose the one with _HVM-standard-0_ whose ami id is _ami-7c25e604_.
 $ systemctl disable dnf-makecache.timer
 #$ systemctl disable packagekit.service
 #$ systemctl disable packagekit-offline-update.service
+
+### https://ask.fedoraproject.org/en/question/92941/how-to-stop-fedora-24-gnome-software-auto-updating/
+$ gsettings set org.gnome.software download-updates false
+
 ```
 
 ## [oc cli: auto-completion](https://bierkowski.com/openshift-cli-morsels-enable-oc-shell-completion/)

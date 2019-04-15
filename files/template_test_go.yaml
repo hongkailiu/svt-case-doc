@@ -1,3 +1,5 @@
+#$ oc process -f https://raw.githubusercontent.com/hongkailiu/svt-case-doc/master/files/template_test_go.yaml | oc create -f -
+---
 apiVersion: v1
 kind: Template
 metadata:

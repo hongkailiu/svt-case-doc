@@ -72,8 +72,25 @@ echo "PrivateSubnetIds: $PRIVATE_SUBNET_IDS" && echo "PublicSubnetIds:  $PUBLIC_
 
 ### Create DNS and Load Balancer stack - infra
 
+You need to know your domain name and hosted zone id.
+You can check this on aws console [AWS - route53](https://console.aws.amazon.com/route53/home?#hosted-zones:) or using aws client:
+
 ```bash
-aws cloudformation create-stack --stack-name $CLUSTER_NAME-infra --template-body file://02_cluster_infra.yaml --parameters ParameterKey=ClusterName,ParameterValue=$CLUSTER_NAME ParameterKey=HostedZoneId,ParameterValue=Z3B3KOVA3TRCWP ParameterKey=HostedZoneName,ParameterValue=qe.devcluster.openshift.com ParameterKey=PublicSubnets,ParameterValue=$PUBLIC_SUBNET_IDS ParameterKey=PrivateSubnets,ParameterValue=$PRIVATE_SUBNET_IDS ParameterKey=VpcId,ParameterValue=$VPC_ID --capabilities CAPABILITY_NAMED_IAM
+aws route53 list-hosted-zones
+```
+
+* Store information about domain:
+    * HostedZoneId
+    * HostedZoneName
+
+```bash
+export HOSTED_ZONE_ID=Z3B3KOVA3TRCWP
+export HOSTED_ZONE_NAME=qe.devcluster.openshift.com
+```
+
+* Create infra stack
+```bash
+aws cloudformation create-stack --stack-name $CLUSTER_NAME-infra --template-body file://02_cluster_infra.yaml --parameters ParameterKey=ClusterName,ParameterValue=$CLUSTER_NAME ParameterKey=InfrastructureName,ParameterValue=$CLUSTER_NAME ParameterKey=HostedZoneId,ParameterValue=$HOSTED_ZONE_ID ParameterKey=HostedZoneName,ParameterValue=$HOSTED_ZONE_NAME ParameterKey=PublicSubnets,ParameterValue=$PUBLIC_SUBNET_IDS ParameterKey=PrivateSubnets,ParameterValue=$PRIVATE_SUBNET_IDS ParameterKey=VpcId,ParameterValue=$VPC_ID --capabilities CAPABILITY_NAMED_IAM
 ```
 
 Wait few minutes to provide stack
@@ -238,7 +255,7 @@ aws cloudformation describe-stacks --stack-name $CLUSTER_NAME-worker
 ### Initialization of UPI
 
 ```bash
-./openshift-install user-provided-infrastructure bootstrap-complete
+./openshift-install wait-for bootstrap-complete
 # export kube config file:
 export KUBECONFIG=$PWD/auth/kubeconfig
 ```
@@ -252,7 +269,7 @@ aws cloudformation delete-stack --stack-name $CLUSTER_NAME-boot
 * Finish installation:
 
 ```bash
-user-provided-infrastructure finish
+./openshift-install wait-for finish
 ```
 
 * Cleanup - Deleting master machine definition
@@ -282,9 +299,9 @@ machine.machine.openshift.io "skordas-tkh7l-master-2" deleted
 ./openshift-install destroy cluster
 aws cloudformation delete-stack --stack-name $CLUSTER_NAME-worker
 aws cloudformation delete-stack --stack-name $CLUSTER_NAME-master
-aws cloudformation delete-stack --stack-name $CLUSTER_NAME-sq
+aws cloudformation delete-stack --stack-name $CLUSTER_NAME-sg
 aws cloudformation delete-stack --stack-name $CLUSTER_NAME-infra
-aws cloudformation delete-stack --stack-name $CLUSTER_NAME-vpr
+aws cloudformation delete-stack --stack-name $CLUSTER_NAME-vpc
 aws s3 rm s3://$CLUSTER_NAME-upi/bootstrap.ign
 aws s3 rb s3://$CLUSTER_NAME-upi
 ```

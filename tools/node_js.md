@@ -12,7 +12,7 @@ $ tar -xJvf node-v10.15.0-linux-x64.tar.xz
 $ ln -s ./node-v10.15.0-linux-x64 ./node
 $ vi ~/.bashrc
 ...
-export NODEJS_HOME=/home/hongkliu/tool/node
+export NODEJS_HOME=${HOME}/tool/node
 export PATH=${NODEJS_HOME}/bin:$PATH
 
 $ source ~/.bashrc

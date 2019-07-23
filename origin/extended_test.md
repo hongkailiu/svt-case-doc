@@ -107,3 +107,86 @@ Some wholes for us when transforming python config files to golang:
   - use `kind` instead of `Kind`: lowercase k.
   - template name: no upper case allowed.
 
+
+## Update on 20190723
+
+```
+$ oc version
+oc v3.11.0+8de5c34
+kubernetes v1.10.0+d4cacc0
+features: Basic-Auth GSSAPI Kerberos SPNEGO
+
+Server https://api.sj-071819-1.perf-testing.devcluster.openshift.com:6443
+kubernetes v1.13.4+6569b4f
+
+$ sudo dnf install krb5-devel
+$ make build-extended-test
+
+$ pwd
+/home/hongkliu/Downloads/e2e.sjug
+[hongkliu@MiWiFi-R1CM-srv e2e.sjug]$ cat nodeVertical.yaml 
+provider: local
+ClusterLoader:
+  cleanup: true
+  projects:
+    - num: 1
+      basename: clusterproject
+      tuning: default
+      ifexists: delete
+      pods:
+        - num: 150
+          image: gcr.io/google_containers/pause-amd64:3.0
+          basename: pausepods
+          file: pod-pause.json
+  tuningsets:
+    - name: default
+      pods:
+        stepping:
+          stepsize: 50
+          pause: 60
+        ratelimit:
+          delay: 0
+[hongkliu@MiWiFi-R1CM-srv e2e.sjug]$ cat pod-pause.json 
+{
+  "kind": "Pod",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "pause-amd64",
+    "creationTimestamp": null,
+    "labels": {
+      "name": "pause-amd64"
+    }
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "pause-amd64",
+        "image": "gcr.io/google_containers/pause-amd64:3.0",
+        "ports": [
+          {
+            "containerPort": 8080,
+            "protocol": "TCP"
+          }
+        ],
+        "terminationMessagePath": "/dev/termination-log",
+        "imagePullPolicy": "IfNotPresent",
+        "capabilities": {},
+        "securityContext": {
+          "capabilities": {},
+          "privileged": false
+        }
+      }
+    ],
+    "restartPolicy": "Always",
+    "dnsPolicy": "ClusterFirst",
+    "serviceAccount": ""
+  },
+  "status": {}
+}
+
+
+
+$ KUBECONFIG=/home/hongkliu/.kube/config VIPERCONFIG=/home/hongkliu/Downloads/e2e.sjug/nodeVertical.yaml ./_output/local/bin/linux/amd64/openshift-tests run-test "[Feature:Performance][Serial][Slow] Load cluster should load the cluster [Suite:openshift]"
+
+
+```
